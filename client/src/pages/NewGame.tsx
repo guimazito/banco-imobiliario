@@ -19,7 +19,7 @@ export default function NewGame() {
     const navigate = useNavigate();
     const [open, setOpen] = useState(false);
     const [money, setMoney] = useState<number>(0);
-    const [players, setPlayers] = useState([{name: ""}]);
+    const [players, setPlayers] = useState([{name: ""}, {name: ""}]);
     const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
     const [failAlertOpen, setFailAlertOpen] = useState(false);
     const [failAlertMessage, setFailAlertMessage] = useState<string>('');
@@ -33,12 +33,25 @@ export default function NewGame() {
       };
 
     const handleAddPlayer = () => {
-        setPlayers((prevPlayers) => [...prevPlayers, { name: "" }]);        
+        setPlayers((prevPlayers) => {
+            if (prevPlayers.length >= 6) {
+                setFailAlertMessage('Máximo de 6 jogadores atingido!');
+                setFailAlertOpen(true);
+                return prevPlayers;
+            }
+            return [...prevPlayers, { name: "" }];
+        });
     };
 
     const handleRemovePlayer = (index: number) => {
-        setPlayers((prevPlayers) =>
-            prevPlayers.filter((_, i) => i !== index))
+        setPlayers((prevPlayers) => {
+            if (prevPlayers.length <=2) {
+                setFailAlertMessage('Mínimo de 2 jogadores necessário!');
+                setFailAlertOpen(true);
+                return prevPlayers;
+            }
+            return prevPlayers.filter((_, i) => i !== index);
+        });
     };
 
     const handlePlayerNameChange = (index: number, value: string) => {
