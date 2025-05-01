@@ -4,7 +4,8 @@
 
 body {
   @apply bg-grayscale-800 font-sans text-white;
-  overflow-y: hidden; /* Desabilita o scroll vertical */
+  /* overflow-y: hidden;  */
+  /* Desabilita o scroll vertical */
   /* @apply bg-grayscale-800 font-mono text-white; */
 }
 

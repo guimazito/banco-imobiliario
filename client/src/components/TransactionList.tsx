@@ -38,7 +38,7 @@ export default function TransactionList({ transactions }: { transactions: any[] 
         >
             <h2 className="text-lg font-bold text-white text-center">Últimas<br/>Transações</h2>
             <div
-                className="overflow-y-auto max-h-[30vh]"
+                className="overflow-y-auto max-h-[67vh]"
                 style={{ scrollbarWidth: 'thin', scrollbarColor: '#4B5563 #1F2937' }}
             >
                 {transactions.map((transaction, index) => (

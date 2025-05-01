@@ -10,7 +10,7 @@ export default function RankingList({ players }: { players: any[] }) {
           Ranking dos<br/>Jogadores
         </h2>
         <div
-          className="overflow-y-auto max-h-[30vh]"
+          // className="overflow-y-auto max-h-[67vh]"
           style={{ scrollbarWidth: 'thin', scrollbarColor: '#4B5563 #1F2937' }}
         >
           {[...players]
