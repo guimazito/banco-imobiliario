@@ -26,7 +26,8 @@ app.use(json());
 const playerSchema = new Schema({
     name: String,
     money: Number,
-    status: String
+    status: String,
+    icon: String
 }, {versionKey: false});
 
 const transactionSchema = new Schema({
@@ -63,6 +64,7 @@ wss.on('connection', (ws) => {
 
 app.post('/api/players', async (req, res) => {
     const players = req.body;
+    console.log('Received players:', players);
         
     if (!Array.isArray(players)) {
         return res.status(400).json({ messsage: 'Invalid data format. Expected an array of players.' });
@@ -90,7 +92,8 @@ app.get('/api/players', async (req, res) => {
             id: player._id,
             name: player.name,
             money: player.money,
-            status: player.status
+            status: player.status,
+            icon: player.icon
     }))
     .sort((a, b) => a.name.localeCompare(b.name));  
     res.status(200).json(formattedPlayers);
