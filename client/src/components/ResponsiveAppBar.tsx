@@ -24,17 +24,16 @@ interface Props {
 
 export default function ResponsiveAppBar(props: Props) {  
     const drawerWidth = 240;
-    const navItems = ['Home', 'Novo Jogo', 'Propriedades', 'Balanço Final'];
+    const navItems = ['Novo Jogo', 'Transações', 'Propriedades', 'Balanço Final'];
     const { window } = props;
     const [mobileOpen, setMobileOpen] = React.useState(false);
     const handleDrawerToggle = () => {
-        console.log("handleDrawerToggle");
         setMobileOpen((prevState) => !prevState);
     };
     const navigate = useNavigate();
     
     const handleNavigation = (item: string) => {
-        if (item === 'Home') {
+        if (item === 'Transações') {
             navigate('/');
         } else if (item === 'Novo Jogo') {
             navigate('/new-game');
@@ -45,31 +44,50 @@ export default function ResponsiveAppBar(props: Props) {
         //     navigate('/final-balance');
     };
 
+    const getPageTitle = () => {
+        switch (location.pathname) {
+        case '/':
+            return 'TRANSAÇÕES';
+        case '/new-game':
+            return 'NOVO JOGO';
+        case '/properties':
+            return 'PROPRIEDADES';
+        case '/final-balance':
+            return 'BALANÇO FINAL';
+        default:
+            return 'BANCO IMOBILIÁRIO APP';
+        }
+    };
+
     const drawer = (
-    <Box
-        className="bg-grayscale-800 text-white"
-        onClick={handleDrawerToggle} sx={{ textAlign: 'center' }}
-    >
-        <Typography variant="h6" sx={{ my: 2, userSelect: 'none' }}>
-        Banco Imobiliário App
-        </Typography>
-        <Divider sx={{ backgroundColor: 'gray' }}/>
-        <List>
-        {navItems.map((item) => (
-            <ListItem
-                key={item}
-                disablePadding
-                onClick={() => {
-                    handleNavigation(item);
-                }}
+        <Box
+            className="bg-grayscale-800 text-white"
+            onClick={handleDrawerToggle}
+            sx={{ textAlign: 'center' }}
+        >
+            <Typography
+                variant="h6"
+                sx={{ my: 2, userSelect: 'none' }}
             >
-            <ListItemButton sx={{ textAlign: 'center' }}>
-                <ListItemText primary={item} />
-            </ListItemButton>
-            </ListItem>
-        ))}
-        </List>
-    </Box>
+                Banco Imobiliário App
+            </Typography>
+            <Divider sx={{ backgroundColor: 'gray' }}/>
+            <List>
+                {navItems.map((item) => (
+                    <ListItem
+                        key={item}
+                        disablePadding
+                        onClick={() => {
+                            handleNavigation(item);
+                        }}
+                    >
+                    <ListItemButton sx={{ textAlign: 'center' }}>
+                        <ListItemText primary={item} />
+                    </ListItemButton>
+                    </ListItem>
+                ))}
+            </List>
+        </Box>
     );
 
     const container = window !== undefined ? () => window().document.body : undefined;
@@ -80,57 +98,74 @@ export default function ResponsiveAppBar(props: Props) {
             sx={{ display: 'flex' }}
         >
             <AppBar component="nav" sx={{ backgroundColor: '#1c45ab' }}>
-            <Toolbar>
-                <IconButton
-                color="inherit"
-                aria-label="open drawer"
-                edge="start"
-                onClick={handleDrawerToggle}
-                sx={{ mr: 2, display: { sm: 'none' } }}
-                >
-                <MenuIcon />
-                </IconButton>
-                <Typography
-                variant="h6"
-                component="div"
-                sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block', userSelect: 'none' } }}
-                >
-                Banco Imobiliário App
-                </Typography>
-                <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
-                {navItems.map((item) => (
-                    <Button 
-                        key={item}
-                        sx={{ color: '#fff' }}
-                        onClick={() => {
-                            handleNavigation(item);
+                <Toolbar>
+                    <IconButton
+                        color="inherit"
+                        aria-label="open drawer"
+                        edge="start"
+                        onClick={handleDrawerToggle}
+                        sx={{ mr: 2, display: { sm: 'none' } }}
+                    >
+                    <MenuIcon />
+                    </IconButton>
+                    <Typography
+                        variant="h5"
+                        component="div"
+                        sx={{
+                            flexGrow: 1,
+                            textAlign: 'center',
+                            display: { xs: 'block', sm: 'none' },
+                            userSelect: 'none',
+                            marginLeft: '-20px',
                         }}
                     >
-                    {item}
-                    </Button>
-                ))}
-                </Box>
-            </Toolbar>
+                        {getPageTitle()}
+                    </Typography>
+                    <Typography
+                        variant="h6"
+                        component="div"
+                        sx={{
+                            flexGrow: 1,
+                            display: { xs: 'none', sm: 'block' },
+                            userSelect: 'none'
+                        }}
+                    >
+                        Banco Imobiliário App
+                    </Typography>
+                    <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
+                        {navItems.map((item) => (
+                            <Button 
+                                key={item}
+                                sx={{ color: '#fff' }}
+                                onClick={() => {
+                                    handleNavigation(item);
+                                }}
+                            >
+                                {item}
+                            </Button>
+                        ))}
+                    </Box>
+                </Toolbar>
             </AppBar>
             <nav>
-            <Drawer
-                container={container}
-                variant="temporary"
-                open={mobileOpen}
-                onClose={handleDrawerToggle}
-                ModalProps={{
-                keepMounted: true,
-                }}
-                sx={{
-                display: { xs: 'block', sm: 'none' },
-                '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth, backgroundColor: '#1a1a1a'},   
-                }}
-            >
-                {drawer}
-            </Drawer>
+                <Drawer
+                    container={container}
+                    variant="temporary"
+                    open={mobileOpen}
+                    onClose={handleDrawerToggle}
+                    ModalProps={{
+                        keepMounted: true,
+                    }}
+                    sx={{
+                        display: { xs: 'block', sm: 'none' },
+                        '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth, backgroundColor: '#1a1a1a'},   
+                    }}
+                >
+                    {drawer}
+                </Drawer>
             </nav>
             <Box component="main">
-            <Toolbar />
+                <Toolbar />
             </Box>
         </Box>
     );
