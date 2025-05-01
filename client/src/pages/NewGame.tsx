@@ -14,6 +14,17 @@ import { IconButton, InputAdornment, TextField } from "@mui/material";
 import FlagCircleRoundedIcon from '@mui/icons-material/FlagCircleRounded';
 import RemoveCircleRoundedIcon from '@mui/icons-material/RemoveCircleRounded';
 import PersonAddAltRoundedIcon from '@mui/icons-material/PersonAddAltRounded';
+import ImageList from '@mui/material/ImageList';
+import ImageListItem from '@mui/material/ImageListItem';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+// import Avatar from '@mui/joy/Avatar';
+// import ListItemDecorator from '@mui/joy/ListItemDecorator';
+// // import IconButton from '@mui/joy/IconButton';
+// import Menu from '@mui/joy/Menu';
+// import MenuItem from '@mui/joy/MenuItem';
+// import MenuButton from '@mui/joy/MenuButton';
+// import Apps from '@mui/icons-material/Apps';
+// import Dropdown from '@mui/joy/Dropdown';
 
 export default function NewGame() {
     const navigate = useNavigate();
@@ -174,6 +185,67 @@ export default function NewGame() {
 
                 {players.map((player, index) => (
                     <div className="flex mt-5" key={index}>
+                        <IconButton
+                            color='primary'
+                            // onClick={handleRemovePlayer.bind(null, index)}
+                        >
+                            <AccountCircleIcon fontSize="large"/>
+                        </IconButton>
+
+                        {/* <Dropdown>
+                            <MenuButton
+                                slots={{ root: IconButton }}
+                                slotProps={{ root: { variant: 'plain', color: 'neutral' } }}
+                                sx={{ borderRadius: 40 }}
+                            >
+                                <Apps />
+                            </MenuButton>
+                            <Menu
+                                variant="solid"
+                                invertedColors
+                                aria-labelledby="apps-menu-demo"
+                                sx={{
+                                '--List-padding': '0.5rem',
+                                '--ListItemDecorator-size': '3rem',
+                                display: 'grid',
+                                gridTemplateColumns: 'repeat(3, 100px)',
+                                gridAutoRows: '100px',
+                                gap: 1,
+                                }}
+                            >
+                                <MenuItem orientation="vertical">
+                                <ListItemDecorator>
+                                    <Avatar>S</Avatar>
+                                </ListItemDecorator>
+                                Search
+                                </MenuItem>
+                                <MenuItem orientation="vertical">
+                                <ListItemDecorator>
+                                    <Avatar>M</Avatar>
+                                </ListItemDecorator>
+                                Maps
+                                </MenuItem>
+                                <MenuItem orientation="vertical">
+                                <ListItemDecorator>
+                                    <Avatar>M</Avatar>
+                                </ListItemDecorator>
+                                Mail
+                                </MenuItem>
+                                <MenuItem orientation="vertical">
+                                <ListItemDecorator>
+                                    <Avatar>D</Avatar>
+                                </ListItemDecorator>
+                                Drive
+                                </MenuItem>
+                                <MenuItem orientation="vertical">
+                                <ListItemDecorator>
+                                    <Avatar>C</Avatar>
+                                </ListItemDecorator>
+                                Calendar
+                                </MenuItem>
+                            </Menu>
+                            </Dropdown> */}
+
                         <TextField
                             label={`Jogador ${index + 1}`}
                             variant="filled"
@@ -181,7 +253,7 @@ export default function NewGame() {
                             type="text"
                             value={player.name}
                             onChange={(e) => handlePlayerNameChange(index, e.target.value)}
-                        />
+                            />
                         <IconButton
                             color='error'
                             onClick={handleRemovePlayer.bind(null, index)}

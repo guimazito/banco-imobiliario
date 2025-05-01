@@ -3,6 +3,8 @@ import { Player } from './types';
 import { PlayerCardProps } from './types';
 import FaceIcon from '@mui/icons-material/Face';
 // import { updatePlayer, fetchPlayers } from "./api/players";
+import Avatar from '@mui/material/Avatar';
+
 
 export function PlayerCard({ player, fetchPlayers }: PlayerCardProps) {
   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
@@ -66,7 +68,8 @@ export function PlayerCard({ player, fetchPlayers }: PlayerCardProps) {
           <p className="mt-2 text-lg text-neutral-400">R$ {new Intl.NumberFormat("pt-BR").format(player.money)}</p>
         </div>
         <div className='self-start'>
-          <FaceIcon></FaceIcon>
+          {/* <FaceIcon></FaceIcon> */}
+          <Avatar>H</Avatar>
         </div>
       </div>
     </div>

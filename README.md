@@ -10,7 +10,6 @@
 
 ## ToDo
 - Avatar por jogador no início
-- Popup de confirmação ao iniciar novo jogo
 - Tutorial de inicialização
 - Indicar cor diferente no ranking para jogadores com saldo negativo
 - Ajustar resposividade vertical dos componentes ranking e transações
@@ -30,3 +29,4 @@
 - Add avatar do jogador no card na tela principal
 - Responsividade na tela de novo jogo
 - Mostrar somente últimas transações com caixa de rolamento
+- Popup de confirmação ao iniciar novo jogo
