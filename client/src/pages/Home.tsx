@@ -11,6 +11,7 @@ import TransactionList from "../components/TransactionList";
 // import { updatePlayer, fetchPlayers } from "../api/players";
 import { IconButton, TextField, InputAdornment } from '@mui/material';
 import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded';
+import ResponsiveAppBar from "../components/ResponsiveAppBar";
 
 export default function Home() {
   const [open, setOpen] = useState(false);
@@ -233,56 +234,52 @@ export default function Home() {
 
   return (
     <div className="m-2">
-      <div className="grid grid-cols-2">
-        <div>
-          <NewGameButton></NewGameButton>
-        </div>
-        <div className="mb-2">
-          <div className="flex place-content-end gap-2">
-            <TextField
-              label="Valor"
+      <ResponsiveAppBar></ResponsiveAppBar>
+      <div className="mb-2">
+        <div className="flex place-content-end gap-2">
+          <TextField
+            label="Valor"
+            variant="filled"
+            className="bg-white border rounded"
+            style={{ width: '100%', userSelect: 'none'}}
+            type="number"
+            id="moneyInput"
+            value={inputValue === 0 ? "" : new Intl.NumberFormat("pt-BR").format(inputValue)}
+            onChange={handleInputChange}
+            slotProps={{
+                input: {
+                    startAdornment: <InputAdornment position="start">R$</InputAdornment>,
+                }
+            }}
+          />
+          <IconButton
+            color='primary'
+            onClick={playersTransaction}
+            disabled={!isTransactionButtonEnabled()}
+          >
+            <CheckCircleRoundedIcon fontSize="large"/>
+          </IconButton>
+          <Snackbar
+            open={open}
+            autoHideDuration={1500}
+            onClose={handleClose}
+            anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+          >
+            <Alert
+              severity="success"
               variant="filled"
-              className="bg-white border rounded"
-              style={{ width: '60%', userSelect: 'none'}}
-              type="number"
-              id="moneyInput"
-              value={inputValue === 0 ? "" : new Intl.NumberFormat("pt-BR").format(inputValue)}
-              onChange={handleInputChange}
-              slotProps={{
-                  input: {
-                      startAdornment: <InputAdornment position="start">R$</InputAdornment>,
-                  }
-              }}
-            />
-            <IconButton
-              color='primary'
-              onClick={playersTransaction}
-              disabled={!isTransactionButtonEnabled()}
+              sx={{ width: '100%' }}
             >
-              <CheckCircleRoundedIcon fontSize="large"/>
-            </IconButton>
-            <Snackbar
-              open={open}
-              autoHideDuration={1500}
-              onClose={handleClose}
-              anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
-            >
-              <Alert
-                severity="success"
-                variant="filled"
-                sx={{ width: '100%' }}
-              >
-                Transação finalizada com sucesso!
-              </Alert>
-            </Snackbar>
+              Transação finalizada com sucesso!
+            </Alert>
+          </Snackbar>
 
-            <FailAlert
-              open={failAlertOpen}
-              onClose={() => setFailAlertOpen(false)}
-              message={failAlertMessage}
-            ></FailAlert>
+          <FailAlert
+            open={failAlertOpen}
+            onClose={() => setFailAlertOpen(false)}
+            message={failAlertMessage}
+          ></FailAlert>
 
-          </div>
         </div>
       </div>
 
