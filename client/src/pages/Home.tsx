@@ -134,7 +134,7 @@ export default function Home() {
 
   function handleInputChange(event: React.ChangeEvent<HTMLInputElement>) {
     const rawValue = event.target.value.replace(/\D/g, ""); // Remove caracteres não numéricos
-    const formattedValue = new Intl.NumberFormat("pt-BR").format(Number(rawValue)); // Formata o número
+    const formattedValue = new Intl.NumberFormat("pt-BR").format(Number(rawValue));
     setInputValue(Number(event.target.value));
     if (Number(event.target.value) < 0) {
       setFailAlertMessage('Valor não pode ser negativo!');
@@ -233,65 +233,73 @@ export default function Home() {
   }
 
   return (
-    <div className="m-2">
+    <div>
       <ResponsiveAppBar></ResponsiveAppBar>
-      <div className="mb-2">
-        <div className="flex place-content-end gap-2">
-          <TextField
-            label="Valor"
-            variant="filled"
-            className="bg-white border rounded"
-            style={{ width: '100%', userSelect: 'none'}}
-            type="number"
-            id="moneyInput"
-            value={inputValue === 0 ? "" : new Intl.NumberFormat("pt-BR").format(inputValue)}
-            onChange={handleInputChange}
-            slotProps={{
-                input: {
-                    startAdornment: <InputAdornment position="start">R$</InputAdornment>,
-                }
-            }}
-          />
-          <IconButton
-            color='primary'
-            onClick={playersTransaction}
-            disabled={!isTransactionButtonEnabled()}
-          >
-            <CheckCircleRoundedIcon fontSize="large"/>
-          </IconButton>
-          <Snackbar
-            open={open}
-            autoHideDuration={1500}
-            onClose={handleClose}
-            anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
-          >
-            <Alert
-              severity="success"
+
+      <div className="m-2">
+        <div className="mb-2">        
+          <div className="flex place-content-end gap-2">
+            <TextField
+              label="Valor"
               variant="filled"
-              sx={{ width: '100%' }}
+              className="bg-white border rounded"
+              style={{ width: '100%', userSelect: 'none'}}
+              type="number"
+              id="moneyInput"
+              value={inputValue === 0 ? "" : new Intl.NumberFormat("pt-BR").format(inputValue)}
+              onChange={handleInputChange}
+              slotProps={{
+                  input: {
+                      startAdornment: <InputAdornment position="start">R$</InputAdornment>,
+                  }
+              }}
+            />
+            <IconButton
+              color='primary'
+              onClick={playersTransaction}
+              disabled={!isTransactionButtonEnabled()}
+              sx={{
+                '&.Mui-disabled': {
+                  color: 'rgba(25, 121, 206, 0.5)',
+                },
+              }}
             >
-              Transação finalizada com sucesso!
-            </Alert>
-          </Snackbar>
+              <CheckCircleRoundedIcon fontSize="large"/>
+            </IconButton>
+            <Snackbar
+              open={open}
+              autoHideDuration={1500}
+              onClose={handleClose}
+              anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+            >
+              <Alert
+                severity="success"
+                variant="filled"
+                sx={{ width: '100%' }}
+              >
+                Transação finalizada com sucesso!
+              </Alert>
+            </Snackbar>
 
-          <FailAlert
-            open={failAlertOpen}
-            onClose={() => setFailAlertOpen(false)}
-            message={failAlertMessage}
-          ></FailAlert>
+            <FailAlert
+              open={failAlertOpen}
+              onClose={() => setFailAlertOpen(false)}
+              message={failAlertMessage}
+            ></FailAlert>
 
+          </div>
         </div>
-      </div>
 
-      <div className="grid grid-cols-2 gap-2">
-        {players.map((player) => (
-          <PlayerCard key={player.id} player={player} fetchPlayers={fetchPlayers}/>
-        ))}
-      </div>
+        <div className="grid grid-cols-2 gap-2">
+          {players.map((player) => (
+            <PlayerCard key={player.id} player={player} fetchPlayers={fetchPlayers}/>
+          ))}
+        </div>
 
-      <div className="grid grid-cols-2 gap-2 mt-2 h-full">
-        <RankingList players={players}></RankingList>
-        <TransactionList transactions={transactions}></TransactionList>  
+        <div className="grid grid-cols-2 gap-2 mt-2 h-full">
+          <RankingList players={players}></RankingList>
+          <TransactionList transactions={transactions}></TransactionList>  
+        </div>
       </div>
     </div>
   );

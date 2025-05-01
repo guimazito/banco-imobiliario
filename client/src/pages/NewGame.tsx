@@ -156,56 +156,8 @@ export default function NewGame() {
     return (
         <div>
             <ResponsiveAppBar></ResponsiveAppBar>
-            <header className="flex place-content-between bg-gray-800 mb-5 p-2">
-            <div>
-                    <IconButton
-                        color='primary'
-                        onClick={handleAddPlayer}
-                    >
-                        <PersonAddAltRoundedIcon fontSize="large"/>
-                    </IconButton>
-                </div>
 
-                <h1
-                    className="text-3xl font-bold text-center mt-2"
-                    style={{ userSelect: 'none' }}
-                >
-                    NOVO JOGO
-                </h1>
-
-                <div>
-                    <IconButton
-                        color='success'
-                        onClick={handleClick}
-                        disabled={!isCreateButtonEnabled()}
-                    >
-                        <FlagCircleRoundedIcon fontSize="large"/>
-                    </IconButton>
-                    <Dialog
-                        open={open}
-                        onClose={handleClose}
-                        aria-labelledby="alert-dialog-title"
-                        aria-describedby="alert-dialog-description"
-                    >
-                        <DialogTitle id="alert-dialog-title">
-                        {"Deseja iniciar um novo jogo?"}
-                        </DialogTitle>
-                        <DialogContent>
-                        <DialogContentText id="alert-dialog-description">
-                            Todos os jogadores e transações da partida anterior serão apagados.
-                        </DialogContentText>
-                        </DialogContent>
-                        <DialogActions>
-                        <Button onClick={handleClose}>Não</Button>
-                        <Button onClick={handleSubmit} autoFocus>
-                            Sim
-                        </Button>
-                        </DialogActions>
-                    </Dialog>
-                </div>
-            </header>
-
-            <form className="flex flex-col items-center">
+            <form className="flex flex-col items-center mt-2">                
                 <TextField
                     label="Valor Inicial"
                     variant="filled"
@@ -222,7 +174,7 @@ export default function NewGame() {
                 />
 
                 {players.map((player, index) => (
-                    <div className="flex mt-5" key={index}>
+                    <div className="flex mt-3" key={index}>
                         <IconButton
                             color='primary'
                             onClick={(event) => handleOpenAvatarMenu(event, index)}
@@ -280,7 +232,54 @@ export default function NewGame() {
                     onClose={() => setFailAlertOpen(false)}
                     message={failAlertMessage}
                 ></FailAlert>
-            </form>            
+            </form>
+
+            <footer className="flex place-content-between bg-gray-800 p-2 absolute bottom-0 w-full">
+                <div>
+                    <IconButton
+                        color='primary'
+                        onClick={handleAddPlayer}
+                    >
+                        <PersonAddAltRoundedIcon fontSize="large"/>
+                    </IconButton>
+                </div>               
+
+                <div>
+                    <IconButton
+                        color='success'
+                        onClick={handleClick}
+                        disabled={!isCreateButtonEnabled()}
+                        sx={{
+                            '&.Mui-disabled': {
+                              color: 'rgba(52, 125, 54, 0.5)',
+                            },
+                        }}
+                    >
+                        <FlagCircleRoundedIcon fontSize="large"/>
+                    </IconButton>
+                    <Dialog
+                        open={open}
+                        onClose={handleClose}
+                        aria-labelledby="alert-dialog-title"
+                        aria-describedby="alert-dialog-description"
+                    >
+                        <DialogTitle id="alert-dialog-title">
+                        {"Deseja iniciar um novo jogo?"}
+                        </DialogTitle>
+                        <DialogContent>
+                        <DialogContentText id="alert-dialog-description">
+                            Todos os jogadores e transações da partida anterior serão apagados.
+                        </DialogContentText>
+                        </DialogContent>
+                        <DialogActions>
+                        <Button onClick={handleClose}>Não</Button>
+                        <Button onClick={handleSubmit} autoFocus>
+                            Sim
+                        </Button>
+                        </DialogActions>
+                    </Dialog>
+                </div>
+            </footer>
         </div>
     );
 }
