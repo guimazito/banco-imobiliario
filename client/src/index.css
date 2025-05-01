@@ -3,7 +3,8 @@
 @tailwind utilities;
 
 body {
-  @apply bg-grayscale-800 font-sans text-white;
+  @apply bg-grayscale-800 text-white;
+  font-family: 'open-sans', sans-serif;
   /* overflow-y: hidden;  */
   /* Desabilita o scroll vertical */
   /* @apply bg-grayscale-800 font-mono text-white; */

@@ -17,9 +17,9 @@ export default {
           900: '#000',
         },
       },
-      // fontFamily: {
-      //   manrope: ['Manrope'],
-      // },
+      fontFamily: {
+        sans: ['open-sans'],
+      },
     },
   },
   plugins: [],
