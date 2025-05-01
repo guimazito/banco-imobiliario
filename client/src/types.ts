@@ -7,6 +7,7 @@ export type Player = {
   name: string;
   money: number;
   status: PlayerStatus;
+  icon: string;
 };
 
 export type Transaction = {
