@@ -159,16 +159,18 @@ export default function Home() {
     const hasValidInput = inputValue > 0;
     const hasOneReceiving = getPlayerReceiving().length === 1;
     const hasOnePaying = getPlayerPaying().length === 1;
+    const hasNoneReceiving = getPlayerReceiving().length === 0;
+    const hasNonePaying = getPlayerPaying().length === 0;
   
     if (hasValidInput && hasOneReceiving && hasOnePaying) {
       return true;
     }
   
-    if (hasValidInput && hasOnePaying) {
+    if (hasValidInput && hasOnePaying && hasNoneReceiving) {
       return true;
     }
   
-    if (hasValidInput && hasOneReceiving) {
+    if (hasValidInput && hasOneReceiving && hasNonePaying) {
       return true;
     }
   
