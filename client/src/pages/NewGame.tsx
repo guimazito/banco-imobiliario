@@ -1,47 +1,61 @@
 import React from "react";
 import { useState } from 'react';
-import Alert from '@mui/material/Alert';
+import Box from '@mui/material/Box';
+import Menu from '@mui/material/Menu';
 import Dialog from '@mui/material/Dialog';
 import Button from '@mui/material/Button';
-import Snackbar from '@mui/material/Snackbar';
+import PixIcon from '@mui/icons-material/Pix';
 import { useNavigate } from 'react-router-dom';
 import DialogTitle from '@mui/material/DialogTitle';
+import SavingsIcon from '@mui/icons-material/Savings';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import FailAlert from '../components/FailAlert/FailAlert';
+import CreditCardIcon from '@mui/icons-material/CreditCard';
+import PointOfSaleIcon from '@mui/icons-material/PointOfSale';
+import ShoppingBagIcon from '@mui/icons-material/ShoppingBag';
 import DialogContentText from '@mui/material/DialogContentText';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
 import { IconButton, InputAdornment, TextField } from "@mui/material";
 import FlagCircleRoundedIcon from '@mui/icons-material/FlagCircleRounded';
 import RemoveCircleRoundedIcon from '@mui/icons-material/RemoveCircleRounded';
 import PersonAddAltRoundedIcon from '@mui/icons-material/PersonAddAltRounded';
-import ImageList from '@mui/material/ImageList';
-import ImageListItem from '@mui/material/ImageListItem';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-// import Avatar from '@mui/joy/Avatar';
-// import ListItemDecorator from '@mui/joy/ListItemDecorator';
-// // import IconButton from '@mui/joy/IconButton';
-// import Menu from '@mui/joy/Menu';
-// import MenuItem from '@mui/joy/MenuItem';
-// import MenuButton from '@mui/joy/MenuButton';
-// import Apps from '@mui/icons-material/Apps';
-// import Dropdown from '@mui/joy/Dropdown';
+
 
 export default function NewGame() {
+    // Router
     const navigate = useNavigate();
+    // Player
     const [open, setOpen] = useState(false);
     const [money, setMoney] = useState<number>(0);
-    const [players, setPlayers] = useState([{name: ""}, {name: ""}]);
-    const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+    const [players, setPlayers] = useState([
+        {name: "", icon: <AccountCircleIcon fontSize="large" name="AccountCircleIcon"/>},
+        {name: "", icon: <AccountCircleIcon fontSize="large" name="AccountCircleIcon"/>},
+    ]);
+    // Alert
     const [failAlertOpen, setFailAlertOpen] = useState(false);
     const [failAlertMessage, setFailAlertMessage] = useState<string>('');
-
+    // Enviroument
+    const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+    // Avatar
+    const iconArray = [
+        <PixIcon fontSize="large" color="primary" name="PixIcon"/>,
+        <SavingsIcon fontSize="large" color="primary" name="SavingsIcon"/>,
+        <CreditCardIcon fontSize="large" color="primary" name="CreditCardIcon"/>,
+        <ShoppingBagIcon fontSize="large" color="primary" name="ShoppingBagIcon"/>,
+        <PointOfSaleIcon fontSize="large" color="primary" name="PointOfSaleIcon"/>,
+        <MonetizationOnIcon fontSize="large" color="primary" name="MonetizationOnIcon"/>,
+    ];
+    const [anchorEl, setAnchorEl] = useState<{ index: number; element: HTMLElement | null }>({ index: -1, element: null });
+    
     const handleClick = () => {
         setOpen(true);
       };
     
-      const handleClose = () => {
+    const handleClose = () => {
         setOpen(false);
-      };
+    };
 
     const handleAddPlayer = () => {
         setPlayers((prevPlayers) => {
@@ -50,7 +64,7 @@ export default function NewGame() {
                 setFailAlertOpen(true);
                 return prevPlayers;
             }
-            return [...prevPlayers, { name: "" }];
+            return [...prevPlayers, { name: "" , icon: <AccountCircleIcon fontSize="large"/> }];
         });
     };
 
@@ -73,7 +87,7 @@ export default function NewGame() {
         );
     };
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = async (e: { preventDefault: () => void; }) => {
         e.preventDefault();
 
         await fetch(`${API_BASE_URL}/api/players`, {
@@ -85,27 +99,49 @@ export default function NewGame() {
             method: "DELETE",
         });
         console.log("Deletou as transações");
-
+        console.log(players)
         await fetch(`${API_BASE_URL}/api/players`, {
             method: "POST",
             headers : {
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify(players.map(player => ({ name: player.name.trim(), money: money, status: "idle" }))),
+            body: JSON.stringify(players.map(player => ({
+                name: player.name.trim(),
+                money: money,
+                status: "idle",
+                icon: player.icon.props.name
+            }))),
         });
 
         navigate('/');
+    };  
+    
+    const handleOpenAvatarMenu = (event: React.MouseEvent<HTMLButtonElement>, index: number) => {
+        setAnchorEl({ index, element: event.currentTarget });
+    };
+
+    const handleCloseAvatarMenu = () => {
+        setAnchorEl({ index: -1, element: null });
+    };
+
+    const handleAvatarChange = (playerIndex: number, icon: JSX.Element) => {
+        setPlayers((prevPlayers) =>
+            prevPlayers.map((player, index) =>
+                index === playerIndex ? { ...player, icon } : player
+            )
+        );
+        setAnchorEl({ index: -1, element: null });
     };
 
     function handleMoneyChange(event: React.ChangeEvent<HTMLInputElement>) {
         const rawValue = event.target.value.replace(/\D/g, ""); // Remove caracteres não numéricos
-        const formattedValue = new Intl.NumberFormat("pt-BR").format(Number(rawValue)); // Formata o número
+        const formattedValue = new Intl.NumberFormat("pt-BR").format(Number(rawValue));
         if (Number(event.target.value) < 0) {
             setFailAlertMessage('Valor não pode ser negativo!');
             setFailAlertOpen(true);
             setMoney(0);
         }    
-        setMoney(Number(rawValue)); // Atualiza o estado com o valor numérico
+        setMoney(Number(rawValue));
     }
 
     function isCreateButtonEnabled() {
@@ -187,64 +223,38 @@ export default function NewGame() {
                     <div className="flex mt-5" key={index}>
                         <IconButton
                             color='primary'
-                            // onClick={handleRemovePlayer.bind(null, index)}
+                            onClick={(event) => handleOpenAvatarMenu(event, index)}
                         >
-                            <AccountCircleIcon fontSize="large"/>
+                            {player.icon}
                         </IconButton>
 
-                        {/* <Dropdown>
-                            <MenuButton
-                                slots={{ root: IconButton }}
-                                slotProps={{ root: { variant: 'plain', color: 'neutral' } }}
-                                sx={{ borderRadius: 40 }}
-                            >
-                                <Apps />
-                            </MenuButton>
-                            <Menu
-                                variant="solid"
-                                invertedColors
-                                aria-labelledby="apps-menu-demo"
+                        <Menu
+                            id="basic-menu"
+                            anchorEl={anchorEl.element}
+                            open={anchorEl.index === index}
+                            onClose={handleCloseAvatarMenu}
+                        >
+                            <Box
                                 sx={{
-                                '--List-padding': '0.5rem',
-                                '--ListItemDecorator-size': '3rem',
-                                display: 'grid',
-                                gridTemplateColumns: 'repeat(3, 100px)',
-                                gridAutoRows: '100px',
-                                gap: 1,
+                                    display: 'grid',
+                                    gridTemplateColumns: 'repeat(3, 1fr)',
+                                    gap: 2,
+                                    padding: 2,
+                                    borderRadius: 2,
+                                    cursor: 'pointer',
                                 }}
                             >
-                                <MenuItem orientation="vertical">
-                                <ListItemDecorator>
-                                    <Avatar>S</Avatar>
-                                </ListItemDecorator>
-                                Search
-                                </MenuItem>
-                                <MenuItem orientation="vertical">
-                                <ListItemDecorator>
-                                    <Avatar>M</Avatar>
-                                </ListItemDecorator>
-                                Maps
-                                </MenuItem>
-                                <MenuItem orientation="vertical">
-                                <ListItemDecorator>
-                                    <Avatar>M</Avatar>
-                                </ListItemDecorator>
-                                Mail
-                                </MenuItem>
-                                <MenuItem orientation="vertical">
-                                <ListItemDecorator>
-                                    <Avatar>D</Avatar>
-                                </ListItemDecorator>
-                                Drive
-                                </MenuItem>
-                                <MenuItem orientation="vertical">
-                                <ListItemDecorator>
-                                    <Avatar>C</Avatar>
-                                </ListItemDecorator>
-                                Calendar
-                                </MenuItem>
-                            </Menu>
-                            </Dropdown> */}
+                               {iconArray.map((icon, iconIndex) => (
+                                    <div
+                                        key={iconIndex}
+                                        onClick={() => handleAvatarChange(index, icon)}
+                                        style={{ cursor: 'pointer' }}
+                                    >
+                                        {icon}
+                                    </div> 
+                                ))}
+                            </Box>
+                        </Menu>
 
                         <TextField
                             label={`Jogador ${index + 1}`}
@@ -262,21 +272,6 @@ export default function NewGame() {
                         </IconButton>
                     </div>
                 ))}
-
-                {/* <Snackbar
-                    open={open}
-                    autoHideDuration={1500}
-                    onClose={handleClose}
-                    anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
-                > */}
-                    {/* <Alert
-                    severity="success"
-                    variant="filled"
-                    sx={{ width: '100%' }}
-                    >
-                    Transação finalizada com sucesso!
-                    </Alert> */}
-                {/* </Snackbar> */}
     
                 <FailAlert
                     open={failAlertOpen}
@@ -286,5 +281,4 @@ export default function NewGame() {
             </form>            
         </div>
     );
-
 }

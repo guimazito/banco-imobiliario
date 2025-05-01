@@ -1,14 +1,20 @@
 import React from 'react';
 import { Player } from './types';
 import { PlayerCardProps } from './types';
-import FaceIcon from '@mui/icons-material/Face';
+import PixIcon from '@mui/icons-material/Pix';
+import SavingsIcon from '@mui/icons-material/Savings';
+import CreditCardIcon from '@mui/icons-material/CreditCard';
+import PointOfSaleIcon from '@mui/icons-material/PointOfSale';
+import ShoppingBagIcon from '@mui/icons-material/ShoppingBag';
 // import { updatePlayer, fetchPlayers } from "./api/players";
-import Avatar from '@mui/material/Avatar';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
 
 
 export function PlayerCard({ player, fetchPlayers }: PlayerCardProps) {
+  // Environment
   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
-  
+  // Player
   const updatePlayer = async (playerId: string, updatedData: Partial<Player>) => {
     try {
       const response = await fetch(`${API_BASE_URL}/api/players/${playerId}`, {
@@ -49,12 +55,32 @@ export function PlayerCard({ player, fetchPlayers }: PlayerCardProps) {
     }
   };
 
-  const cardColor = 
-    player.status === 'pay'
-    ? 'bg-red-900'
-    : player.status === 'receive'
-    ? 'bg-green-900'
-    : 'bg-neutral-700';
+  const cardColorMap: { [key: string]: string } = {
+    pay: 'bg-red-900',
+    receive: 'bg-green-900',
+    idle: 'bg-neutral-700',
+  };
+
+  const cardColor = cardColorMap[player.status] || 'bg-neutral-700';
+
+  const cardAvatar = (name: string) => {
+    switch (name) {
+      case 'PixIcon':
+        return <PixIcon fontSize="large" />;
+      case 'SavingsIcon':
+        return <SavingsIcon fontSize="large" />;
+      case 'CreditCardIcon':
+        return <CreditCardIcon fontSize="large" />;
+      case 'PointOfSaleIcon':
+        return <PointOfSaleIcon fontSize="large" />;
+      case 'MonetizationOnIcon':
+        return <MonetizationOnIcon fontSize="large" />;
+      case 'ShoppingBagIcon':
+        return <ShoppingBagIcon fontSize="large" />;
+      default:
+        return <AccountCircleIcon fontSize="large" />;
+    }
+  }
 
   return (
     <div
@@ -68,8 +94,7 @@ export function PlayerCard({ player, fetchPlayers }: PlayerCardProps) {
           <p className="mt-2 text-lg text-neutral-400">R$ {new Intl.NumberFormat("pt-BR").format(player.money)}</p>
         </div>
         <div className='self-start'>
-          {/* <FaceIcon></FaceIcon> */}
-          <Avatar>H</Avatar>
+          {cardAvatar(player.icon)}
         </div>
       </div>
     </div>
