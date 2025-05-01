@@ -21,6 +21,7 @@ import { IconButton, InputAdornment, TextField } from "@mui/material";
 import FlagCircleRoundedIcon from '@mui/icons-material/FlagCircleRounded';
 import RemoveCircleRoundedIcon from '@mui/icons-material/RemoveCircleRounded';
 import PersonAddAltRoundedIcon from '@mui/icons-material/PersonAddAltRounded';
+import ResponsiveAppBar from "../components/ResponsiveAppBar";
 
 
 export default function NewGame() {
@@ -154,7 +155,8 @@ export default function NewGame() {
 
     return (
         <div>
-            <header className="flex place-content-between bg-gray-700 mb-5 p-2">
+            <ResponsiveAppBar></ResponsiveAppBar>
+            <header className="flex place-content-between bg-gray-800 mb-5 p-2">
             <div>
                     <IconButton
                         color='primary'
