@@ -9,13 +9,11 @@
 5. Enjoy!
 
 ## ToDo
-- Avatar por jogador no início
-- Tutorial de inicialização
+- Add menu lateral com as opções de novo jogo, propriedades por jogador e balanço final (https://mui.com/material-ui/react-app-bar/)
 - Indicar cor diferente no ranking para jogadores com saldo negativo
-- Ajustar resposividade vertical dos componentes ranking e transações
 - Add página de propriedades por jogador
 - Add página de balanço final para finalização de jogo
-- Add menu lateral com as opções de novo jogo, propriedades por jogador e balanço final
+- Tutorial de inicialização
 
 ## Done
 - Fonte texto mais amigável
@@ -30,3 +28,5 @@
 - Responsividade na tela de novo jogo
 - Mostrar somente últimas transações com caixa de rolamento
 - Popup de confirmação ao iniciar novo jogo
+- Avatar por jogador no início
+- Ajustar resposividade vertical dos componentes ranking e transações
