@@ -9,7 +9,6 @@
 5. Enjoy!
 
 ## ToDo
-- Add menu lateral com as opções de novo jogo, propriedades por jogador e balanço final (https://mui.com/material-ui/react-app-bar/)
 - Indicar cor diferente no ranking para jogadores com saldo negativo
 - Add página de propriedades por jogador
 - Add página de balanço final para finalização de jogo
@@ -30,3 +29,4 @@
 - Popup de confirmação ao iniciar novo jogo
 - Avatar por jogador no início
 - Ajustar resposividade vertical dos componentes ranking e transações
+- Add menu lateral com as opções de novo jogo, propriedades por jogador e balanço final (https://mui.com/material-ui/react-app-bar/)
