@@ -13,7 +13,14 @@ console.log("API URL:", API_BASE_URL);
 console.log("WebSocket URL:", WS_BASE_URL);
 console.log("DB URL:", DB_BASE_URL);
 
-app.use(cors());
+let corsOptions = {
+    origin: [
+        "http://localhost:3001",
+        "https://banco-imobiliario-gules.vercel.app"
+    ],
+  };  
+
+app.use(cors(corsOptions));
 app.use(json());
 
 // connection
