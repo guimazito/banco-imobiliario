@@ -14,12 +14,23 @@ console.log("WebSocket URL:", WS_BASE_URL);
 console.log("DB URL:", DB_BASE_URL);
 
 let corsOptions = {
-    origin: [
-        "http://localhost:3001",
-        "https://banco-imobiliario-gules.vercel.app",
-        "https://banco-imobiliario-snowy.vercel.app"
-    ],
-  };  
+    origin: function (origin, callback) {
+        const allowedOrigins = [
+            "http://localhost:3001",
+            "https://banco-imobiliario-gules.vercel.app",
+            "https://banco-imobiliario-snowy.vercel.app"
+        ];
+
+        // Permite a origem se estiver na lista de origens permitidas
+        if (allowedOrigins.includes(origin) || !origin) {
+            callback(null, true);
+        } else {
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+}; 
 
 app.use(cors(corsOptions));
 app.use(json());
