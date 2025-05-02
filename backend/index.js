@@ -30,6 +30,7 @@ let corsOptions = {
     },
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true, // Permite o envio de cookies, se necessário
 };  
 
 app.use(cors(corsOptions));
