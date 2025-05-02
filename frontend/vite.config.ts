@@ -2,6 +2,8 @@ import react from '@vitejs/plugin-react';
 import path from 'path';
 import Unfonts from 'unplugin-fonts/vite';
 import { defineConfig } from 'vite';
+import * as dotenv from 'dotenv';
+dotenv.config();
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -26,5 +28,9 @@ export default defineConfig({
     alias: {
       '@': path.resolve(__dirname, './src'),
     },
+  },
+  server: {
+    host: process.env.VITE_FRONTEND_URL.split(":")[0] || 'localhost',
+    port: parseInt(process.env.VITE_FRONTEND_URL.split(":")[1]) || 5173,
   },
 });
