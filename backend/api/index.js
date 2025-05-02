@@ -16,7 +16,8 @@ console.log("DB URL:", DB_BASE_URL);
 let corsOptions = {
     origin: [
         "http://localhost:3001",
-        "https://banco-imobiliario-gules.vercel.app"
+        "https://banco-imobiliario-gules.vercel.app",
+        "https://banco-imobiliario-snowy.vercel.app"
     ],
   };  
 
