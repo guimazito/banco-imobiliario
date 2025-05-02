@@ -33,6 +33,7 @@ let corsOptions = {
     credentials: true, // Permite o envio de cookies, se necessário
 };  
 
+app.options('*', cors(corsOptions));
 app.use(cors(corsOptions));
 app.use(json());
 
