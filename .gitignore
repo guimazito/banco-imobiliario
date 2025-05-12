@@ -30,3 +30,5 @@ mongo_data
 
 # Environment variables
 .env
+.env.development
+.env.production
