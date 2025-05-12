@@ -1,4 +1,5 @@
 import 'dotenv/config';
+import cors from 'cors';
 import { WebSocketServer } from 'ws';
 import express, { json } from 'express';
 import { connect, model, Schema } from 'mongoose';
@@ -11,6 +12,14 @@ const DB_BASE_URL = process.env.VITE_DB_BASE_URL;
 console.log("API URL:", API_BASE_URL);
 console.log("WebSocket URL:", WS_BASE_URL);
 console.log("DB URL:", DB_BASE_URL);
+
+const corsOptions = {
+    origin: 'http://localhost:5173', // Replace with your frontend's URL
+    methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allowed HTTP methods
+    allowedHeaders: ['Content-Type', 'Authorization'], // Allowed headers
+};
+
+app.use(cors(corsOptions));
 
 // connection
     connect(`mongodb://${DB_BASE_URL}/playerdb`, {

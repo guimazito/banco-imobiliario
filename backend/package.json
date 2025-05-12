@@ -4,18 +4,18 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "nodemon vite",
     "build": "tsc && vite build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview"
   },
   "dependencies": {
+    "cloudinary": "^1.21.0",
     "cors": "^2.8.5",
     "dotenv": "^16.5.0",
     "express": "^5.1.0",
     "mongoose": "^8.13.2",
-    "ws": "^8.18.1",
-    "cloudinary": "^1.21.0"
+    "ws": "^8.18.1"
   },
   "devDependencies": {
     "@types/cors": "^2.8.17",
@@ -27,6 +27,7 @@
     "autoprefixer": "^10.4.16",
     "eslint": "^8.55.0",
     "eslint-plugin-simple-import-sort": "^10.0.0",
+    "nodemon": "^3.1.10",
     "postcss": "^8.4.33",
     "prettier": "^3.2.2",
     "prettier-plugin-tailwindcss": "^0.5.11",
