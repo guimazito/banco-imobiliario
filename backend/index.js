@@ -1,8 +1,10 @@
-import 'dotenv/config';
 import cors from 'cors';
+import { config } from 'dotenv';
 import { WebSocketServer } from 'ws';
 import express, { json } from 'express';
 import { connect, model, Schema } from 'mongoose';
+
+config({ path: `.env.${process.env.NODE_ENV}` });
 
 const app = express();
 const WS_BASE_URL = process.env.VITE_WS_BASE_URL;
@@ -13,13 +15,8 @@ console.log("API URL:", API_BASE_URL);
 console.log("WebSocket URL:", WS_BASE_URL);
 console.log("DB URL:", DB_BASE_URL);
 
-const corsOptions = {
-    origin: 'http://localhost:5173', // Replace with your frontend's URL
-    methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allowed HTTP methods
-    allowedHeaders: ['Content-Type', 'Authorization'], // Allowed headers
-};
-
-app.use(cors(corsOptions));
+app.use(cors());
+app.use(json());
 
 // connection
     connect(`mongodb://${DB_BASE_URL}/playerdb`, {
@@ -192,5 +189,8 @@ app.listen(3001, () => {
     console.log(`Server is running on ${API_BASE_URL}`);
 });
 
-/* Start the server
-    node server.js */
+/*
+Start the server:
+    development: npm start
+    development externalize ip: npm run start:prod
+*/
