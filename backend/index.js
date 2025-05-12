@@ -1,5 +1,4 @@
 import 'dotenv/config';
-import cors from 'cors';
 import { WebSocketServer } from 'ws';
 import express, { json } from 'express';
 import { connect, model, Schema } from 'mongoose';
@@ -12,30 +11,6 @@ const DB_BASE_URL = process.env.VITE_DB_BASE_URL;
 console.log("API URL:", API_BASE_URL);
 console.log("WebSocket URL:", WS_BASE_URL);
 console.log("DB URL:", DB_BASE_URL);
-
-let corsOptions = {
-    origin: function (origin, callback) {
-        const allowedOrigins = [
-            "http://localhost:3001",
-            "https://banco-imobiliario-gules.vercel.app",
-            "https://banco-imobiliario-snowy.vercel.app"
-        ];
-
-        // Permite a origem se estiver na lista de origens permitidas
-        if (allowedOrigins.includes(origin) || !origin) {
-            callback(null, true);
-        } else {
-            callback(new Error('Not allowed by CORS'));
-        }
-    },
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
-    credentials: true, // Permite o envio de cookies, se necessário
-};  
-
-app.options('*', cors(corsOptions));
-app.use(cors(corsOptions));
-app.use(json());
 
 // connection
     connect(`mongodb://${DB_BASE_URL}/playerdb`, {

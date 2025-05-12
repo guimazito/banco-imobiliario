@@ -29,8 +29,4 @@ export default defineConfig({
       '@': path.resolve(__dirname, './src'),
     },
   },
-  // server: {
-  //   host: process.env.VITE_FRONTEND_URL.split(":")[0] || 'localhost',
-  //   port: parseInt(process.env.VITE_FRONTEND_URL.split(":")[1]) || 5173,
-  // },
 });
