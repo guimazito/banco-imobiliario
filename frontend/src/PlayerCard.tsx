@@ -14,6 +14,7 @@ import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
 export function PlayerCard({ player, fetchPlayers }: PlayerCardProps) {
   // Environment
   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+  console.log("API_BASE_URL", API_BASE_URL);
   // Player
   const updatePlayer = async (playerId: string, updatedData: Partial<Player>) => {
     try {

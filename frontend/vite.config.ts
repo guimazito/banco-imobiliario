@@ -3,6 +3,7 @@ import path from 'path';
 import Unfonts from 'unplugin-fonts/vite';
 import { defineConfig } from 'vite';
 import * as dotenv from 'dotenv';
+
 dotenv.config();
 
 // https://vitejs.dev/config/
