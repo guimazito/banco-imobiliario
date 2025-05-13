@@ -38,9 +38,18 @@ app.use(cors(corsOptions));
 app.use(json());
 
 // connection
-    connect(`mongodb://${DB_BASE_URL}/playerdb`, {
+    // connect(`mongodb://${DB_BASE_URL}/playerdb`, {
+connect(`${DB_BASE_URL}`, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
     maxPoolSize: 50,
     wtimeoutMS: 2500,
+})
+.then(() => {
+    console.log('Connected to MongoDB successfully');
+})
+.catch((error) => {
+    console.error('Error connecting to MongoDB:', error);
 });
 
 // schemas
