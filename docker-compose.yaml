@@ -1,0 +1,68 @@
+version: '3.8'
+
+services:
+  banco_imobiliario_db:
+    image: mysql:5.7
+    container_name: banco_imobiliario_db
+    restart: always
+    env_file:
+      - ./backend/.env
+    ports:
+      - '3306:3306'
+    volumes:
+      - banco_imobiliario_mysql_data:/var/lib/mysql
+    networks:
+      - banco_imobiliario_network
+
+  # hemotrack_backend:
+  #   build:
+  #     context: ./backend
+  #     dockerfile: Dockerfile
+  #   container_name: hemotrack_backend
+  #   restart: always
+  #   env_file:
+  #     - ./backend/.env
+  #   ports:
+  #     - '3000:3000'
+  #   depends_on:
+  #     - hemotrack_db
+  #   networks:
+  #     - hemotrack_network
+  #   volumes:
+  #     - ./backend:/app
+  #     - hemotrack_backend_logs:/log
+  #   command: sh -c "npx prisma migrate deploy && npx prisma generate && npx prisma db seed && npm run dev"
+
+  # hemotrack_frontend:
+  #   build:
+  #     context: ./frontend
+  #     dockerfile: Dockerfile
+  #   container_name: hemotrack_frontend
+  #   restart: always
+  #   environment:
+  #     - NODE_ENV=development
+  #     - PORT=8080
+  #   ports:
+  #     - '8080:8080'
+  #   networks:
+  #     - hemotrack_network
+  #   volumes:
+  #     - ./frontend:/app
+  #   command: sh -c "npm install && npm run dev"
+
+volumes:
+  banco_imobiliario_mysql_data:
+  # hemotrack_backend_logs:
+
+networks:
+  banco_imobiliario_network:
+    driver: bridge
+
+# validate configuration: docker-compose config
+# bring up the services: docker-compose up --build
+# bring down the services and remove volumes: docker-compose down -v
+
+# Check hemotrack_backend_logs:
+#   docker exec -it hemotrack_backend bash
+#   ls /log
+#   cat /log/yourfile.log
