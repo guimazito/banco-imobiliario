@@ -1,0 +1,183 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Banco Imobiliário API",
+    "description": "Documentação da API Banco Imobiliário",
+    "version": "1.0.0"
+  },
+  "host": "localhost:3000",
+  "basePath": "/",
+  "schemes": [
+    "http"
+  ],
+  "paths": {
+    "/v1/players/": {
+      "get": {
+        "tags": [
+          "Players"
+        ],
+        "summary": "List all players",
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "List of players",
+            "schema": {
+              "$ref": "#/definitions/Player"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Players"
+        ],
+        "summary": "Create a new player",
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/CreatePlayerDto"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Player created successfully",
+            "schema": {
+              "$ref": "#/definitions/Player"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Player": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "number",
+          "example": 1
+        },
+        "name": {
+          "type": "string",
+          "example": "Player One"
+        },
+        "money": {
+          "type": "number",
+          "example": 1500
+        },
+        "status": {
+          "type": "string",
+          "example": "active"
+        },
+        "icon": {
+          "type": "string",
+          "example": "🚀"
+        }
+      }
+    },
+    "CreatePlayerDto": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "example": "Player One"
+        },
+        "money": {
+          "type": "string",
+          "example": "1500"
+        },
+        "status": {
+          "type": "string",
+          "example": "active"
+        },
+        "icon": {
+          "type": "string",
+          "example": "🚀"
+        }
+      }
+    },
+    "SuccessMessage": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "example": "Operation completed successfully."
+        }
+      }
+    },
+    "BadRequest": {
+      "type": "object",
+      "properties": {
+        "error": {
+          "type": "string",
+          "example": "Error details"
+        },
+        "message": {
+          "type": "string",
+          "example": "Bad request message"
+        }
+      }
+    },
+    "Unauthorized": {
+      "type": "object",
+      "properties": {
+        "error": {
+          "type": "string",
+          "example": "Error details"
+        },
+        "message": {
+          "type": "string",
+          "example": "Unauthorized message"
+        }
+      }
+    },
+    "NotFound": {
+      "type": "object",
+      "properties": {
+        "error": {
+          "type": "string",
+          "example": "Error details"
+        },
+        "message": {
+          "type": "string",
+          "example": "Not found message"
+        }
+      }
+    },
+    "Error": {
+      "type": "object",
+      "properties": {
+        "error": {
+          "type": "string",
+          "example": "Error details"
+        },
+        "message": {
+          "type": "string",
+          "example": "Error message"
+        }
+      }
+    }
+  }
+}

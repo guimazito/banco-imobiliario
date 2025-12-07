@@ -10,6 +10,7 @@ generator client {
 
 datasource db {
   provider = "mysql"
+  url      = env("DATABASE_URL")
 }
 
 model Player {
@@ -19,3 +20,7 @@ model Player {
   status String
   icon   String
 }
+
+/*
+  npx prisma generate
+*/

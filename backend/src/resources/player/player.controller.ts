@@ -1,0 +1,64 @@
+import { Request, Response } from "express";
+import { playerError } from "./player.errors";
+import { StatusCodes } from "http-status-codes";
+import {
+    createPlayer,
+    getPlayerById,
+    getAllPlayers,
+    updatePlayer,
+    deletePlayer,
+} from "./player.service";
+import { CreatePlayerDto } from "./player.types";
+
+const index = async (req: Request, res: Response) => {
+    /*
+    #swagger.summary = 'List all players'
+    #swagger.responses[200] = {
+        description: 'List of players',
+        schema: { $ref: '#/definitions/Player' }
+    }
+    #swagger.responses[500] = {
+        description: 'Internal Server Error',
+        schema: { $ref: '#/definitions/Error' }
+    }
+    */
+    try {
+        const players = await getAllPlayers();
+        res.status(StatusCodes.OK).json(players);
+    } catch (err) {
+        playerError(res, err);
+    }
+};
+
+const create = async (req: Request, res: Response) => {
+    /*
+    #swagger.summary = 'Create a new player'
+    #swagger.parameters['body'] = {
+        in: 'body',
+        schema: { $ref: '#/definitions/CreatePlayerDto' }
+    }
+    #swagger.responses[201] = {
+        description: 'Player created successfully',
+        schema: { $ref: '#/definitions/Player' }
+    }
+    #swagger.responses[400] = {
+        description: 'Bad Request',
+        schema: { $ref: '#/definitions/Error' }
+    }
+    #swagger.responses[500] = {
+        description: 'Internal Server Error',
+        schema: { $ref: '#/definitions/Error' }
+    }
+    */
+    try {
+        const player = await createPlayer(req.body);
+        res.status(StatusCodes.CREATED).json(player);
+    } catch (err) {
+        playerError(res, err);
+    }
+};
+
+export default {
+    index,
+    create,
+}
