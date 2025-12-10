@@ -1,0 +1,25 @@
+import { PrismaClient, Transaction } from "@prisma/client";
+import { CreateTransactionDto } from "./transaction.types";
+
+const prisma = new PrismaClient();
+
+export const createTransaction = async (data: CreateTransactionDto): Promise<Transaction> => {
+    const newTransaction = await prisma.transaction.create({
+        data: {
+            ...data,
+            amount: Number(data.amount),
+        },
+    });
+
+    return newTransaction;
+};
+
+export const getTransactionById = async (id: string): Promise<Transaction | null> => {
+    return await prisma.transaction.findUnique({
+        where: { id },
+    });
+};
+
+export const getAllTransactions = async (): Promise<Transaction[]> => {
+    return await prisma.transaction.findMany();
+};
