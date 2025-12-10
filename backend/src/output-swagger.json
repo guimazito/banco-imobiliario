@@ -76,12 +76,12 @@
       "type": "object",
       "properties": {
         "id": {
-          "type": "number",
-          "example": 1
+          "type": "string",
+          "example": "8a2053de-5d92-4c43-97c0-c9b2b0d56703"
         },
         "name": {
           "type": "string",
-          "example": "Player One"
+          "example": "João Silva"
         },
         "money": {
           "type": "number",
@@ -89,12 +89,21 @@
         },
         "status": {
           "type": "string",
-          "example": "active"
+          "example": "IDLE"
         },
         "icon": {
           "type": "string",
-          "example": "🚀"
-        }
+          "example": "ACCOUNT_CIRCLE"
+        },
+        "createdAt": {
+          "type": "string",
+          "example": "2025-09-16T19:27:15.645Z"
+        },
+        "updatedAt": {
+          "type": "string",
+          "example": "2025-09-16T19:27:15.645Z"
+        },
+        "deletedAt": {}
       }
     },
     "CreatePlayerDto": {
@@ -102,7 +111,11 @@
       "properties": {
         "name": {
           "type": "string",
-          "example": "Player One"
+          "example": "João Silva"
+        },
+        "email": {
+          "type": "string",
+          "example": "joao_silva@gmail.com"
         },
         "money": {
           "type": "string",
@@ -110,11 +123,11 @@
         },
         "status": {
           "type": "string",
-          "example": "active"
+          "example": "IDLE"
         },
         "icon": {
           "type": "string",
-          "example": "🚀"
+          "example": "ACCOUNT_CIRCLE"
         }
       }
     },

@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -13,14 +7,59 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Player {
-  id     String @id @default(uuid()) @db.Char(36)
-  name   String
-  money  Int
-  status String
-  icon   String
+enum PlayerStatus {
+  IDLE
+  RECEIVE
+  PAY
 }
 
-/*
-  npx prisma generate
-*/
+enum PlayerIcon {
+  PIX
+  SAVINGS
+  CREDIT_CARD
+  POINT_OF_SALE
+  MONETIZATION
+  SHOPPING_BAG
+  ACCOUNT_CIRCLE
+}
+
+enum TransactionType {
+  BETWEEN_PLAYERS
+  PAY_TO_BANK
+  RECEIVE_FROM_BANK
+}
+
+model Player {
+  id        String       @id @default(uuid()) @db.Char(36)
+  name      String
+  email     String       @unique @db.VarChar(255)
+  password  String       @db.VarChar(255)
+  money     Int
+  status    PlayerStatus @default(IDLE)
+  icon      PlayerIcon   @default(ACCOUNT_CIRCLE)
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
+  deletedAt DateTime?    @db.DateTime(6)
+
+  transactionsPay     Transaction[] @relation("PlayerPay")
+  transactionsReceive Transaction[] @relation("PlayerReceive")
+}
+
+model Transaction {
+  id              String          @id @default(uuid()) @db.Char(36)
+  amount          Int
+  description     String          @db.VarChar(255)
+  type            TransactionType @default(BETWEEN_PLAYERS)
+  playerIdPay     String          @db.Char(36)
+  playerIdReceive String          @db.Char(36)
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+  deletedAt       DateTime?       @db.DateTime(6)
+
+  playerPay     Player  @relation("PlayerPay", fields: [playerIdPay], references: [id])
+  playerReceive Player  @relation("PlayerReceive", fields: [playerIdReceive], references: [id])
+}
+
+/**
+ * Generates the Prisma Client: npx prisma generate
+ */
