@@ -31,6 +31,7 @@ clear-next:
 
 migrate:
 	$(DOCKER_COMPOSE) exec banco_imobiliario_backend npx prisma migrate dev
+	$(DOCKER_COMPOSE) exec banco_imobiliario_backend npx prisma generate
 
 swagger:
 	$(DOCKER_COMPOSE) exec banco_imobiliario_backend npx ts-node src/swagger.ts
