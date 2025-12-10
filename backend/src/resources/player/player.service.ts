@@ -1,15 +1,25 @@
 import { PrismaClient, Player } from "@prisma/client";
+import { genSalt, hash } from "bcryptjs";
 import { CreatePlayerDto } from "./player.types";
 
 const prisma = new PrismaClient();
 
 export const createPlayer = async (data: CreatePlayerDto): Promise<Player> => {
-    return await prisma.player.create({
+    const defaultPassword = "banco123";
+    const passwordToUse = data.password && data.password.trim() !== "" ? data.password : defaultPassword;
+    const rounds = parseInt(process.env.ROUNDS_BCRYPT ?? "10");
+    const salt = await genSalt(rounds);
+    const hashedPassword = await hash(passwordToUse, salt);
+
+    const newPlayer = await prisma.player.create({
         data: {
             ...data,
+            password: hashedPassword,
             money: Number(data.money),
         },
     });
+
+    return newPlayer;
 };
 
 export const getPlayerById = async (id: string): Promise<Player | null> => {

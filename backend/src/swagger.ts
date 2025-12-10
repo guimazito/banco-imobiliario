@@ -1,5 +1,6 @@
 import dotenv from "dotenv";
 import swaggerAutogen from "swagger-autogen";
+import { PlayerStatus, PlayerIcon } from "./resources/player/player.constants";
 
 dotenv.config();
 
@@ -15,17 +16,21 @@ const docSwagger = {
   host: `${HOST}:${PORT}`,
   definitions: {
     Player: {
-      id: 1,
-      name: "Player One",
+      id: '8a2053de-5d92-4c43-97c0-c9b2b0d56703',
+      name: "João Silva",
       money: 1500,
-      status: "active",
-      icon: "🚀",
+      status: PlayerStatus.IDLE,
+      icon: PlayerIcon.ACCOUNT_CIRCLE,
+      createdAt: '2025-09-16T19:27:15.645Z',
+      updatedAt: '2025-09-16T19:27:15.645Z',
+      deletedAt: null,
     },
     CreatePlayerDto: {
-      name: "Player One",
+      name: 'João Silva',
+      email: 'joao_silva@gmail.com',
       money: "1500",
-      status: "active",
-      icon: "🚀",
+      status: PlayerStatus.IDLE,
+      icon: PlayerIcon.ACCOUNT_CIRCLE,
     },
     SuccessMessage: {
       message: "Operation completed successfully.",
