@@ -1,6 +1,7 @@
 import dotenv from "dotenv";
 import swaggerAutogen from "swagger-autogen";
 import { PlayerStatus, PlayerIcon } from "./resources/player/player.constants";
+import { TransactionType } from "./resources/transaction/transaction.constants";
 
 dotenv.config();
 
@@ -31,6 +32,24 @@ const docSwagger = {
       money: "1500",
       status: PlayerStatus.IDLE,
       icon: PlayerIcon.ACCOUNT_CIRCLE,
+    },
+    Transaction: {
+      id: 'd4f7e8c2-3b6a-4f1e-9f3b-2c8e4f5a6b7c',
+      amount: 200,
+      description: 'João fez pagamento de R$200 para Maria',
+      type: TransactionType.BETWEEN_PLAYERS,
+      playerIdPay: '8a2053de-5d92-4c43-97c0-c9b2b0d56703',
+      playerIdReceive: '9a2053de-5d92-4c43-97c0-c9b2b0d56704',
+      createdAt: '2025-09-16T19:27:15.645Z',
+      updatedAt: '2025-09-16T19:27:15.645Z',
+      deletedAt: null,
+    },
+    CreateTransactionDto: {
+      amount: 200,
+      description: 'João fez pagamento de R$200 para Maria',
+      type: TransactionType.BETWEEN_PLAYERS,
+      playerIdPay: '8a2053de-5d92-4c43-97c0-c9b2b0d56703',
+      playerIdReceive: '9a2053de-5d92-4c43-97c0-c9b2b0d56704',
     },
     SuccessMessage: {
       message: "Operation completed successfully.",

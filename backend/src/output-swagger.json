@@ -69,6 +69,102 @@
           }
         }
       }
+    },
+    "/v1/transactions/": {
+      "get": {
+        "tags": [
+          "Transactions"
+        ],
+        "summary": "List all transactions",
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "List of transactions",
+            "schema": {
+              "$ref": "#/definitions/Transaction"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Transactions"
+        ],
+        "summary": "Create a new transaction",
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/CreateTransactionDto"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Transaction created successfully",
+            "schema": {
+              "$ref": "#/definitions/Transaction"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/v1/transactions/{id}": {
+      "get": {
+        "tags": [
+          "Transactions"
+        ],
+        "summary": "Get a transaction by ID",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Transaction retrieved successfully",
+            "schema": {
+              "$ref": "#/definitions/Transaction"
+            }
+          },
+          "404": {
+            "description": "Transaction not found",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
     }
   },
   "definitions": {
@@ -128,6 +224,69 @@
         "icon": {
           "type": "string",
           "example": "ACCOUNT_CIRCLE"
+        }
+      }
+    },
+    "Transaction": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "example": "d4f7e8c2-3b6a-4f1e-9f3b-2c8e4f5a6b7c"
+        },
+        "amount": {
+          "type": "number",
+          "example": 200
+        },
+        "description": {
+          "type": "string",
+          "example": "João fez pagamento de R$200 para Maria"
+        },
+        "type": {
+          "type": "string",
+          "example": "BETWEEN_PLAYERS"
+        },
+        "playerIdPay": {
+          "type": "string",
+          "example": "8a2053de-5d92-4c43-97c0-c9b2b0d56703"
+        },
+        "playerIdReceive": {
+          "type": "string",
+          "example": "9a2053de-5d92-4c43-97c0-c9b2b0d56704"
+        },
+        "createdAt": {
+          "type": "string",
+          "example": "2025-09-16T19:27:15.645Z"
+        },
+        "updatedAt": {
+          "type": "string",
+          "example": "2025-09-16T19:27:15.645Z"
+        },
+        "deletedAt": {}
+      }
+    },
+    "CreateTransactionDto": {
+      "type": "object",
+      "properties": {
+        "amount": {
+          "type": "number",
+          "example": 200
+        },
+        "description": {
+          "type": "string",
+          "example": "João fez pagamento de R$200 para Maria"
+        },
+        "type": {
+          "type": "string",
+          "example": "BETWEEN_PLAYERS"
+        },
+        "playerIdPay": {
+          "type": "string",
+          "example": "8a2053de-5d92-4c43-97c0-c9b2b0d56703"
+        },
+        "playerIdReceive": {
+          "type": "string",
+          "example": "9a2053de-5d92-4c43-97c0-c9b2b0d56704"
         }
       }
     },
