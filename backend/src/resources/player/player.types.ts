@@ -9,3 +9,11 @@ export type CreatePlayerDto = Pick<
     | 'status'
     | 'icon'
 >;
+
+export type UpdatePlayerDto = Partial<
+    Pick<
+        Player,
+        | 'money'
+        | 'status'
+    >
+>;

@@ -3,12 +3,9 @@ import { playerError } from "./player.errors";
 import { StatusCodes } from "http-status-codes";
 import {
     createPlayer,
-    getPlayerById,
     getAllPlayers,
     updatePlayer,
-    deletePlayer,
 } from "./player.service";
-import { CreatePlayerDto } from "./player.types";
 
 const index = async (req: Request, res: Response) => {
     /*
@@ -58,7 +55,47 @@ const create = async (req: Request, res: Response) => {
     }
 };
 
+const update = async (req: Request, res: Response) => {
+    /*
+    #swagger.summary = 'Update a player by ID'
+    #swagger.parameters['id'] = {
+        in: 'path',
+        description: 'Player ID',
+        required: true,
+        type: 'string'
+    }
+    #swagger.parameters['body'] = {
+        in: 'body',
+        schema: { $ref: '#/definitions/UpdatePlayerDto' }
+    }
+    #swagger.responses[200] = {
+        description: 'Player updated successfully',
+        schema: { $ref: '#/definitions/Player' }
+    }
+    #swagger.responses[400] = {
+        description: 'Bad Request',
+        schema: { $ref: '#/definitions/Error' }
+    }
+    #swagger.responses[404] = {
+        description: 'Player not found',
+        schema: { $ref: '#/definitions/Error' }
+    }
+    #swagger.responses[500] = {
+        description: 'Internal Server Error',
+        schema: { $ref: '#/definitions/Error' }
+    }
+    */
+    try {
+        const { id } = req.params;
+        const player = await updatePlayer(id, req.body);
+        res.status(StatusCodes.OK).json(player);
+    } catch (err) {
+        playerError(res, err);
+    }
+};
+
 export default {
     index,
     create,
+    update,
 }

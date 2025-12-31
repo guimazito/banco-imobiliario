@@ -13,3 +13,8 @@ export const createPlayerSchema = Joi.object({
     status: Joi.string().valid(...Object.values(PlayerStatus)).required(),
     icon: Joi.string().valid(...Object.values(PlayerIcon)).required(),
 });
+
+export const updatePlayerSchema = Joi.object({
+    money: Joi.number().optional(),
+    status: Joi.string().valid(...Object.values(PlayerStatus)).optional(),
+});

@@ -33,6 +33,10 @@ const docSwagger = {
       status: PlayerStatus.IDLE,
       icon: PlayerIcon.ACCOUNT_CIRCLE,
     },
+    UpdatePlayerDto: {
+      money: 2000,
+      status: PlayerStatus.IDLE,
+    },
     Transaction: {
       id: 'd4f7e8c2-3b6a-4f1e-9f3b-2c8e4f5a6b7c',
       amount: 200,
