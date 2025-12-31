@@ -70,6 +70,57 @@
         }
       }
     },
+    "/v1/players/{id}": {
+      "put": {
+        "tags": [
+          "Players"
+        ],
+        "summary": "Update a player by ID",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Player ID"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/UpdatePlayerDto"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Player updated successfully",
+            "schema": {
+              "$ref": "#/definitions/Player"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "404": {
+            "description": "Player not found",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
     "/v1/transactions/": {
       "get": {
         "tags": [
@@ -224,6 +275,19 @@
         "icon": {
           "type": "string",
           "example": "ACCOUNT_CIRCLE"
+        }
+      }
+    },
+    "UpdatePlayerDto": {
+      "type": "object",
+      "properties": {
+        "money": {
+          "type": "number",
+          "example": 2000
+        },
+        "status": {
+          "type": "string",
+          "example": "IDLE"
         }
       }
     },
