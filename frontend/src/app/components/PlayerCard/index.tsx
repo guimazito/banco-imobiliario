@@ -32,17 +32,17 @@ export function PlayerCard({ player, onCardClick }: PlayerCardProps) {
 
   const cardAvatar = (name: string) => {
     switch (name) {
-      case "PixIcon":
+      case "PIX":
         return <PixIcon fontSize="large" />;
-      case "SavingsIcon":
+      case "SAVINGS":
         return <SavingsIcon fontSize="large" />;
-      case "CreditCardIcon":
+      case "CREDIT_CARD":
         return <CreditCardIcon fontSize="large" />;
-      case "PointOfSaleIcon":
+      case "POINT_OF_SALE":
         return <PointOfSaleIcon fontSize="large" />;
-      case "MonetizationOnIcon":
+      case "MONETIZATION":
         return <MonetizationOnIcon fontSize="large" />;
-      case "ShoppingBagIcon":
+      case "SHOPPING_BAG":
         return <ShoppingBagIcon fontSize="large" />;
       default:
         return <AccountCircleIcon fontSize="large" />;
@@ -61,6 +61,7 @@ export function PlayerCard({ player, onCardClick }: PlayerCardProps) {
         userSelect: "none",
         transition: "box-shadow 0.2s",
         "&:hover": { boxShadow: 6 },
+        mb: 1,
       }}
     >
       <CardContent

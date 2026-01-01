@@ -70,6 +70,44 @@
         }
       }
     },
+    "/v1/players/name/{name}": {
+      "get": {
+        "tags": [
+          "Players"
+        ],
+        "summary": "Get a player by name",
+        "description": "",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Player name"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Player retrieved successfully",
+            "schema": {
+              "$ref": "#/definitions/Player"
+            }
+          },
+          "404": {
+            "description": "Player not found",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
     "/v1/players/{id}": {
       "put": {
         "tags": [

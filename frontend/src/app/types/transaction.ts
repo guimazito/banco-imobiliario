@@ -9,3 +9,11 @@ export interface Transaction {
   playerIdReceive: string;
   createdAt: string;
 }
+
+export interface CreateTransactionDto {
+  amount: number;
+  description: string;
+  type: TransactionType;
+  playerIdPay: string;
+  playerIdReceive: string;
+}

@@ -21,5 +21,9 @@ export const getTransactionById = async (id: string): Promise<Transaction | null
 };
 
 export const getAllTransactions = async (): Promise<Transaction[]> => {
-    return await prisma.transaction.findMany();
+    return await prisma.transaction.findMany({
+        orderBy: {
+            createdAt: 'desc',
+        },
+    });
 };

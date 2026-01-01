@@ -1,9 +1,9 @@
 import { Router } from "express";
 import playerController from "./player.controller";
 import {
-    playerIdSchema,
     createPlayerSchema,
-    updatePlayerSchema
+    updatePlayerSchema,
+    playerNameSchema
 } from "./player.schema";
 import { validate } from "../../middlewares/validate";
 
@@ -12,6 +12,12 @@ const router = Router();
 router.get(
     "/",
     playerController.index
+);
+
+router.get(
+    "/name/:name",
+    validate(playerNameSchema),
+    playerController.listPlayerByName
 );
 
 router.post(

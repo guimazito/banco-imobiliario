@@ -5,6 +5,7 @@ import {
     createPlayer,
     getAllPlayers,
     updatePlayer,
+    getPlayerByName,
 } from "./player.service";
 
 const index = async (req: Request, res: Response) => {
@@ -94,8 +95,40 @@ const update = async (req: Request, res: Response) => {
     }
 };
 
+const listPlayerByName = async (req: Request, res: Response) => {
+    /*
+    #swagger.summary = 'Get a player by name'
+    #swagger.parameters['name'] = {
+        in: 'path',
+        description: 'Player name',
+        required: true,
+        type: 'string'
+    }
+    #swagger.responses[200] = {
+        description: 'Player retrieved successfully',
+        schema: { $ref: '#/definitions/Player' }
+    }
+    #swagger.responses[404] = {
+        description: 'Player not found',
+        schema: { $ref: '#/definitions/Error' }
+    }
+    #swagger.responses[500] = {
+        description: 'Internal Server Error',
+        schema: { $ref: '#/definitions/Error' }
+    }
+    */
+    try {
+        const { name } = req.params;
+        const player = await getPlayerByName(name);
+        res.status(StatusCodes.OK).json(player);
+    } catch (err) {
+        playerError(res, err);
+    }
+};
+
 export default {
     index,
     create,
     update,
+    listPlayerByName,
 }
