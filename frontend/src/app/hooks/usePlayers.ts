@@ -3,6 +3,7 @@ import {
   listPlayers,
   createPlayer,
   updatePlayer,
+  getPlayerByName
 } from "@/app/services/players";
 import { CreatePlayerDto, UpdatePlayerDto } from "@/app/types/player";
 
@@ -10,6 +11,13 @@ export function useListPlayers() {
   return useQuery({
     queryKey: ["players"],
     queryFn: listPlayers,
+  });
+}
+
+export function useGetPlayerByName(name: string) {
+  return useQuery({
+    queryKey: ["player", name],
+    queryFn: () => getPlayerByName(name),
   });
 }
 

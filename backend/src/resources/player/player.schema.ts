@@ -5,6 +5,10 @@ export const playerIdSchema = Joi.object({
     id: Joi.string().uuid().required(),
 });
 
+export const playerNameSchema = Joi.object({
+    name: Joi.string().min(1).max(100).required(),
+});
+
 export const createPlayerSchema = Joi.object({
     name: Joi.string().min(1).max(100).required(),
     email: Joi.string().min(3).max(50).required(),

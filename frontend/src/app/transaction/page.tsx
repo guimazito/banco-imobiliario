@@ -3,39 +3,48 @@
 import React from "react";
 import Alert from "@mui/material/Alert";
 import { PlayerCard } from "../components/PlayerCard";
+import { TransactionHistory } from "../components/TransactionHistory";
 import { useState, useEffect } from "react";
 import Snackbar from "@mui/material/Snackbar";
-// import RankingList from "../components/RankingList";
-import type { Player, Transaction } from "../types";
-import NewGameButton from "../components/NewGameButton";
-// import FailAlert from '../components/FailAlert/FailAlert';
-// import TransactionList from "../components/TransactionList";
-// import { updatePlayer, fetchPlayers } from "../api/players";
+import { Player } from "../types/player";
+import { Transaction } from "../types/transaction";
+import { TransactionType } from "../types/transactionType";
 import { IconButton, TextField, InputAdornment } from "@mui/material";
 import CheckCircleRoundedIcon from "@mui/icons-material/CheckCircleRounded";
-// import ResponsiveAppBar from "../components/ResponsiveAppBar";
 import {
   useListPlayers,
-  useCreatePlayer,
   useUpdatePlayer,
+  useGetPlayerByName,
 } from "@/app/hooks/usePlayers";
+import {
+  useListTransactions,
+  useCreateTransaction,
+} from "@/app/hooks/useTransactions";
+// import RankingList from "../components/RankingList";
+// import NewGameButton from "../components/NewGameButton";
+// import FailAlert from '../components/FailAlert/FailAlert';
+// import ResponsiveAppBar from "../components/ResponsiveAppBar";
 
 export default function TransactionPage() {
   const [open, setOpen] = useState(false);
-  const [players, setPlayers] = useState<Player[]>([]);
+  // const [players, setPlayers] = useState<Player[]>([]);
   // const WS_BASE_URL = import.meta.env.VITE_WS_BASE_URL;
   // const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
   const [inputValue, setInputValue] = useState<number>(0);
   const [failAlertOpen, setFailAlertOpen] = useState(false);
   const [failAlertMessage, setFailAlertMessage] = useState<string>("");
-  const [transactions, setTransactions] = useState<Transaction[]>([]);
+  const { data: getPlayerByName } = useGetPlayerByName("Bank");
+  const { data: listTransactions } = useListTransactions();
+  const [transactions, setTransactions] = useState<Transaction[]>(
+    listTransactions ?? []
+  );
 
   // console.log("API URL:", API_BASE_URL);
   // console.log("WebSocket URL:", WS_BASE_URL);
 
-  const { data, isPending, isError, refetch } = useListPlayers();
+  const { data, refetch } = useListPlayers();
   const { mutateAsync: updatePlayerMutate } = useUpdatePlayer();
-  console.log("data", data);
+  const { mutateAsync: createTransactionMutate } = useCreateTransaction();
 
   const updatePlayer = async (
     playerId: string,
@@ -59,7 +68,7 @@ export default function TransactionPage() {
       // console.log("Player updated successfully:", updatedPlayer);
 
       // Atualiza o estado local com os dados atualizados
-      
+
       // setPlayers((prevPlayers) =>
       //   prevPlayers.map((player) =>
       //     player.id === playerId ? { ...player, ...updatedData } : player
@@ -70,25 +79,27 @@ export default function TransactionPage() {
     }
   };
 
-  const handleTransaction = async (description: string, type: string) => {
-    await fetch(`${API_BASE_URL}/api/transactions`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ description: description, type: type }),
-    });
-  };
+  // const handleTransaction = async (description: string, type: string) => {
+  //   await fetch(`${API_BASE_URL}/api/transactions`, {
+  //     method: "POST",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //     },
+  //     body: JSON.stringify({ description: description, type: type }),
+  //   });
+  // };
 
   const fetchTransactions = async () => {
-    const response = await fetch(`${API_BASE_URL}/api/transactions`);
-    const data = await response.json();
-    setTransactions(data);
-    console.log("Transacionee:", transactions);
+    // const response = await fetch(`${API_BASE_URL}/api/transactions`);
+    // const data = await response.json();
+    // setTransactions(data);
+    setTransactions(listTransactions ?? []);
+    // console.log("Transacionee:", transactions);
   };
-  // useEffect(() => {
-  //   fetchPlayers();
-  //   fetchTransactions();
+
+  useEffect(() => {
+    setTransactions(listTransactions ?? []);
+  }, [listTransactions]);
 
   // Connect to WebSocket server
   // const ws = new WebSocket("ws://localhost:3002");
@@ -143,25 +154,23 @@ export default function TransactionPage() {
   };
 
   function handleInputChange(event: React.ChangeEvent<HTMLInputElement>) {
-    const rawValue = event.target.value.replace(/\D/g, ""); // Remove caracteres não numéricos
-    const formattedValue = new Intl.NumberFormat("pt-BR").format(
-      Number(rawValue)
-    );
-    setInputValue(Number(event.target.value));
-    if (Number(event.target.value) < 0) {
+    const rawValue = event.target.value.replace(/\D/g, ""); // Remove non-numeric
+    const value = Number(rawValue);
+    if (value < 0) {
       setFailAlertMessage("Valor não pode ser negativo!");
       setFailAlertOpen(true);
       setInputValue(0);
+    } else {
+      setInputValue(value);
     }
-    setInputValue(Number(rawValue));
   }
 
   function getPlayerReceiving() {
-    return players.filter((player) => player.status === "receive");
+    return (data ?? []).filter((player) => player.status === "RECEIVE");
   }
 
   function getPlayerPaying() {
-    return players.filter((player) => player.status === "pay");
+    return (data ?? []).filter((player) => player.status === "PAY");
   }
 
   function isTransactionButtonEnabled() {
@@ -187,33 +196,32 @@ export default function TransactionPage() {
   }
 
   function addMoneyToPlayer() {
-    updatePlayer(
-      players.filter((player) => player.status === "receive")[0].id,
-      {
-        money:
-          players.filter((player) => player.status === "receive")[0].money +
-          inputValue,
-        status: "idle",
-      }
-    );
+    const receiver = getPlayerReceiving()[0];
+    if (receiver) {
+      updatePlayer(receiver.id, {
+        money: receiver.money + inputValue,
+        status: "IDLE",
+      });
+    }
   }
 
   function removeMoneyToPlayer() {
-    updatePlayer(players.filter((player) => player.status === "pay")[0].id, {
-      money:
-        players.filter((player) => player.status === "pay")[0].money -
-        inputValue,
-      status: "idle",
-    });
+    const payer = getPlayerPaying()[0];
+    if (payer) {
+      updatePlayer(payer.id, {
+        money: payer.money - inputValue,
+        status: "IDLE",
+      });
+    }
   }
 
   async function playersTransaction() {
     const hasOneReceiving = getPlayerReceiving().length === 1;
     const hasOnePaying = getPlayerPaying().length === 1;
-    const won = players.filter((player) => player.status === "receive");
-    const lose = players.filter((player) => player.status === "pay");
+    const won = getPlayerReceiving();
+    const lose = getPlayerPaying();
     let transactionDescription = "";
-    let transactionType = "";
+    let transactionType: TransactionType = "BETWEEN_PLAYERS";
 
     if (hasOneReceiving && hasOnePaying) {
       addMoneyToPlayer();
@@ -224,7 +232,7 @@ export default function TransactionPage() {
         new Intl.NumberFormat("pt-BR").format(inputValue) +
         " de " +
         lose.map((player) => player.name).join(", ");
-      transactionType = "betweenPlayers";
+      transactionType = "BETWEEN_PLAYERS";
     } else if (hasOneReceiving) {
       addMoneyToPlayer();
       transactionDescription =
@@ -232,7 +240,7 @@ export default function TransactionPage() {
         " ganhou R$ " +
         new Intl.NumberFormat("pt-BR").format(inputValue) +
         " do Banco";
-      transactionType = "receiveFromBank";
+      transactionType = "RECEIVE_FROM_BANK";
     } else if (hasOnePaying) {
       removeMoneyToPlayer();
       transactionDescription =
@@ -240,11 +248,18 @@ export default function TransactionPage() {
         " pagou R$ " +
         new Intl.NumberFormat("pt-BR").format(inputValue) +
         " para o Banco";
-      transactionType = "payToBank";
+      transactionType = "PAY_TO_BANK";
     }
 
     setInputValue(0);
-    await handleTransaction(transactionDescription, transactionType);
+    // await handleTransaction(transactionDescription, transactionType);
+    await createTransactionMutate({
+      amount: inputValue,
+      description: transactionDescription,
+      type: transactionType,
+      playerIdPay: hasOnePaying ? lose[0].id : getPlayerByName?.id ?? "",
+      playerIdReceive: hasOneReceiving ? won[0].id : getPlayerByName?.id ?? "",
+    });
     await fetchTransactions();
     // await fetchPlayers();
     handleClick();
@@ -310,33 +325,34 @@ export default function TransactionPage() {
         </div>
 
         <div className="grid grid-cols-2 gap-2">
-          {(data ?? []).map((player) => {
-            const playerStatus = (status: string) => {
-              if (status === "IDLE") return "PAY";
-              if (status === "PAY") return "RECEIVE";
-              if (status === "RECEIVE") return "IDLE";
-              return "IDLE";
-            };
-            const handleCardClick = async () => {
-              await updatePlayer(
-                player.id,
-                { status: playerStatus(player.status) }
+          {(data ?? [])
+            .filter((player) => player.name !== "Bank")
+            .map((player) => {
+              const playerStatus = (status: string) => {
+                if (status === "IDLE") return "PAY";
+                if (status === "PAY") return "RECEIVE";
+                if (status === "RECEIVE") return "IDLE";
+                return "IDLE";
+              };
+              const handleCardClick = async () => {
+                await updatePlayer(player.id, {
+                  status: playerStatus(player.status),
+                });
+                await refetch();
+              };
+              return (
+                <PlayerCard
+                  key={player.id}
+                  player={player}
+                  onCardClick={handleCardClick}
+                />
               );
-              await refetch();
-            };
-            return (
-              <PlayerCard
-                key={player.id}
-                player={player}
-                onCardClick={handleCardClick}
-              />
-            );
-          })}
+            })}
         </div>
 
         <div className="grid grid-cols-2 gap-2 mt-2 h-full">
-          {/* <RankingList players={players}></RankingList>
-          <TransactionList transactions={transactions}></TransactionList>   */}
+          {/* <RankingList players={players}></RankingList> */}
+          <TransactionHistory transactions={transactions}></TransactionHistory>
         </div>
       </div>
     </div>

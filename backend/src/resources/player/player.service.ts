@@ -31,6 +31,12 @@ export const getPlayerById = async (id: string): Promise<Player | null> => {
   });
 };
 
+export const getPlayerByName = async (name: string): Promise<Player | null> => {
+  return await prisma.player.findFirst({
+    where: { name },
+  });
+};
+
 export const getAllPlayers = async (): Promise<Player[]> => {
   return await prisma.player.findMany();
 };

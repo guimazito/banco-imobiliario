@@ -6,7 +6,6 @@ import {
   getTransactionById,
   getAllTransactions,
 } from "./transaction.service";
-import { CreateTransactionDto } from "./transaction.types";
 
 const index = async (req: Request, res: Response) => {
   /*
@@ -81,7 +80,7 @@ const listTransactionById = async (req: Request, res: Response) => {
 };
 
 export default {
-    index,
-    create,
-    listTransactionById
+  index,
+  create,
+  listTransactionById,
 };

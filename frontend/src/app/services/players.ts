@@ -6,6 +6,11 @@ export async function listPlayers(): Promise<Player[]> {
   return data;
 }
 
+export async function getPlayerByName(name: string): Promise<Player | null> {
+  const { data } = await api.get<Player>(`/players/name/${name}`);
+  return data;
+}
+
 export async function createPlayer(payload: CreatePlayerDto): Promise<Player> {
   const { data } = await api.post<Player>("/players", payload);
   return data;
