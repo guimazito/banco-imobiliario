@@ -45,11 +45,10 @@ export function TransactionHistory({ transactions }: { transactions: Transaction
         color: "#000000ff",
         borderRadius: 2,
         boxShadow: 2,
-        p: 0,
-        mx: 2,
+        // width: "100%",
       }}
     >
-      <CardContent sx={{ p: 2 }}>
+      <CardContent sx={{ p: 0, m: 1 }}>
         <Typography variant="h6" align="center" fontWeight={700} gutterBottom>
           Últimas Transações
         </Typography>
@@ -65,7 +64,7 @@ export function TransactionHistory({ transactions }: { transactions: Transaction
                 color: "#fff",
                 borderRadius: 2,
                 boxShadow: 1,
-                p: 3,
+                p: 4,
                 fontSize: "1.1rem",
               }}
               variant="outlined"
