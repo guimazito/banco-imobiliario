@@ -4,13 +4,13 @@ import Card from "@mui/material/Card";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import CardContent from "@mui/material/CardContent";
+import { Transaction } from "../../types/transaction";
 import TrendingUpIcon from "@mui/icons-material/TrendingUp";
 import TrendingDownIcon from "@mui/icons-material/TrendingDown";
 import QuestionMarkOutlinedIcon from "@mui/icons-material/QuestionMarkOutlined";
 import CompareArrowsOutlinedIcon from "@mui/icons-material/CompareArrowsOutlined";
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function TransactionHistory({ transactions }: { transactions: any[] }) {
+export function TransactionHistory({ transactions }: { transactions: Transaction[] }) {
   const cardColor = (type: string) => {
     switch (type) {
       case "BETWEEN_PLAYERS":
@@ -41,19 +41,17 @@ export function TransactionHistory({ transactions }: { transactions: any[] }) {
     <Card
       sx={{
         userSelect: "none",
-        background: "#222",
-        color: "#fff",
+        background: "#ffffffff",
+        color: "#000000ff",
         borderRadius: 2,
         boxShadow: 2,
-        p: 1,
-        mx: 0.5,
+        p: 0,
+        mx: 2,
       }}
     >
-      <CardContent sx={{ p: 0 }}>
+      <CardContent sx={{ p: 2 }}>
         <Typography variant="h6" align="center" fontWeight={700} gutterBottom>
-          Últimas
-          <br />
-          Transações
+          Últimas Transações
         </Typography>
         <Stack spacing={1} sx={{ maxHeight: "67vh", overflowY: "auto", pr: 1 }}>
           {transactions.map((transaction, index) => (
@@ -67,7 +65,7 @@ export function TransactionHistory({ transactions }: { transactions: any[] }) {
                 color: "#fff",
                 borderRadius: 2,
                 boxShadow: 1,
-                p: 1,
+                p: 3,
                 fontSize: "1.1rem",
               }}
               variant="outlined"

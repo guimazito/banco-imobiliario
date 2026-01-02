@@ -62,6 +62,12 @@ export function PlayerCard({ player, onCardClick }: PlayerCardProps) {
         transition: "box-shadow 0.2s",
         "&:hover": { boxShadow: 6 },
         mb: 1,
+        width: '100%',
+        minWidth: 220,
+        maxWidth: 340,
+        alignSelf: 'stretch',
+        display: 'flex',
+        flexDirection: 'column',
       }}
     >
       <CardContent

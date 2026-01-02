@@ -1,48 +1,47 @@
 "use client";
 
-import React from "react";
 import Alert from "@mui/material/Alert";
-import { PlayerCard } from "../components/PlayerCard";
-import { TransactionHistory } from "../components/TransactionHistory";
-import { useState, useEffect } from "react";
-import Snackbar from "@mui/material/Snackbar";
 import { Player } from "../types/player";
-import { Transaction } from "../types/transaction";
+import Snackbar from "@mui/material/Snackbar";
+import FailAlert from "../components/FailedAlert";
+import React, { useState, useEffect } from "react";
+import { PlayerCard } from "../components/PlayerCard";
+import { RankingList } from "../components/RankingList";
 import { TransactionType } from "../types/transactionType";
-import { IconButton, TextField, InputAdornment } from "@mui/material";
+import { useWebSocket } from "../contexts/WebSocketContext";
+import { TransactionHistory } from "../components/TransactionHistory";
 import CheckCircleRoundedIcon from "@mui/icons-material/CheckCircleRounded";
-import {
-  useListPlayers,
-  useUpdatePlayer,
-  useGetPlayerByName,
-} from "@/app/hooks/usePlayers";
 import {
   useListTransactions,
   useCreateTransaction,
 } from "@/app/hooks/useTransactions";
-// import RankingList from "../components/RankingList";
-// import NewGameButton from "../components/NewGameButton";
-// import FailAlert from '../components/FailAlert/FailAlert';
-// import ResponsiveAppBar from "../components/ResponsiveAppBar";
+import {
+  useListPlayers,
+  useUpdatePlayer,
+  useGetPlayerByName,
+  useGetPlayerRanking,
+} from "@/app/hooks/usePlayers";
+import {
+  IconButton,
+  TextField,
+  InputAdornment,
+  Container,
+  Box,
+  Paper,
+  Grid,
+} from "@mui/material";
 
 export default function TransactionPage() {
   const [open, setOpen] = useState(false);
-  // const [players, setPlayers] = useState<Player[]>([]);
-  // const WS_BASE_URL = import.meta.env.VITE_WS_BASE_URL;
-  // const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
   const [inputValue, setInputValue] = useState<number>(0);
   const [failAlertOpen, setFailAlertOpen] = useState(false);
   const [failAlertMessage, setFailAlertMessage] = useState<string>("");
+  const { ws } = useWebSocket();
   const { data: getPlayerByName } = useGetPlayerByName("Bank");
-  const { data: listTransactions } = useListTransactions();
-  const [transactions, setTransactions] = useState<Transaction[]>(
-    listTransactions ?? []
-  );
-
-  // console.log("API URL:", API_BASE_URL);
-  // console.log("WebSocket URL:", WS_BASE_URL);
-
-  const { data, refetch } = useListPlayers();
+  const { data: listPlayers, refetch: refetchPlayers } = useListPlayers();
+  const { data: listTransactions, refetch: refetchTransactions } =
+    useListTransactions();
+  const { refetch: refetchRanking } = useGetPlayerRanking();
   const { mutateAsync: updatePlayerMutate } = useUpdatePlayer();
   const { mutateAsync: createTransactionMutate } = useCreateTransaction();
 
@@ -52,98 +51,40 @@ export default function TransactionPage() {
   ) => {
     try {
       await updatePlayerMutate({ playerId, updatedData });
-      // const response = await fetch(`${API_BASE_URL}/api/players/${playerId}`, {
-      //   method: "PUT",
-      //   headers: {
-      //     "Content-Type": "application/json",
-      //   },
-      //   body: JSON.stringify(updatedData),
-      // });
-
-      // if (!response.ok) {
-      //   throw new Error("Failed to update player");
-      // }
-
-      // const updatedPlayer = await response.json();
-      // console.log("Player updated successfully:", updatedPlayer);
-
-      // Atualiza o estado local com os dados atualizados
-
-      // setPlayers((prevPlayers) =>
-      //   prevPlayers.map((player) =>
-      //     player.id === playerId ? { ...player, ...updatedData } : player
-      //   )
-      // );
     } catch (error) {
       console.error("Error updating player:", error);
     }
   };
 
-  // const handleTransaction = async (description: string, type: string) => {
-  //   await fetch(`${API_BASE_URL}/api/transactions`, {
-  //     method: "POST",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //     },
-  //     body: JSON.stringify({ description: description, type: type }),
-  //   });
-  // };
-
-  const fetchTransactions = async () => {
-    // const response = await fetch(`${API_BASE_URL}/api/transactions`);
-    // const data = await response.json();
-    // setTransactions(data);
-    setTransactions(listTransactions ?? []);
-    // console.log("Transacionee:", transactions);
-  };
-
   useEffect(() => {
-    setTransactions(listTransactions ?? []);
-  }, [listTransactions]);
+    if (!ws) return;
 
-  // Connect to WebSocket server
-  // const ws = new WebSocket("ws://localhost:3002");
-  // const ws = new WebSocket(`${WS_BASE_URL}`);
+    const handleMessage = async (event: MessageEvent) => {
+      try {
+        let messageData = event.data;
+        if (messageData instanceof Blob) {
+          messageData = await messageData.text();
+        }
+        const message = JSON.parse(messageData);
+        console.log("WebSocket message received:", message);
+        if (message.type === "PLAYER_UPDATED") {
+          await refetchPlayers();
+        }
+        if (message.type === "TRANSACTION_ADDED") {
+          await refetchTransactions();
+          await refetchPlayers();
+          await refetchRanking();
+        }
+      } catch (error) {
+        console.error("Error parsing message:", error);
+      }
+    };
 
-  //   ws.onopen = () => {
-  //       console.log("WebSocket connection established client");
-  //       ws.send(JSON.stringify({ event: 'greeting', message: 'Hello server!' }));
-  //   };
-
-  //   ws.onmessage = (event) => {
-  //       try {
-  //           console.log("Event:", event);
-  //           // console.log('Type:', typeof event.data);
-  //           const message = JSON.parse(event.data)
-  //           console.log("WebSocket mensagiiii:", message);
-  //           console.log("Message type:", message.type);
-  //           if (message.type === "TRANSACTION_ADDED") {
-  //               // Fetch the updated list of players
-  //               // console.log('message.player:', message.player);
-  //               console.log('vai setTransaction:', message.transaction);
-  //               fetchTransactions();
-  //               fetchPlayers();
-  //           }
-  //       }catch (error) {
-  //           console.error("Error parsing message:", error);
-  //       }
-  //   };
-
-  //   ws.onerror = (error) => {
-  //       console.error("WebSocket error:", error);
-  //   };
-
-  //   ws.onclose = () => {
-  //       console.log("WebSocket connection closed");
-  //   };
-
-  //   // // Clean up the WebSocket connection when the component unmounts
-  //   return () => {
-  //       ws.close();
-  //       console.log("WebSocket connection closed client");
-  //   };
-
-  // }, []);
+    ws.addEventListener("message", handleMessage);
+    return () => {
+      ws.removeEventListener("message", handleMessage);
+    };
+  }, [ws, refetchPlayers, refetchTransactions, refetchRanking]);
 
   const handleClick = () => {
     setOpen(true);
@@ -154,7 +95,7 @@ export default function TransactionPage() {
   };
 
   function handleInputChange(event: React.ChangeEvent<HTMLInputElement>) {
-    const rawValue = event.target.value.replace(/\D/g, ""); // Remove non-numeric
+    const rawValue = event.target.value.replace(/\D/g, "");
     const value = Number(rawValue);
     if (value < 0) {
       setFailAlertMessage("Valor não pode ser negativo!");
@@ -166,11 +107,11 @@ export default function TransactionPage() {
   }
 
   function getPlayerReceiving() {
-    return (data ?? []).filter((player) => player.status === "RECEIVE");
+    return (listPlayers ?? []).filter((player) => player.status === "RECEIVE");
   }
 
   function getPlayerPaying() {
-    return (data ?? []).filter((player) => player.status === "PAY");
+    return (listPlayers ?? []).filter((player) => player.status === "PAY");
   }
 
   function isTransactionButtonEnabled() {
@@ -252,80 +193,80 @@ export default function TransactionPage() {
     }
 
     setInputValue(0);
-    // await handleTransaction(transactionDescription, transactionType);
+    const playerIdPay = hasOnePaying ? lose[0].id : getPlayerByName?.id ?? "";
+    const playerIdReceive = hasOneReceiving
+      ? won[0].id
+      : getPlayerByName?.id ?? "";
     await createTransactionMutate({
       amount: inputValue,
       description: transactionDescription,
       type: transactionType,
-      playerIdPay: hasOnePaying ? lose[0].id : getPlayerByName?.id ?? "",
-      playerIdReceive: hasOneReceiving ? won[0].id : getPlayerByName?.id ?? "",
+      playerIdPay: playerIdPay,
+      playerIdReceive: playerIdReceive,
     });
-    await fetchTransactions();
-    // await fetchPlayers();
     handleClick();
+    if (ws && ws.readyState === WebSocket.OPEN) {
+      ws.send(
+        JSON.stringify({
+          type: "TRANSACTION_ADDED",
+          playerIdPay: playerIdPay,
+          playerIdReceive: playerIdReceive,
+        })
+      );
+    }
   }
 
   return (
-    <div>
-      {/* <ResponsiveAppBar></ResponsiveAppBar> */}
-
-      <div className="m-2">
-        <div className="mb-2">
-          <div className="flex place-content-end gap-2">
-            <TextField
-              label="Valor"
-              variant="filled"
-              className="bg-white border rounded"
-              style={{ width: "100%", userSelect: "none" }}
-              type="number"
-              id="moneyInput"
-              value={
-                inputValue === 0
-                  ? ""
-                  : new Intl.NumberFormat("pt-BR").format(inputValue)
-              }
-              onChange={handleInputChange}
-              slotProps={{
-                input: {
-                  startAdornment: (
-                    <InputAdornment position="start">R$</InputAdornment>
-                  ),
-                },
-              }}
-            />
-            <IconButton
-              color="primary"
-              onClick={playersTransaction}
-              disabled={!isTransactionButtonEnabled()}
-              sx={{
-                "&.Mui-disabled": {
-                  color: "rgba(25, 121, 206, 0.5)",
-                },
-              }}
-            >
-              <CheckCircleRoundedIcon fontSize="large" />
-            </IconButton>
-            <Snackbar
-              open={open}
-              autoHideDuration={1500}
-              onClose={handleClose}
-              anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-            >
-              <Alert severity="success" variant="filled" sx={{ width: "100%" }}>
-                Transação finalizada com sucesso!
-              </Alert>
-            </Snackbar>
-
-            {/* <FailAlert
-              open={failAlertOpen}
-              onClose={() => setFailAlertOpen(false)}
-              message={failAlertMessage}
-            ></FailAlert> */}
-          </div>
-        </div>
-
-        <div className="grid grid-cols-2 gap-2">
-          {(data ?? [])
+    <Container maxWidth="md" sx={{ py: 3 }}>
+      <Paper elevation={3} sx={{ p: 3, mb: 3 }}>
+        <Box display="flex" alignItems="center" gap={2}>
+          <TextField
+            label="Valor"
+            variant="filled"
+            fullWidth
+            type="number"
+            id="moneyInput"
+            value={inputValue === 0 ? "" : inputValue}
+            onChange={handleInputChange}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">R$</InputAdornment>
+              ),
+            }}
+          />
+          <IconButton
+            color="primary"
+            onClick={playersTransaction}
+            disabled={!isTransactionButtonEnabled()}
+            sx={{
+              "&.Mui-disabled": {
+                color: "rgba(25, 121, 206, 0.5)",
+              },
+            }}
+          >
+            <CheckCircleRoundedIcon fontSize="large" />
+          </IconButton>
+        </Box>
+        <Snackbar
+          open={open}
+          autoHideDuration={1500}
+          onClose={handleClose}
+          anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+        >
+          <Alert severity="success" variant="filled" sx={{ width: "100%" }}>
+            Transação finalizada com sucesso!
+          </Alert>
+        </Snackbar>
+        <FailAlert
+          open={failAlertOpen}
+          onClose={() => setFailAlertOpen(false)}
+          message={failAlertMessage}
+        ></FailAlert>
+      </Paper>
+      <Grid container columns={12} columnSpacing={2} mb={3}>
+        {Array.isArray(listPlayers) &&
+          listPlayers.length > 0 &&
+          listPlayers
             .filter((player) => player.name !== "Bank")
             .map((player) => {
               const playerStatus = (status: string) => {
@@ -338,23 +279,27 @@ export default function TransactionPage() {
                 await updatePlayer(player.id, {
                   status: playerStatus(player.status),
                 });
-                await refetch();
+                if (ws && ws.readyState === WebSocket.OPEN) {
+                  ws.send(
+                    JSON.stringify({
+                      type: "PLAYER_UPDATED",
+                      playerId: player.id,
+                    })
+                  );
+                }
               };
               return (
-                <PlayerCard
+                <Grid
                   key={player.id}
-                  player={player}
-                  onCardClick={handleCardClick}
-                />
+                  sx={{ gridColumn: { xs: "span 12", sm: "span 6" } }}
+                >
+                  <PlayerCard player={player} onCardClick={handleCardClick} />
+                </Grid>
               );
             })}
-        </div>
-
-        <div className="grid grid-cols-2 gap-2 mt-2 h-full">
-          {/* <RankingList players={players}></RankingList> */}
-          <TransactionHistory transactions={transactions}></TransactionHistory>
-        </div>
-      </div>
-    </div>
+      </Grid>
+      <RankingList />
+      <TransactionHistory transactions={listTransactions ?? []} />
+    </Container>
   );
 }

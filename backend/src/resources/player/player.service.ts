@@ -37,6 +37,14 @@ export const getPlayerByName = async (name: string): Promise<Player | null> => {
   });
 };
 
+export const getPlayerRanking = async (): Promise<Player[]> => {
+  return await prisma.player.findMany({
+    orderBy: {
+      money: "desc",
+    },
+  });
+};
+
 export const getAllPlayers = async (): Promise<Player[]> => {
   return await prisma.player.findMany();
 };
