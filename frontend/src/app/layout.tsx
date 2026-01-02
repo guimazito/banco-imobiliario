@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { Navbar } from "./components/Navbar";
+import { WebSocketProvider } from "./contexts/WebSocketContext";
 import { ReactQueryClientProvider } from "./components/ReactQueryClient";
 
 export const metadata: Metadata = {
@@ -14,9 +16,12 @@ export default function RootLayout({
   return (
     <html lang="pt-BR">
       <body>
-        <ReactQueryClientProvider>
-          {children}
-        </ReactQueryClientProvider>
+        <WebSocketProvider>
+          <ReactQueryClientProvider>
+            <Navbar />
+            {children}
+          </ReactQueryClientProvider>
+        </WebSocketProvider>
       </body>
     </html>
   );

@@ -15,6 +15,11 @@ router.get(
 );
 
 router.get(
+    "/ranking",
+    playerController.listPlayerRanking
+);
+
+router.get(
     "/name/:name",
     validate(playerNameSchema),
     playerController.listPlayerByName

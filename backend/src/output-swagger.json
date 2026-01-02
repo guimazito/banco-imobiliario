@@ -70,6 +70,29 @@
         }
       }
     },
+    "/v1/players/ranking": {
+      "get": {
+        "tags": [
+          "Players"
+        ],
+        "summary": "Get player ranking",
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "Player ranking retrieved successfully",
+            "schema": {
+              "$ref": "#/definitions/Player"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
     "/v1/players/name/{name}": {
       "get": {
         "tags": [
