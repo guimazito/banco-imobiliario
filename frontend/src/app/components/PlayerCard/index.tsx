@@ -63,8 +63,6 @@ export function PlayerCard({ player, onCardClick }: PlayerCardProps) {
         "&:hover": { boxShadow: 6 },
         mb: 1,
         width: '100%',
-        minWidth: 220,
-        maxWidth: 340,
         alignSelf: 'stretch',
         display: 'flex',
         flexDirection: 'column',

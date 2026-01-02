@@ -291,15 +291,15 @@ export default function TransactionPage() {
               return (
                 <Grid
                   key={player.id}
-                  sx={{ gridColumn: { xs: "span 12", sm: "span 6" } }}
+                  sx={{ width: '100%' }}
                 >
                   <PlayerCard player={player} onCardClick={handleCardClick} />
                 </Grid>
               );
             })}
       </Grid>
-      <RankingList />
       <TransactionHistory transactions={listTransactions ?? []} />
+      <RankingList />
     </Container>
   );
 }
