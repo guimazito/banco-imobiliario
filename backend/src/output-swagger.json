@@ -277,6 +277,152 @@
           }
         }
       }
+    },
+    "/v1/games/": {
+      "get": {
+        "tags": [
+          "Games"
+        ],
+        "summary": "List all games",
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "List of games",
+            "schema": {
+              "$ref": "#/definitions/Game"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Games"
+        ],
+        "summary": "Create a new game",
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/CreateGameDto"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Game created successfully",
+            "schema": {
+              "$ref": "#/definitions/Game"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/v1/games/{id}": {
+      "get": {
+        "tags": [
+          "Games"
+        ],
+        "summary": "Get a game by ID",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Game ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Game retrieved successfully",
+            "schema": {
+              "$ref": "#/definitions/Game"
+            }
+          },
+          "404": {
+            "description": "Game Not Found",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Games"
+        ],
+        "summary": "Update an existing game",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Game ID"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/UpdateGameDto"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Game updated successfully",
+            "schema": {
+              "$ref": "#/definitions/Game"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "404": {
+            "description": "Game Not Found",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
     }
   },
   "definitions": {
@@ -302,6 +448,10 @@
         "icon": {
           "type": "string",
           "example": "ACCOUNT_CIRCLE"
+        },
+        "gameId": {
+          "type": "string",
+          "example": "1a2b3c4d-5e6f-7g8h-9i0j-k1l2m3n4o5p6"
         },
         "createdAt": {
           "type": "string",
@@ -336,6 +486,10 @@
         "icon": {
           "type": "string",
           "example": "ACCOUNT_CIRCLE"
+        },
+        "gameId": {
+          "type": "string",
+          "example": "1a2b3c4d-5e6f-7g8h-9i0j-k1l2m3n4o5p6"
         }
       }
     },
@@ -379,6 +533,10 @@
           "type": "string",
           "example": "9a2053de-5d92-4c43-97c0-c9b2b0d56704"
         },
+        "gameId": {
+          "type": "string",
+          "example": "1a2b3c4d-5e6f-7g8h-9i0j-k1l2m3n4o5p6"
+        },
         "createdAt": {
           "type": "string",
           "example": "2025-09-16T19:27:15.645Z"
@@ -412,6 +570,87 @@
         "playerIdReceive": {
           "type": "string",
           "example": "9a2053de-5d92-4c43-97c0-c9b2b0d56704"
+        },
+        "gameId": {
+          "type": "string",
+          "example": "1a2b3c4d-5e6f-7g8h-9i0j-k1l2m3n4o5p6"
+        }
+      }
+    },
+    "Game": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "example": "1a2b3c4d-5e6f-7g8h-9i0j-k1l2m3n4o5p6"
+        },
+        "status": {
+          "type": "string",
+          "example": "IN_PROGRESS"
+        },
+        "players": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "example": "8a2053de-5d92-4c43-97c0-c9b2b0d56703"
+              },
+              "name": {
+                "type": "string",
+                "example": "João Silva"
+              },
+              "money": {
+                "type": "number",
+                "example": 1500
+              },
+              "status": {
+                "type": "string",
+                "example": "IDLE"
+              },
+              "icon": {
+                "type": "string",
+                "example": "ACCOUNT_CIRCLE"
+              },
+              "createdAt": {
+                "type": "string",
+                "example": "2025-09-16T19:27:15.645Z"
+              },
+              "updatedAt": {
+                "type": "string",
+                "example": "2025-09-16T19:27:15.645Z"
+              },
+              "deletedAt": {}
+            }
+          }
+        },
+        "createdAt": {
+          "type": "string",
+          "example": "2025-09-16T19:27:15.645Z"
+        },
+        "updatedAt": {
+          "type": "string",
+          "example": "2025-09-16T19:27:15.645Z"
+        },
+        "deletedAt": {}
+      }
+    },
+    "CreateGameDto": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string",
+          "example": "IN_PROGRESS"
+        }
+      }
+    },
+    "UpdateGameDto": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string",
+          "example": "FINISHED"
         }
       }
     },

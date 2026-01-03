@@ -8,6 +8,7 @@ export type CreatePlayerDto = Pick<
     | 'money'
     | 'status'
     | 'icon'
+    | 'gameId'
 >;
 
 export type UpdatePlayerDto = Partial<

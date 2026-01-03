@@ -1,5 +1,6 @@
 import dotenv from "dotenv";
 import swaggerAutogen from "swagger-autogen";
+import { GameStatus } from "./resources/game/game.constants";
 import { PlayerStatus, PlayerIcon } from "./resources/player/player.constants";
 import { TransactionType } from "./resources/transaction/transaction.constants";
 
@@ -22,6 +23,7 @@ const docSwagger = {
       money: 1500,
       status: PlayerStatus.IDLE,
       icon: PlayerIcon.ACCOUNT_CIRCLE,
+      gameId: '1a2b3c4d-5e6f-7g8h-9i0j-k1l2m3n4o5p6',
       createdAt: '2025-09-16T19:27:15.645Z',
       updatedAt: '2025-09-16T19:27:15.645Z',
       deletedAt: null,
@@ -32,6 +34,7 @@ const docSwagger = {
       money: "1500",
       status: PlayerStatus.IDLE,
       icon: PlayerIcon.ACCOUNT_CIRCLE,
+      gameId: '1a2b3c4d-5e6f-7g8h-9i0j-k1l2m3n4o5p6',
     },
     UpdatePlayerDto: {
       money: 2000,
@@ -44,6 +47,7 @@ const docSwagger = {
       type: TransactionType.BETWEEN_PLAYERS,
       playerIdPay: '8a2053de-5d92-4c43-97c0-c9b2b0d56703',
       playerIdReceive: '9a2053de-5d92-4c43-97c0-c9b2b0d56704',
+      gameId: '1a2b3c4d-5e6f-7g8h-9i0j-k1l2m3n4o5p6',
       createdAt: '2025-09-16T19:27:15.645Z',
       updatedAt: '2025-09-16T19:27:15.645Z',
       deletedAt: null,
@@ -54,6 +58,32 @@ const docSwagger = {
       type: TransactionType.BETWEEN_PLAYERS,
       playerIdPay: '8a2053de-5d92-4c43-97c0-c9b2b0d56703',
       playerIdReceive: '9a2053de-5d92-4c43-97c0-c9b2b0d56704',
+      gameId: '1a2b3c4d-5e6f-7g8h-9i0j-k1l2m3n4o5p6',
+    },
+    Game: {
+      id: '1a2b3c4d-5e6f-7g8h-9i0j-k1l2m3n4o5p6',
+      status: GameStatus.IN_PROGRESS,
+      players: [
+        {
+          id: '8a2053de-5d92-4c43-97c0-c9b2b0d56703',
+          name: "João Silva",
+          money: 1500,
+          status: PlayerStatus.IDLE,
+          icon: PlayerIcon.ACCOUNT_CIRCLE,
+          createdAt: '2025-09-16T19:27:15.645Z',
+          updatedAt: '2025-09-16T19:27:15.645Z',
+          deletedAt: null,
+        }
+      ],
+      createdAt: '2025-09-16T19:27:15.645Z',
+      updatedAt: '2025-09-16T19:27:15.645Z',
+      deletedAt: null,
+    },
+    CreateGameDto: {
+      status: GameStatus.IN_PROGRESS,
+    },
+    UpdateGameDto: {
+      status: GameStatus.FINISHED,
     },
     SuccessMessage: {
       message: "Operation completed successfully.",
