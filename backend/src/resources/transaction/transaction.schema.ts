@@ -11,4 +11,5 @@ export const createTransactionSchema = Joi.object({
     type: Joi.string().valid(...Object.values(TransactionType)).required(),
     playerIdPay: Joi.string().uuid().required(),
     playerIdReceive: Joi.string().uuid().required(),
+    gameId: Joi.string().uuid().required(),
 });

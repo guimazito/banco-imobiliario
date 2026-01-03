@@ -7,6 +7,12 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum GameStatus {
+  IN_PROGRESS
+  FINISHED
+  CANCELLED
+}
+
 enum PlayerStatus {
   IDLE
   RECEIVE
@@ -29,6 +35,17 @@ enum TransactionType {
   RECEIVE_FROM_BANK
 }
 
+model Game {
+  id        String     @id @default(uuid()) @db.Char(36)
+  status    GameStatus @default(IN_PROGRESS)
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  deletedAt DateTime?  @db.DateTime(6)
+
+  players      Player[]
+  transactions Transaction[]
+}
+
 model Player {
   id        String       @id @default(uuid()) @db.Char(36)
   name      String
@@ -37,12 +54,14 @@ model Player {
   money     Int
   status    PlayerStatus @default(IDLE)
   icon      PlayerIcon   @default(ACCOUNT_CIRCLE)
+  gameId    String       @db.Char(36)
   createdAt DateTime     @default(now())
   updatedAt DateTime     @updatedAt
   deletedAt DateTime?    @db.DateTime(6)
 
   transactionsPay     Transaction[] @relation("PlayerPay")
   transactionsReceive Transaction[] @relation("PlayerReceive")
+  game                Game          @relation(fields: [gameId], references: [id])
 }
 
 model Transaction {
@@ -52,12 +71,14 @@ model Transaction {
   type            TransactionType @default(BETWEEN_PLAYERS)
   playerIdPay     String          @db.Char(36)
   playerIdReceive String          @db.Char(36)
+  gameId          String          @db.Char(36)
   createdAt       DateTime        @default(now())
   updatedAt       DateTime        @updatedAt
   deletedAt       DateTime?       @db.DateTime(6)
 
-  playerPay     Player  @relation("PlayerPay", fields: [playerIdPay], references: [id])
-  playerReceive Player  @relation("PlayerReceive", fields: [playerIdReceive], references: [id])
+  playerPay     Player @relation("PlayerPay", fields: [playerIdPay], references: [id])
+  playerReceive Player @relation("PlayerReceive", fields: [playerIdReceive], references: [id])
+  game          Game   @relation(fields: [gameId], references: [id])
 }
 
 /**

@@ -7,4 +7,5 @@ export type CreateTransactionDto = Pick<
     | 'type'
     | 'playerIdPay'
     | 'playerIdReceive'
+    | 'gameId'
 >;

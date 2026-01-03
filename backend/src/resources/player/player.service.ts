@@ -19,6 +19,7 @@ export const createPlayer = async (data: CreatePlayerDto): Promise<Player> => {
       ...data,
       password: hashedPassword,
       money: Number(data.money),
+      gameId: data.gameId,
     },
   });
 

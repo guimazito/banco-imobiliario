@@ -8,6 +8,7 @@ export const createTransaction = async (data: CreateTransactionDto): Promise<Tra
         data: {
             ...data,
             amount: Number(data.amount),
+            gameId: data.gameId,
         },
     });
 
