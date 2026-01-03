@@ -3,8 +3,7 @@ import { PlayerIcon } from './playerIcon';
 
 export interface Player {
   id: string;
-  name: string;
-  email: string;
+  username: string;
   password?: string | null;
   money: number;
   status: PlayerStatus;
@@ -15,8 +14,7 @@ export interface Player {
 }
 
 export interface CreatePlayerDto {
-  name: string;
-  email: string;
+  username: string;
   money: string;
   status: PlayerStatus;
   icon: PlayerIcon;

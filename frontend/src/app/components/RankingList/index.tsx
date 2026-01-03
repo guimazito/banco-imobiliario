@@ -26,7 +26,7 @@ export function RankingList() {
         <List>
           {ranking &&
             ranking
-              .filter((player) => player.name !== "Bank")
+              .filter((player) => player.username !== "Bank")
               .map((player, index) => (
                 <ListItem
                   key={player.id}
@@ -52,7 +52,7 @@ export function RankingList() {
                   <ListItemText
                     primary={
                       <Typography fontWeight={index === 0 ? "bold" : "normal"}>
-                        {player.name}
+                        {player.username}
                       </Typography>
                     }
                     secondary={`R$ ${player.money}`}

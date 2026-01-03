@@ -3,6 +3,7 @@
 import Alert from "@mui/material/Alert";
 import { Player } from "../types/player";
 import Snackbar from "@mui/material/Snackbar";
+import { Navbar } from "../components/Navbar";
 import FailAlert from "../components/FailedAlert";
 import React, { useState, useEffect } from "react";
 import { PlayerCard } from "../components/PlayerCard";
@@ -18,7 +19,7 @@ import {
 import {
   useListPlayers,
   useUpdatePlayer,
-  useGetPlayerByName,
+  useGetPlayerByUsername,
   useGetPlayerRanking,
 } from "@/app/hooks/usePlayers";
 import {
@@ -37,7 +38,7 @@ export default function TransactionPage() {
   const [failAlertOpen, setFailAlertOpen] = useState(false);
   const [failAlertMessage, setFailAlertMessage] = useState<string>("");
   const { ws } = useWebSocket();
-  const { data: getPlayerByName } = useGetPlayerByName("Bank");
+  const { data: getPlayerByName } = useGetPlayerByUsername("Bank");
   const { data: listPlayers, refetch: refetchPlayers } = useListPlayers();
   const { data: listTransactions, refetch: refetchTransactions } =
     useListTransactions();
@@ -168,16 +169,16 @@ export default function TransactionPage() {
       addMoneyToPlayer();
       removeMoneyToPlayer();
       transactionDescription =
-        won.map((player) => player.name).join(", ") +
+        won.map((player) => player.username).join(", ") +
         " ganhou R$ " +
         new Intl.NumberFormat("pt-BR").format(inputValue) +
         " de " +
-        lose.map((player) => player.name).join(", ");
+        lose.map((player) => player.username).join(", ");
       transactionType = "BETWEEN_PLAYERS";
     } else if (hasOneReceiving) {
       addMoneyToPlayer();
       transactionDescription =
-        won.map((player) => player.name).join(", ") +
+        won.map((player) => player.username).join(", ") +
         " ganhou R$ " +
         new Intl.NumberFormat("pt-BR").format(inputValue) +
         " do Banco";
@@ -185,7 +186,7 @@ export default function TransactionPage() {
     } else if (hasOnePaying) {
       removeMoneyToPlayer();
       transactionDescription =
-        lose.map((player) => player.name).join(", ") +
+        lose.map((player) => player.username).join(", ") +
         " pagou R$ " +
         new Intl.NumberFormat("pt-BR").format(inputValue) +
         " para o Banco";
@@ -218,6 +219,7 @@ export default function TransactionPage() {
 
   return (
     <Container maxWidth="md" sx={{ py: 3 }}>
+      <Navbar />
       <Paper elevation={3} sx={{ p: 3, mb: 3 }}>
         <Box display="flex" alignItems="center" gap={2}>
           <TextField
@@ -267,7 +269,7 @@ export default function TransactionPage() {
         {Array.isArray(listPlayers) &&
           listPlayers.length > 0 &&
           listPlayers
-            .filter((player) => player.name !== "Bank")
+            .filter((player) => player.username !== "Bank")
             .map((player) => {
               const playerStatus = (status: string) => {
                 if (status === "IDLE") return "PAY";

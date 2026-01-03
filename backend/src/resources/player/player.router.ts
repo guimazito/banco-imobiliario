@@ -3,7 +3,7 @@ import playerController from "./player.controller";
 import {
     createPlayerSchema,
     updatePlayerSchema,
-    playerNameSchema
+    playerUsernameSchema
 } from "./player.schema";
 import { validate } from "../../middlewares/validate";
 
@@ -14,15 +14,15 @@ router.get(
     playerController.index
 );
 
-router.get(
-    "/ranking",
-    playerController.listPlayerRanking
-);
+// router.get(
+//     "/ranking",
+//     playerController.listPlayerRanking
+// );
 
 router.get(
-    "/name/:name",
-    validate(playerNameSchema),
-    playerController.listPlayerByName
+    "/username/:username",
+    validate(playerUsernameSchema),
+    playerController.listPlayerByUsername
 );
 
 router.post(

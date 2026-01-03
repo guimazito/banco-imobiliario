@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { Navbar } from "./components/Navbar";
 import { WebSocketProvider } from "./contexts/WebSocketContext";
 import { ReactQueryClientProvider } from "./components/ReactQueryClient";
 
@@ -18,7 +17,6 @@ export default function RootLayout({
       <body>
         <WebSocketProvider>
           <ReactQueryClientProvider>
-            <Navbar />
             {children}
           </ReactQueryClientProvider>
         </WebSocketProvider>

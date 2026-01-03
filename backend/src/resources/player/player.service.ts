@@ -17,9 +17,7 @@ export const createPlayer = async (data: CreatePlayerDto): Promise<Player> => {
   const newPlayer = await prisma.player.create({
     data: {
       ...data,
-      password: hashedPassword,
-      money: Number(data.money),
-      gameId: data.gameId,
+      password: hashedPassword
     },
   });
 
@@ -32,19 +30,19 @@ export const getPlayerById = async (id: string): Promise<Player | null> => {
   });
 };
 
-export const getPlayerByName = async (name: string): Promise<Player | null> => {
+export const getPlayerByUsername = async (username: string): Promise<Player | null> => {
   return await prisma.player.findFirst({
-    where: { name },
+    where: { username },
   });
 };
 
-export const getPlayerRanking = async (): Promise<Player[]> => {
-  return await prisma.player.findMany({
-    orderBy: {
-      money: "desc",
-    },
-  });
-};
+// export const getPlayerRanking = async (): Promise<Player[]> => {
+//   return await prisma.player.findMany({
+//     orderBy: {
+//       money: "desc",
+//     },
+//   });
+// };
 
 export const getAllPlayers = async (): Promise<Player[]> => {
   return await prisma.player.findMany();

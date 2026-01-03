@@ -42,26 +42,34 @@ model Game {
   updatedAt DateTime   @updatedAt
   deletedAt DateTime?  @db.DateTime(6)
 
-  players      Player[]
   transactions Transaction[]
+  gamePlayers  GamePlayer[]
 }
 
 model Player {
-  id        String       @id @default(uuid()) @db.Char(36)
-  name      String
-  email     String       @unique @db.VarChar(255)
-  password  String       @db.VarChar(255)
-  money     Int
-  status    PlayerStatus @default(IDLE)
-  icon      PlayerIcon   @default(ACCOUNT_CIRCLE)
-  gameId    String       @db.Char(36)
-  createdAt DateTime     @default(now())
-  updatedAt DateTime     @updatedAt
-  deletedAt DateTime?    @db.DateTime(6)
+  id        String    @id @default(uuid()) @db.Char(36)
+  username  String    @unique @db.VarChar(255)
+  password  String    @db.VarChar(255)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime? @db.DateTime(6)
 
   transactionsPay     Transaction[] @relation("PlayerPay")
   transactionsReceive Transaction[] @relation("PlayerReceive")
-  game                Game          @relation(fields: [gameId], references: [id])
+  gamePlayers         GamePlayer[]
+}
+
+model GamePlayer {
+  gameId       String       @db.Char(36)
+  playerId     String       @db.Char(36)
+  playerMoney  Int          @default(25000)
+  playerStatus PlayerStatus @default(IDLE)
+  playerIcon   PlayerIcon   @default(ACCOUNT_CIRCLE)
+
+  game   Game   @relation(fields: [gameId], references: [id])
+  player Player @relation(fields: [playerId], references: [id])
+
+  @@id([gameId, playerId])
 }
 
 model Transaction {
