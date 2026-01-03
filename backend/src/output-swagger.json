@@ -11,6 +11,143 @@
     "http"
   ],
   "paths": {
+    "/v1/auth/signup": {
+      "post": {
+        "tags": [
+          "Authentication"
+        ],
+        "summary": "Register a new player",
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/SignUpDto"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Player registered successfully",
+            "schema": {
+              "$ref": "#/definitions/Player"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/v1/auth/login": {
+      "post": {
+        "tags": [
+          "Authentication"
+        ],
+        "summary": "Log in a player",
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/LoginDto"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Player logged in successfully",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "example": "object"
+                },
+                "properties": {
+                  "type": "object",
+                  "properties": {
+                    "token": {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "example": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/v1/auth/reset-password": {
+      "post": {
+        "tags": [
+          "Authentication"
+        ],
+        "summary": "Reset player password",
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/ResetPasswordDto"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Password reset successfully",
+            "schema": {
+              "$ref": "#/definitions/SuccessMessage"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
     "/v1/players/": {
       "get": {
         "tags": [
@@ -70,43 +207,20 @@
         }
       }
     },
-    "/v1/players/ranking": {
+    "/v1/players/username/{username}": {
       "get": {
         "tags": [
           "Players"
         ],
-        "summary": "Get player ranking",
-        "description": "",
-        "responses": {
-          "200": {
-            "description": "Player ranking retrieved successfully",
-            "schema": {
-              "$ref": "#/definitions/Player"
-            }
-          },
-          "500": {
-            "description": "Internal Server Error",
-            "schema": {
-              "$ref": "#/definitions/Error"
-            }
-          }
-        }
-      }
-    },
-    "/v1/players/name/{name}": {
-      "get": {
-        "tags": [
-          "Players"
-        ],
-        "summary": "Get a player by name",
+        "summary": "Get a player by username",
         "description": "",
         "parameters": [
           {
-            "name": "name",
+            "name": "username",
             "in": "path",
             "required": true,
             "type": "string",
-            "description": "Player name"
+            "description": "Player Username"
           }
         ],
         "responses": {
@@ -423,9 +537,230 @@
           }
         }
       }
+    },
+    "/v1/game-players/": {
+      "get": {
+        "tags": [
+          "GamePlayers"
+        ],
+        "summary": "List all game players",
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "List of game players",
+            "schema": {
+              "$ref": "#/definitions/GamePlayer"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "GamePlayers"
+        ],
+        "summary": "Create a new game player",
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/CreateGamePlayerDto"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Game player created successfully",
+            "schema": {
+              "$ref": "#/definitions/GamePlayer"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/v1/game-players/{gameId}/{playerId}": {
+      "get": {
+        "tags": [
+          "GamePlayers"
+        ],
+        "summary": "Get a game player by Game ID and Player ID",
+        "description": "",
+        "parameters": [
+          {
+            "name": "gameId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Game ID"
+          },
+          {
+            "name": "playerId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Player ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Game player retrieved successfully",
+            "schema": {
+              "$ref": "#/definitions/GamePlayer"
+            }
+          },
+          "404": {
+            "description": "Game Player Not Found",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "GamePlayers"
+        ],
+        "summary": "Update a game player by ID",
+        "description": "",
+        "parameters": [
+          {
+            "name": "gameId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Game ID"
+          },
+          {
+            "name": "playerId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Player ID"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/UpdateGamePlayerDto"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Game player updated successfully",
+            "schema": {
+              "$ref": "#/definitions/GamePlayer"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "404": {
+            "description": "Game Player Not Found",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
     }
   },
   "definitions": {
+    "SignUpDto": {
+      "type": "object",
+      "properties": {
+        "username": {
+          "type": "string",
+          "example": "joao.silva"
+        },
+        "password": {
+          "type": "string",
+          "example": "senha123"
+        }
+      }
+    },
+    "LoginDto": {
+      "type": "object",
+      "properties": {
+        "username": {
+          "type": "string",
+          "example": "joao.silva"
+        },
+        "password": {
+          "type": "string",
+          "example": "senha123"
+        }
+      }
+    },
+    "ChangePasswordDto": {
+      "type": "object",
+      "properties": {
+        "oldPassword": {
+          "type": "string",
+          "example": "senha123"
+        },
+        "newPassword": {
+          "type": "string",
+          "example": "novaSenha456"
+        }
+      }
+    },
+    "ResetPasswordDto": {
+      "type": "object",
+      "properties": {
+        "token": {
+          "type": "string",
+          "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjhhMjA1M2RlLTVkOTItNGM0My05N2MwLWM5YjJiMGQ1NjcwMyIsIm5hbWUiOiJBbmEgUGVyZWlyYSIsImVtYWlsIjoiYW5hX3BlcmlyYUBoZW1vdHJhY2suY29tIiwicHJvZmlsZUlkIjoiQURNSU4iLCJibG9vZENlbnRlcklkIjoiMDBjNmZiMmMtYTI4MC00MzFjLWIxMmYtNmU2YTc4ZjdhN2YwIiwiaWF0IjoxNjkyNTI0NzI1fQ.sJt9H3z8n5X1mX0F6vE3K1Zl5H3z8n5X1mX0F6vE3K1Zl5"
+        },
+        "newPassword": {
+          "type": "string",
+          "example": "novaSenha456"
+        }
+      }
+    },
+    "AuthToken": {
+      "type": "object",
+      "properties": {
+        "token": {
+          "type": "string",
+          "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjhhMjA1M2RlLTVkOTItNGM0My05N2MwLWM5YjJiMGQ1NjcwMyIsIm5hbWUiOiJBbmEgUGVyZWlyYSIsImVtYWlsIjoiYW5hX3BlcmlyYUBoZW1vdHJhY2suY29tIiwicHJvZmlsZUlkIjoiQURNSU4iLCJibG9vZENlbnRlcklkIjoiMDBjNmZiMmMtYTI4MC00MzFjLWIxMmYtNmU2YTc4ZjdhN2YwIiwiaWF0IjoxNjkyNTI0NzI1fQ.sJt9H3z8n5X1mX0F6vE3K1Zl5H3z8n5X1mX0F6vE3K1Zl5"
+        }
+      }
+    },
     "Player": {
       "type": "object",
       "properties": {
@@ -433,25 +768,9 @@
           "type": "string",
           "example": "8a2053de-5d92-4c43-97c0-c9b2b0d56703"
         },
-        "name": {
+        "username": {
           "type": "string",
           "example": "João Silva"
-        },
-        "money": {
-          "type": "number",
-          "example": 1500
-        },
-        "status": {
-          "type": "string",
-          "example": "IDLE"
-        },
-        "icon": {
-          "type": "string",
-          "example": "ACCOUNT_CIRCLE"
-        },
-        "gameId": {
-          "type": "string",
-          "example": "1a2b3c4d-5e6f-7g8h-9i0j-k1l2m3n4o5p6"
         },
         "createdAt": {
           "type": "string",
@@ -467,42 +786,22 @@
     "CreatePlayerDto": {
       "type": "object",
       "properties": {
-        "name": {
+        "username": {
           "type": "string",
           "example": "João Silva"
         },
-        "email": {
+        "password": {
           "type": "string",
-          "example": "joao_silva@gmail.com"
-        },
-        "money": {
-          "type": "string",
-          "example": "1500"
-        },
-        "status": {
-          "type": "string",
-          "example": "IDLE"
-        },
-        "icon": {
-          "type": "string",
-          "example": "ACCOUNT_CIRCLE"
-        },
-        "gameId": {
-          "type": "string",
-          "example": "1a2b3c4d-5e6f-7g8h-9i0j-k1l2m3n4o5p6"
+          "example": "senha123"
         }
       }
     },
     "UpdatePlayerDto": {
       "type": "object",
       "properties": {
-        "money": {
-          "type": "number",
-          "example": 2000
-        },
-        "status": {
+        "username": {
           "type": "string",
-          "example": "IDLE"
+          "example": "João Silva"
         }
       }
     },
@@ -514,8 +813,8 @@
           "example": "d4f7e8c2-3b6a-4f1e-9f3b-2c8e4f5a6b7c"
         },
         "amount": {
-          "type": "number",
-          "example": 200
+          "type": "string",
+          "example": "200"
         },
         "description": {
           "type": "string",
@@ -552,8 +851,8 @@
       "type": "object",
       "properties": {
         "amount": {
-          "type": "number",
-          "example": 200
+          "type": "string",
+          "example": "200"
         },
         "description": {
           "type": "string",
@@ -597,7 +896,7 @@
                 "type": "string",
                 "example": "8a2053de-5d92-4c43-97c0-c9b2b0d56703"
               },
-              "name": {
+              "username": {
                 "type": "string",
                 "example": "João Silva"
               },
@@ -651,6 +950,73 @@
         "status": {
           "type": "string",
           "example": "FINISHED"
+        }
+      }
+    },
+    "GamePlayer": {
+      "type": "object",
+      "properties": {
+        "gameId": {
+          "type": "string",
+          "example": "1a2b3c4d-5e6f-7g8h-9i0j-k1l2m3n4o5p6"
+        },
+        "playerId": {
+          "type": "string",
+          "example": "8a2053de-5d92-4c43-97c0-c9b2b0d56703"
+        },
+        "playerMoney": {
+          "type": "number",
+          "example": 1500
+        },
+        "playerStatus": {
+          "type": "string",
+          "example": "IDLE"
+        },
+        "playerIcon": {
+          "type": "string",
+          "example": "ACCOUNT_CIRCLE"
+        }
+      }
+    },
+    "CreateGamePlayerDto": {
+      "type": "object",
+      "properties": {
+        "gameId": {
+          "type": "string",
+          "example": "1a2b3c4d-5e6f-7g8h-9i0j-k1l2m3n4o5p6"
+        },
+        "playerId": {
+          "type": "string",
+          "example": "8a2053de-5d92-4c43-97c0-c9b2b0d56703"
+        },
+        "playerMoney": {
+          "type": "number",
+          "example": 1500
+        },
+        "playerStatus": {
+          "type": "string",
+          "example": "PAY"
+        },
+        "playerIcon": {
+          "type": "string",
+          "example": "ACCOUNT_CIRCLE"
+        }
+      }
+    },
+    "UpdateGamePlayerDto": {
+      "type": "object",
+      "properties": {
+        "playerMoney": {
+          "type": "number",
+          "example": 2000
+        },
+        "playerStatus": {
+          "type": "string",
+          "example": "IDLE"
+        },
+        "playerIcon": {
+          "type": "string",
+          "example": "ACCOUNT_CIRCLE"
         }
       }
     },

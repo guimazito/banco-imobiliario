@@ -2,19 +2,14 @@ import { Player } from '@prisma/client';
 
 export type CreatePlayerDto = Pick<
     Player,
-    | 'name'
-    | 'email'
+    | 'username'
     | 'password'
-    | 'money'
-    | 'status'
-    | 'icon'
-    | 'gameId'
 >;
 
 export type UpdatePlayerDto = Partial<
     Pick<
         Player,
-        | 'money'
-        | 'status'
+        | 'username'
+        | 'password'
     >
 >;

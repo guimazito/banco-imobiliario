@@ -78,7 +78,7 @@ export function PlayerCard({ player, onCardClick }: PlayerCardProps) {
       >
         <div>
           <Typography variant="h6" component="div" sx={{ color: "#fff" }}>
-            {player.name}
+            {player.username}
           </Typography>
           <Typography variant="body1" sx={{ color: "#e5e5e5", mt: 1 }}>
             R$ {new Intl.NumberFormat("pt-BR").format(player.money)}

@@ -32,9 +32,9 @@ export default function NewGamePage() {
   const [money, setMoney] = useState<number>(0);
   // Player
   const { mutateAsync: createPlayer } = useCreatePlayer();
-  const [players, setPlayers] = useState<{ name: string; icon: PlayerIcon }[]>([
-    { name: "", icon: "ACCOUNT_CIRCLE" as PlayerIcon },
-    { name: "", icon: "ACCOUNT_CIRCLE" as PlayerIcon },
+  const [players, setPlayers] = useState<{ username: string; icon: PlayerIcon }[]>([
+    { username: "", icon: "ACCOUNT_CIRCLE" as PlayerIcon },
+    { username: "", icon: "ACCOUNT_CIRCLE" as PlayerIcon },
   ]);
   // Alert
   const [failAlertOpen, setFailAlertOpen] = useState(false);
@@ -81,7 +81,7 @@ export default function NewGamePage() {
       }
       return [
         ...prevPlayers,
-        { name: "", icon: "ACCOUNT_CIRCLE" as PlayerIcon },
+        { username: "", icon: "ACCOUNT_CIRCLE" as PlayerIcon },
       ];
     });
   };
@@ -100,7 +100,7 @@ export default function NewGamePage() {
   const handlePlayerNameChange = (index: number, value: string) => {
     setPlayers((prevPlayers) =>
       prevPlayers.map((player, i) =>
-        i === index ? { ...player, name: value } : player
+        i === index ? { ...player, username: value } : player
       )
     );
   };
@@ -118,11 +118,7 @@ export default function NewGamePage() {
     if (e) e.preventDefault();
     for (const player of players) {
       await onSubmit({
-        name: player.name.trim(),
-        email: `${player.name
-          .trim()
-          .toLowerCase()
-          .replace(/\s+/g, ".")}@gmail.com`,
+        username: player.username.trim(),
         money: money.toString(),
         status: "IDLE",
         icon: player.icon,
@@ -165,7 +161,7 @@ export default function NewGamePage() {
   function isCreateButtonEnabled() {
     const hasValidInput = money > 0;
     const hasTwoPlayers = players.length >= 2;
-    const allNamesFilled = players.every((player) => player.name.trim() !== "");
+    const allNamesFilled = players.every((player) => player.username.trim() !== "");
 
     return hasValidInput && hasTwoPlayers && allNamesFilled;
   }
@@ -254,7 +250,7 @@ export default function NewGamePage() {
               variant="filled"
               sx={{ bgcolor: "white", borderRadius: 1, flex: 1, mr: 1 }}
               type="text"
-              value={player.name}
+              value={player.username}
               onChange={(e) => handlePlayerNameChange(index, e.target.value)}
             />
             <IconButton

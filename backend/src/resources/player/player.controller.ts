@@ -5,8 +5,8 @@ import {
     createPlayer,
     getAllPlayers,
     updatePlayer,
-    getPlayerByName,
-    getPlayerRanking
+    // getPlayerRanking,
+    getPlayerByUsername,
 } from "./player.service";
 
 const index = async (req: Request, res: Response) => {
@@ -96,12 +96,12 @@ const update = async (req: Request, res: Response) => {
     }
 };
 
-const listPlayerByName = async (req: Request, res: Response) => {
+const listPlayerByUsername = async (req: Request, res: Response) => {
     /*
-    #swagger.summary = 'Get a player by name'
-    #swagger.parameters['name'] = {
+    #swagger.summary = 'Get a player by username'
+    #swagger.parameters['username'] = {
         in: 'path',
-        description: 'Player name',
+        description: 'Player Username',
         required: true,
         type: 'string'
     }
@@ -119,38 +119,38 @@ const listPlayerByName = async (req: Request, res: Response) => {
     }
     */
     try {
-        const { name } = req.params;
-        const player = await getPlayerByName(name);
+        const { username } = req.params;
+        const player = await getPlayerByUsername(username);
         res.status(StatusCodes.OK).json(player);
     } catch (err) {
         playerError(res, err);
     }
 };
 
-const listPlayerRanking = async (req: Request, res: Response) => {
-    /*
-    #swagger.summary = 'Get player ranking'
-    #swagger.responses[200] = {
-        description: 'Player ranking retrieved successfully',
-        schema: { $ref: '#/definitions/Player' }
-    }
-    #swagger.responses[500] = {
-        description: 'Internal Server Error',
-        schema: { $ref: '#/definitions/Error' }
-    }
-    */
-    try {
-        const ranking = await getPlayerRanking();
-        res.status(StatusCodes.OK).json(ranking);
-    } catch (err) {
-        playerError(res, err);
-    }
-};
+// const listPlayerRanking = async (req: Request, res: Response) => {
+//     /*
+//     #swagger.summary = 'Get player ranking'
+//     #swagger.responses[200] = {
+//         description: 'Player ranking retrieved successfully',
+//         schema: { $ref: '#/definitions/Player' }
+//     }
+//     #swagger.responses[500] = {
+//         description: 'Internal Server Error',
+//         schema: { $ref: '#/definitions/Error' }
+//     }
+//     */
+//     try {
+//         const ranking = await getPlayerRanking();
+//         res.status(StatusCodes.OK).json(ranking);
+//     } catch (err) {
+//         playerError(res, err);
+//     }
+// };
 
 export default {
     index,
     create,
     update,
-    listPlayerByName,
-    listPlayerRanking
+    // listPlayerRanking,
+    listPlayerByUsername
 }

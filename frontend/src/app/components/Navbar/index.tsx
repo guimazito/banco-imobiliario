@@ -28,7 +28,7 @@ export function Navbar(props: Props) {
   const router = useRouter();
   const pathname = usePathname();
   const drawerWidth = 240;
-  const navItems = ["Novo Jogo", "Transações", "Propriedades", "Balanço Final"];
+  const navItems = [/*"Novo Jogo", */"Transações", "Propriedades", "Balanço Final"];
   const { window } = props;
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const handleDrawerToggle = () => {
@@ -38,8 +38,8 @@ export function Navbar(props: Props) {
   const handleNavigation = (item: string) => {
     if (item === "Transações") {
       router.push("/transaction");
-    } else if (item === "Novo Jogo") {
-      router.push("/new-game");
+    // } else if (item === "Novo Jogo") {
+    //   router.push("/new-game");
     } else if (item === "Propriedades") {
       router.push("/properties");
     } else if (item === "Balanço Final") {
@@ -51,8 +51,8 @@ export function Navbar(props: Props) {
     switch (pathname) {
       case "/transaction":
         return "TRANSAÇÕES";
-      case "/new-game":
-        return "NOVO JOGO";
+      // case "/new-game":
+      //   return "NOVO JOGO";
       case "/properties":
         return "PROPRIEDADES";
       case "/final-balance":
