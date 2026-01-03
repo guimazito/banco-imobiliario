@@ -1,4 +1,4 @@
-export type Icon =
+export type PlayerIcon =
   | "PIX"
   | "SAVINGS"
   | "CREDIT_CARD"
