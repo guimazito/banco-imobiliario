@@ -1,19 +1,20 @@
-/* eslint-disable react/jsx-key */
 "use client";
 
-import React, { JSX } from "react";
-import { useState } from "react";
 import Box from "@mui/material/Box";
 import Menu from "@mui/material/Menu";
-import Dialog from "@mui/material/Dialog";
 import Button from "@mui/material/Button";
+import Dialog from "@mui/material/Dialog";
+import { useRouter } from "next/navigation";
+import React, { useState, JSX } from "react";
 import PixIcon from "@mui/icons-material/Pix";
-// import { useNavigate } from 'react-router-dom';
+import { PlayerIcon } from "../types/playerIcon";
+import { CreatePlayerDto } from "../types/player";
+import FailAlert from "../components/FailedAlert";
 import DialogTitle from "@mui/material/DialogTitle";
 import SavingsIcon from "@mui/icons-material/Savings";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
-// import FailAlert from '../components/FailAlert/FailAlert';
+import { useCreatePlayer } from "@/app/hooks/usePlayers";
 import CreditCardIcon from "@mui/icons-material/CreditCard";
 import PointOfSaleIcon from "@mui/icons-material/PointOfSale";
 import ShoppingBagIcon from "@mui/icons-material/ShoppingBag";
@@ -24,54 +25,40 @@ import { IconButton, InputAdornment, TextField } from "@mui/material";
 import FlagCircleRoundedIcon from "@mui/icons-material/FlagCircleRounded";
 import RemoveCircleRoundedIcon from "@mui/icons-material/RemoveCircleRounded";
 import PersonAddAltRoundedIcon from "@mui/icons-material/PersonAddAltRounded";
-// import ResponsiveAppBar from "../components/ResponsiveAppBar";
-import { useListPlayers, useCreatePlayer } from "@/app/hooks/usePlayers";
-import { CreatePlayerDto } from "../types/player";
 
 export default function NewGamePage() {
-  const { data, isPending, isError } = useListPlayers();
-  const { mutateAsync: createPlayer } = useCreatePlayer();
-  // Router
-  // const navigate = useNavigate();
-  // Player
+  const router = useRouter();
   const [open, setOpen] = useState(false);
   const [money, setMoney] = useState<number>(0);
-  const [players, setPlayers] = useState([
-    { name: "", icon: "AccountCircleIcon" },
-    { name: "", icon: "AccountCircleIcon" },
+  // Player
+  const { mutateAsync: createPlayer } = useCreatePlayer();
+  const [players, setPlayers] = useState<{ name: string; icon: PlayerIcon }[]>([
+    { name: "", icon: "ACCOUNT_CIRCLE" as PlayerIcon },
+    { name: "", icon: "ACCOUNT_CIRCLE" as PlayerIcon },
   ]);
   // Alert
   const [failAlertOpen, setFailAlertOpen] = useState(false);
   const [failAlertMessage, setFailAlertMessage] = useState<string>("");
-  // Enviroument
-  // const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
-  const API_BASE_URL = process.env.API_BASE_URL || "http://localhost:3000";
   // Avatar
-  const iconMap: Record<string, JSX.Element> = {
-    PixIcon: <PixIcon fontSize="large" color="primary" />,
-    SavingsIcon: <SavingsIcon fontSize="large" color="primary" />,
-    CreditCardIcon: <CreditCardIcon fontSize="large" color="primary" />,
-    ShoppingBagIcon: <ShoppingBagIcon fontSize="large" color="primary" />,
-    PointOfSaleIcon: <PointOfSaleIcon fontSize="large" color="primary" />,
-    MonetizationOnIcon: <MonetizationOnIcon fontSize="large" color="primary" />,
-    AccountCircleIcon: <AccountCircleIcon fontSize="large" />,
+  const iconMap: Record<PlayerIcon, JSX.Element> = {
+    PIX: <PixIcon fontSize="large" color="primary" />,
+    SAVINGS: <SavingsIcon fontSize="large" color="primary" />,
+    CREDIT_CARD: <CreditCardIcon fontSize="large" color="primary" />,
+    SHOPPING_BAG: <ShoppingBagIcon fontSize="large" color="primary" />,
+    POINT_OF_SALE: <PointOfSaleIcon fontSize="large" color="primary" />,
+    MONETIZATION: <MonetizationOnIcon fontSize="large" color="primary" />,
+    ACCOUNT_CIRCLE: <AccountCircleIcon fontSize="large" />,
   };
-  // const iconArray = [
-  //     <PixIcon fontSize="large" color="primary" name="PixIcon"/>,
-  //     <SavingsIcon fontSize="large" color="primary" name="SavingsIcon"/>,
-  //     <CreditCardIcon fontSize="large" color="primary" name="CreditCardIcon"/>,
-  //     <ShoppingBagIcon fontSize="large" color="primary" name="ShoppingBagIcon"/>,
-  //     <PointOfSaleIcon fontSize="large" color="primary" name="PointOfSaleIcon"/>,
-  //     <MonetizationOnIcon fontSize="large" color="primary" name="MonetizationOnIcon"/>,
-  // ];
-  const iconArray = [
-    "PixIcon",
-    "SavingsIcon",
-    "CreditCardIcon",
-    "ShoppingBagIcon",
-    "PointOfSaleIcon",
-    "MonetizationOnIcon",
+
+  const iconArray: PlayerIcon[] = [
+    "PIX",
+    "SAVINGS",
+    "CREDIT_CARD",
+    "SHOPPING_BAG",
+    "POINT_OF_SALE",
+    "MONETIZATION",
   ];
+
   const [anchorEl, setAnchorEl] = useState<{
     index: number;
     element: HTMLElement | null;
@@ -94,7 +81,7 @@ export default function NewGamePage() {
       }
       return [
         ...prevPlayers,
-        { name: "", icon: <AccountCircleIcon fontSize="large" /> },
+        { name: "", icon: "ACCOUNT_CIRCLE" as PlayerIcon },
       ];
     });
   };
@@ -118,57 +105,32 @@ export default function NewGamePage() {
     );
   };
 
-const onSubmit = async (playerData: CreatePlayerDto) => {
-  try {
-    await createPlayer(playerData);
-  } catch (error) {
-    setFailAlertMessage("Erro ao criar jogador!");
-    setFailAlertOpen(true);
-  }
-};
+  const onSubmit = async (playerData: CreatePlayerDto) => {
+    try {
+      await createPlayer(playerData);
+    } catch {
+      setFailAlertMessage("Erro ao criar jogador!");
+      setFailAlertOpen(true);
+    }
+  };
 
-const handleSubmit = async (e?: React.FormEvent) => {
-  if (e) e.preventDefault();
-  for (const player of players) {
-    await onSubmit({
-      name: player.name.trim(),
-      money,
-      status: "IDLE",
-      icon: player.icon,
-    });
-  }
-  setOpen(false);
-  // navegação ou outras ações...
-};
-
-  // const handleSubmit = async (e: { preventDefault: () => void; }) => {
-  //     e.preventDefault();
-  //     console.log('data', data);
-  // await fetch(`${API_BASE_URL}/api/players`, {
-  //     method: "DELETE",
-  // });
-  // console.log("Deletou os jogadores");
-
-  // await fetch(`${API_BASE_URL}/api/transactions`, {
-  //     method: "DELETE",
-  // });
-  // console.log("Deletou as transações");
-  // console.log(players)
-  // await fetch(`${API_BASE_URL}/api/players`, {
-  //     method: "POST",
-  //     headers : {
-  //         "Content-Type": "application/json",
-  //     },
-  //     body: JSON.stringify(players.map(player => ({
-  //         name: player.name.trim(),
-  //         money: money,
-  //         status: "idle",
-  //         icon: player.icon.props.name
-  //     }))),
-  // });
-
-  // navigate('/');
-  // };
+  const handleSubmit = async (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
+    for (const player of players) {
+      await onSubmit({
+        name: player.name.trim(),
+        email: `${player.name
+          .trim()
+          .toLowerCase()
+          .replace(/\s+/g, ".")}@gmail.com`,
+        money: money.toString(),
+        status: "IDLE",
+        icon: player.icon,
+      });
+    }
+    setOpen(false);
+    router.push("/transaction");
+  };
 
   const handleOpenAvatarMenu = (
     event: React.MouseEvent<HTMLButtonElement>,
@@ -181,7 +143,7 @@ const handleSubmit = async (e?: React.FormEvent) => {
     setAnchorEl({ index: -1, element: null });
   };
 
-  const handleAvatarChange = (playerIndex: number, iconName: string) => {
+  const handleAvatarChange = (playerIndex: number, iconName: PlayerIcon) => {
     setPlayers((prevPlayers) =>
       prevPlayers.map((player, index) =>
         index === playerIndex ? { ...player, icon: iconName } : player
@@ -191,10 +153,7 @@ const handleSubmit = async (e?: React.FormEvent) => {
   };
 
   function handleMoneyChange(event: React.ChangeEvent<HTMLInputElement>) {
-    const rawValue = event.target.value.replace(/\D/g, ""); // Remove caracteres não numéricos
-    const formattedValue = new Intl.NumberFormat("pt-BR").format(
-      Number(rawValue)
-    );
+    const rawValue = event.target.value.replace(/\D/g, "");
     if (Number(event.target.value) < 0) {
       setFailAlertMessage("Valor não pode ser negativo!");
       setFailAlertOpen(true);
@@ -212,34 +171,47 @@ const handleSubmit = async (e?: React.FormEvent) => {
   }
 
   return (
-    <div>
-      {/* <ResponsiveAppBar></ResponsiveAppBar> */}
-
-      <form className="flex flex-col items-center mt-2">
+    <Box sx={{ minHeight: "100vh", bgcolor: "#f5f5f5", pb: 8 }}>
+      <Box
+        component="form"
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          mt: 2,
+        }}
+      >
         <TextField
           label="Valor Inicial"
           variant="filled"
-          className="bg-white border rounded"
-          style={{ width: "90%", userSelect: "none" }}
+          sx={{
+            bgcolor: "white",
+            borderRadius: 1,
+            width: "90%",
+            userSelect: "none",
+            mb: 2,
+          }}
           type="number"
           value={
             money === 0 ? "" : new Intl.NumberFormat("pt-BR").format(money)
           }
           onChange={handleMoneyChange}
-          slotProps={{
-            input: {
-              startAdornment: (
-                <InputAdornment position="start">R$</InputAdornment>
-              ),
-            },
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">R$</InputAdornment>
+            ),
           }}
         />
 
         {players.map((player, index) => (
-          <div className="flex mt-3" key={index}>
+          <Box
+            key={index}
+            sx={{ display: "flex", alignItems: "center", mt: 3, width: "90%" }}
+          >
             <IconButton
               color="primary"
               onClick={(event) => handleOpenAvatarMenu(event, index)}
+              sx={{ mr: 1 }}
             >
               {iconMap[player.icon]}
             </IconButton>
@@ -261,13 +233,18 @@ const handleSubmit = async (e?: React.FormEvent) => {
                 }}
               >
                 {iconArray.map((iconName, iconIndex) => (
-                  <div
+                  <Box
                     key={iconIndex}
                     onClick={() => handleAvatarChange(index, iconName)}
-                    style={{ cursor: "pointer" }}
+                    sx={{
+                      cursor: "pointer",
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
                   >
                     {iconMap[iconName]}
-                  </div>
+                  </Box>
                 ))}
               </Box>
             </Menu>
@@ -275,7 +252,7 @@ const handleSubmit = async (e?: React.FormEvent) => {
             <TextField
               label={`Jogador ${index + 1}`}
               variant="filled"
-              className="bg-white border rounded"
+              sx={{ bgcolor: "white", borderRadius: 1, flex: 1, mr: 1 }}
               type="text"
               value={player.name}
               onChange={(e) => handlePlayerNameChange(index, e.target.value)}
@@ -286,24 +263,38 @@ const handleSubmit = async (e?: React.FormEvent) => {
             >
               <RemoveCircleRoundedIcon fontSize="large" />
             </IconButton>
-          </div>
+          </Box>
         ))}
 
-        {/* <FailAlert
-                    open={failAlertOpen}
-                    onClose={() => setFailAlertOpen(false)}
-                    message={failAlertMessage}
-                ></FailAlert> */}
-      </form>
+        <FailAlert
+          open={failAlertOpen}
+          onClose={() => setFailAlertOpen(false)}
+          message={failAlertMessage}
+        ></FailAlert>
+      </Box>
 
-      <footer className="flex place-content-between bg-gray-800 p-2 absolute bottom-0 w-full">
-        <div>
-          <IconButton color="primary" onClick={handleAddPlayer}>
-            <PersonAddAltRoundedIcon fontSize="large" />
-          </IconButton>
-        </div>
+      <Box
+        component="footer"
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          bgcolor: "grey.800",
+          p: 2,
+          position: "fixed",
+          bottom: 0,
+          left: 0,
+          right: 0,
+          width: "95%",
+          margin: "0 auto",
+          zIndex: 1201,
+        }}
+      >
+        <IconButton color="primary" onClick={handleAddPlayer}>
+          <PersonAddAltRoundedIcon fontSize="large" />
+        </IconButton>
 
-        <div>
+        <Box>
           <IconButton
             color="success"
             onClick={handleClick}
@@ -338,8 +329,8 @@ const handleSubmit = async (e?: React.FormEvent) => {
               </Button>
             </DialogActions>
           </Dialog>
-        </div>
-      </footer>
-    </div>
+        </Box>
+      </Box>
+    </Box>
   );
 }

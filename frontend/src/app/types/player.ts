@@ -1,5 +1,5 @@
 import { PlayerStatus } from './playerStatus';
-import { Icon } from './playerIcon';
+import { PlayerIcon } from './playerIcon';
 
 export interface Player {
   id: string;
@@ -8,7 +8,7 @@ export interface Player {
   password?: string | null;
   money: number;
   status: PlayerStatus;
-  icon: Icon;
+  icon: PlayerIcon;
   createdAt: string;
   updatedAt: string;
   deletedAt?: string | null;
@@ -17,10 +17,9 @@ export interface Player {
 export interface CreatePlayerDto {
   name: string;
   email: string;
-  password: string;
-  money: number;
+  money: string;
   status: PlayerStatus;
-  icon: Icon;
+  icon: PlayerIcon;
 }
 
 export interface UpdatePlayerDto {
