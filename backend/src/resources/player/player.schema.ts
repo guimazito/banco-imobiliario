@@ -10,8 +10,10 @@ export const playerUsernameSchema = Joi.object({
 
 export const createPlayerSchema = Joi.object({
     username: Joi.string().min(1).max(100).required(),
+    profileId: Joi.string().uuid().required(),
 });
 
 export const updatePlayerSchema = Joi.object({
     username: Joi.string().min(1).max(100).required(),
+    profileId: Joi.string().uuid().required(),
 });

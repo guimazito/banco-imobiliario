@@ -17,7 +17,7 @@ export const createPlayer = async (data: CreatePlayerDto): Promise<Player> => {
   const newPlayer = await prisma.player.create({
     data: {
       ...data,
-      password: hashedPassword
+      password: hashedPassword,
     },
   });
 

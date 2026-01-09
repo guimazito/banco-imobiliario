@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { WebSocketProvider } from "./contexts/WebSocketContext";
+import { AuthProvider } from "./components/AuthProvider/AuthContext";
 import { ReactQueryClientProvider } from "./components/ReactQueryClient";
 
 export const metadata: Metadata = {
@@ -17,7 +18,9 @@ export default function RootLayout({
       <body>
         <WebSocketProvider>
           <ReactQueryClientProvider>
-            {children}
+            <AuthProvider>
+              {children}
+            </AuthProvider>
           </ReactQueryClientProvider>
         </WebSocketProvider>
       </body>

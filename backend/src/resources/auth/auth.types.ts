@@ -4,6 +4,7 @@ export type SignUpDto = Pick<
     Player,
     | 'username'
     | 'password'
+    | 'profileId'
 >;
 
 export type LoginDto = Pick<
