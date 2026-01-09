@@ -9,8 +9,32 @@ import {
   Button,
   Typography,
 } from "@mui/material";
+import { useRouter } from "next/navigation";
+import { useCreateGame } from "../hooks/useGames";
+import { useCreateGamePlayer } from "../hooks/useGamePlayers";
 
 export default function HomePage() {
+  const router = useRouter();
+  const { mutateAsync: createGame } = useCreateGame();
+  const { mutateAsync: createGamePlayer } = useCreateGamePlayer();
+  const handleCreateGame = async () => {
+    try {
+      const game = await createGame({ status: "IN_PROGRESS" });
+      await createGamePlayer({
+        gameId: game.id,
+        playerId: "Host",
+        playerMoney: 0,
+        playerStatus: "IDLE",
+        playerIcon: "PIX"
+      });
+      if (game?.id) {
+        router.push(`/game/${game.id}/transaction`);
+        // router.push(`/transaction/${game.id}`);
+      }
+    } catch (err) {
+    }
+  };
+
   return (
     <main>
       <Box
@@ -36,7 +60,7 @@ export default function HomePage() {
                 </Typography>
               </CardContent>
               <CardActions>
-                <Button variant="contained" color="primary" href="/new-game">
+                <Button variant="contained" color="primary" onClick={handleCreateGame}>
                   Novo Jogo
                 </Button>
               </CardActions>

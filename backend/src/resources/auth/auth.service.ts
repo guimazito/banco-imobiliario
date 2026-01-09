@@ -7,6 +7,7 @@ import {
 } from "./auth.types";
 import jwt from "jsonwebtoken";
 import { compare, hash } from "bcryptjs";
+import { PlayerProfileConstants } from "../playerProfile/playerProfile.constants";
 
 const prisma = new PrismaClient();
 
@@ -20,6 +21,7 @@ export async function signUp(data: SignUpDto): Promise<Player> {
     data: {
       username: data.username,
       password: hashedPassword,
+      profileId: PlayerProfileConstants.USER,
     },
   });
 

@@ -4,6 +4,7 @@ export type CreatePlayerDto = Pick<
     Player,
     | 'username'
     | 'password'
+    | 'profileId'
 >;
 
 export type UpdatePlayerDto = Partial<
@@ -11,5 +12,6 @@ export type UpdatePlayerDto = Partial<
         Player,
         | 'username'
         | 'password'
+        | 'profileId'
     >
 >;

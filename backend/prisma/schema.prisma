@@ -50,6 +50,7 @@ model Player {
   id        String    @id @default(uuid()) @db.Char(36)
   username  String    @unique @db.VarChar(255)
   password  String    @db.VarChar(255)
+  profileId String    @db.Char(36)
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   deletedAt DateTime? @db.DateTime(6)
@@ -57,6 +58,7 @@ model Player {
   transactionsPay     Transaction[] @relation("PlayerPay")
   transactionsReceive Transaction[] @relation("PlayerReceive")
   gamePlayers         GamePlayer[]
+  profile             PlayerProfile @relation(fields: [profileId], references: [id])
 }
 
 model GamePlayer {
@@ -87,6 +89,17 @@ model Transaction {
   playerPay     Player @relation("PlayerPay", fields: [playerIdPay], references: [id])
   playerReceive Player @relation("PlayerReceive", fields: [playerIdReceive], references: [id])
   game          Game   @relation(fields: [gameId], references: [id])
+}
+
+model PlayerProfile {
+  id          String    @id @default(uuid()) @db.Char(36)
+  profileName String    @db.VarChar(50)
+  description String?   @db.VarChar(255)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  deletedAt   DateTime? @db.DateTime(6)
+
+  players Player[]
 }
 
 /**

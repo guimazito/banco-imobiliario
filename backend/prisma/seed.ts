@@ -1,14 +1,33 @@
 import { PrismaClient } from "@prisma/client";
+import bcrypt from "bcryptjs";
 import {
   PlayerIcon,
   PlayerStatus,
 } from "../src/resources/player/player.constants";
 import { GameStatus } from "../src/resources/game/game.constants";
+import { PlayerProfileConstants } from "../src/resources/playerProfile/playerProfile.constants";
 
 const prisma = new PrismaClient();
 
 async function seed() {
   console.log("Seeding database...");
+
+  console.log("Creating Player Profiles...");
+  await prisma.playerProfile.createMany({
+    data: [
+      {
+        id: PlayerProfileConstants.ADMIN,
+        profileName: "Admin",
+        description: "Administrador com acesso total",
+      },
+      {
+        id: PlayerProfileConstants.USER,
+        profileName: "User",
+        description: "Usuário padrão com acesso limitado",
+      },
+    ],
+    skipDuplicates: true,
+  });
 
   console.log("Creating a Game...");
   const game = await prisma.game.create({
@@ -18,35 +37,52 @@ async function seed() {
   });
 
   console.log("Creating Players...");
+  const salt = await bcrypt.genSalt(
+    parseInt(process.env.ROUNDS_BCRYPT ?? "10")
+  );
+  const hashedAdminPassword = await bcrypt.hash("admin123", salt);
+  const hashedUserPassword = await bcrypt.hash("banco123", salt);
   const players = await Promise.all([
     prisma.player.create({
       data: {
+        username: "admin",
+        password: hashedAdminPassword,
+        profileId: PlayerProfileConstants.ADMIN,
+      },
+    }),
+    prisma.player.create({
+      data: {
         username: "Bank",
-        password: "banco123",
+        password: hashedUserPassword,
+        profileId: PlayerProfileConstants.USER,
       },
     }),
     prisma.player.create({
       data: {
         username: "Alice",
-        password: "banco123",
+        password: hashedUserPassword,
+        profileId: PlayerProfileConstants.USER,
       },
     }),
     prisma.player.create({
       data: {
         username: "Bob",
-        password: "banco123",
+        password: hashedUserPassword,
+        profileId: PlayerProfileConstants.USER,
       },
     }),
     prisma.player.create({
       data: {
         username: "Maria",
-        password: "banco123",
+        password: hashedUserPassword,
+        profileId: PlayerProfileConstants.USER,
       },
     }),
     prisma.player.create({
       data: {
         username: "João",
-        password: "banco123",
+        password: hashedUserPassword,
+        profileId: PlayerProfileConstants.USER,
       },
     }),
   ]);

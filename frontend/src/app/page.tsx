@@ -13,12 +13,13 @@ import {
   Link,
   Alert,
 } from "@mui/material";
+import { useLogin } from '@/app/hooks/useAuth';
 
 export default function LoginPage() {
   const router = useRouter();
   const [form, setForm] = useState({ username: "", password: "" });
   const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
+  const { mutateAsync, isPending } = useLogin();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -26,17 +27,14 @@ export default function LoginPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
     setError("");
-    // Simulação de login
-    setTimeout(() => {
-      setLoading(false);
-      if (form.username !== "admin" || form.password !== "admin") {
-        setError("Usuário ou senha inválidos.");
-      } else {
-        router.push("/home");
-      }
-    }, 1000);
+    try {
+      await mutateAsync({ username: form.username, password: form.password });
+      router.push("/home");
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (err: any) {
+      setError(err?.message || "Usuário ou senha inválidos.");
+    }
   };
 
   return (
@@ -82,10 +80,10 @@ export default function LoginPage() {
               type="submit"
               variant="contained"
               color="primary"
-              disabled={loading}
+              disabled={isPending}
               fullWidth
             >
-              {loading ? "Entrando..." : "Entrar"}
+              {isPending ? "Entrando..." : "Entrar"}
             </Button>
           </Box>
         </CardContent>

@@ -3,7 +3,8 @@ import swaggerAutogen from "swagger-autogen";
 import { GameStatus } from "./resources/game/game.constants";
 import { PlayerStatus, PlayerIcon } from "./resources/player/player.constants";
 import { TransactionType } from "./resources/transaction/transaction.constants";
-import { Sign } from "crypto";
+import { PlayerProfileConstants } from './resources/playerProfile/playerProfile.constants';
+import { profile } from "console";
 
 dotenv.config();
 
@@ -40,6 +41,7 @@ const docSwagger = {
     Player: {
       id: "8a2053de-5d92-4c43-97c0-c9b2b0d56703",
       username: "João Silva",
+      profileId: PlayerProfileConstants.USER,
       createdAt: "2025-09-16T19:27:15.645Z",
       updatedAt: "2025-09-16T19:27:15.645Z",
       deletedAt: null,
@@ -47,9 +49,11 @@ const docSwagger = {
     CreatePlayerDto: {
       username: "João Silva",
       password: "senha123",
+      profileId: PlayerProfileConstants.USER,
     },
     UpdatePlayerDto: {
       username: "João Silva",
+      profileId: PlayerProfileConstants.USER,
     },
     Transaction: {
       id: "d4f7e8c2-3b6a-4f1e-9f3b-2c8e4f5a6b7c",
@@ -114,6 +118,22 @@ const docSwagger = {
       playerMoney: 2000,
       playerStatus: PlayerStatus.IDLE,
       playerIcon: PlayerIcon.ACCOUNT_CIRCLE,
+    },
+    PlayerProfile: {
+      id: "a1b2c3d4-e5f6-7g8h-9i0j-k1l2m3n4o5p6",
+      profileName: "Perfil Padrão",
+      description: "Este é o perfil padrão do jogador.",
+      createdAt: "2025-09-16T19:27:15.645Z",
+      updatedAt: "2025-09-16T19:27:15.645Z",
+      deletedAt: null,
+    },
+    CreatePlayerProfileDto: {
+      profileName: "Perfil Padrão",
+      description: "Este é o perfil padrão do jogador.",
+    },
+    UpdatePlayerProfileDto: {
+      profileName: "Perfil Avançado",
+      description: "Este é o perfil avançado do jogador.",
     },
     SuccessMessage: {
       message: "Operation completed successfully.",

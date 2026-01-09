@@ -697,6 +697,185 @@
           }
         }
       }
+    },
+    "/v1/player-profiles/": {
+      "get": {
+        "tags": [
+          "PlayerProfiles"
+        ],
+        "summary": "List all player profiles.",
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "Player profiles retrieved successfully.",
+            "schema": {
+              "$ref": "#/definitions/PlayerProfile"
+            }
+          },
+          "500": {
+            "description": "Internal server error.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "PlayerProfiles"
+        ],
+        "summary": "Create new player profile.",
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/CreatePlayerProfileDto"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Player profile created successfully.",
+            "schema": {
+              "$ref": "#/definitions/PlayerProfile"
+            }
+          },
+          "400": {
+            "description": "Bad request.",
+            "schema": {
+              "$ref": "#/definitions/BadRequest"
+            }
+          },
+          "500": {
+            "description": "Internal server error.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/v1/player-profiles/{id}": {
+      "get": {
+        "tags": [
+          "PlayerProfiles"
+        ],
+        "summary": "Get player profile by ID.",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Player profile retrieved successfully.",
+            "schema": {
+              "$ref": "#/definitions/PlayerProfile"
+            }
+          },
+          "404": {
+            "description": "Player profile not found.",
+            "schema": {
+              "$ref": "#/definitions/NotFound"
+            }
+          },
+          "500": {
+            "description": "Internal server error.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "PlayerProfiles"
+        ],
+        "summary": "Update player profile by ID.",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/UpdatePlayerProfileDto"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Player profile updated successfully.",
+            "schema": {
+              "$ref": "#/definitions/PlayerProfile"
+            }
+          },
+          "400": {
+            "description": "Bad request.",
+            "schema": {
+              "$ref": "#/definitions/BadRequest"
+            }
+          },
+          "404": {
+            "description": "Player profile not found.",
+            "schema": {
+              "$ref": "#/definitions/NotFound"
+            }
+          },
+          "500": {
+            "description": "Internal server error.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "PlayerProfiles"
+        ],
+        "summary": "Delete player profile by ID.",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Player profile deleted successfully.",
+            "schema": {
+              "$ref": "#/definitions/PlayerProfile"
+            }
+          },
+          "404": {
+            "description": "Player profile not found.",
+            "schema": {
+              "$ref": "#/definitions/NotFound"
+            }
+          },
+          "500": {
+            "description": "Internal server error.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
     }
   },
   "definitions": {
@@ -772,6 +951,10 @@
           "type": "string",
           "example": "João Silva"
         },
+        "profileId": {
+          "type": "string",
+          "example": "b3c1f8d2-4e5a-4c6b-9f0d-7e8f9a0b1c2d"
+        },
         "createdAt": {
           "type": "string",
           "example": "2025-09-16T19:27:15.645Z"
@@ -793,6 +976,10 @@
         "password": {
           "type": "string",
           "example": "senha123"
+        },
+        "profileId": {
+          "type": "string",
+          "example": "b3c1f8d2-4e5a-4c6b-9f0d-7e8f9a0b1c2d"
         }
       }
     },
@@ -802,6 +989,10 @@
         "username": {
           "type": "string",
           "example": "João Silva"
+        },
+        "profileId": {
+          "type": "string",
+          "example": "b3c1f8d2-4e5a-4c6b-9f0d-7e8f9a0b1c2d"
         }
       }
     },
@@ -1017,6 +1208,58 @@
         "playerIcon": {
           "type": "string",
           "example": "ACCOUNT_CIRCLE"
+        }
+      }
+    },
+    "PlayerProfile": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "example": "a1b2c3d4-e5f6-7g8h-9i0j-k1l2m3n4o5p6"
+        },
+        "profileName": {
+          "type": "string",
+          "example": "Perfil Padrão"
+        },
+        "description": {
+          "type": "string",
+          "example": "Este é o perfil padrão do jogador."
+        },
+        "createdAt": {
+          "type": "string",
+          "example": "2025-09-16T19:27:15.645Z"
+        },
+        "updatedAt": {
+          "type": "string",
+          "example": "2025-09-16T19:27:15.645Z"
+        },
+        "deletedAt": {}
+      }
+    },
+    "CreatePlayerProfileDto": {
+      "type": "object",
+      "properties": {
+        "profileName": {
+          "type": "string",
+          "example": "Perfil Padrão"
+        },
+        "description": {
+          "type": "string",
+          "example": "Este é o perfil padrão do jogador."
+        }
+      }
+    },
+    "UpdatePlayerProfileDto": {
+      "type": "object",
+      "properties": {
+        "profileName": {
+          "type": "string",
+          "example": "Perfil Avançado"
+        },
+        "description": {
+          "type": "string",
+          "example": "Este é o perfil avançado do jogador."
         }
       }
     },

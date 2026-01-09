@@ -1,11 +1,26 @@
 import dotenv from "dotenv";
 import express from "express";
 import router from "./router/index";
-// import { v4 as uuidv4 } from "uuid";
+import cookieParser from "cookie-parser";
+import { setCookieLanguage } from "./middlewares/setCookieLanguage";
+import { v4 as uuidv4 } from "uuid";
 import swaggerUi from "swagger-ui-express";
 import swaggerFile from "./output-swagger.json";
 import cors from "cors";
 import { WebSocketServer } from "ws";
+
+declare global {
+  namespace Express {
+    interface Player {
+      id: string;
+      username: string;
+      [key: string]: any;
+    }
+    interface Request {
+      player?: Player;
+    }
+  }
+}
 
 dotenv.config();
 const app = express();
@@ -18,8 +33,8 @@ app.use(
   })
 );
 app.use(express.json());
-// app.use(cookieParser());
-// app.use(setCookieLanguage);
+app.use(cookieParser());
+app.use(setCookieLanguage);
 // app.use(
 //   session({
 //     genid: () => uuidv4(),
