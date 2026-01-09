@@ -23,12 +23,11 @@ export const getAllGamePlayers = async (): Promise<GamePlayer[]> => {
     return await prisma.gamePlayer.findMany();
 };
 
-export const getGamePlayerById = async (
-    gameId: string,
-    playerId: string
-): Promise<GamePlayer | null> => {
-    return await prisma.gamePlayer.findUnique({
-        where: { gameId_playerId: { gameId, playerId } },
+export const getGamePlayerByGameId = async (
+    gameId: string
+): Promise<GamePlayer[]> => {
+    return await prisma.gamePlayer.findMany({
+        where: { gameId },
     });
 };
 

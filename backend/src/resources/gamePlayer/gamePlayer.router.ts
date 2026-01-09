@@ -15,9 +15,9 @@ router.get(
 );
 
 router.get(
-    "/:gameId/:playerId",
+    "/:gameId",
     validate(gamePlayerIdSchema),
-    gamePlayerController.listGamePlayerById
+    gamePlayerController.listGamePlayerByGameId
 );
 
 router.post(

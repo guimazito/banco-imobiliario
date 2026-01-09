@@ -2,7 +2,8 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
     listGamePlayers,
     createGamePlayer,
-    updateGamePlayer
+    updateGamePlayer,
+    getGamePlayerByGameId
 } from "@/app/services/gamePlayers";
 import { GamePlayer } from "@/app/types/gamePlayers";
 
@@ -10,6 +11,13 @@ export function useListGamePlayers(gameId: string) {
     return useQuery({
         queryKey: ["gamePlayers", gameId],
         queryFn: () => listGamePlayers(gameId),
+    });
+}
+
+export function useGetGamePlayerByGameId(gameId: string) {
+    return useQuery({
+        queryKey: ["gamePlayer", gameId],
+        queryFn: () => getGamePlayerByGameId(gameId),
     });
 }
 

@@ -10,6 +10,7 @@ import { PlayerCard } from "../components/PlayerCard";
 import { RankingList } from "../components/RankingList";
 import { TransactionType } from "../types/transactionType";
 import { useWebSocket } from "../contexts/WebSocketContext";
+import { useGetGamePlayerByGameId } from "@/app/hooks/useGamePlayers";
 import { TransactionHistory } from "../components/TransactionHistory";
 import CheckCircleRoundedIcon from "@mui/icons-material/CheckCircleRounded";
 import {
@@ -31,6 +32,8 @@ import {
   Paper,
   Grid,
 } from "@mui/material";
+import { useParams } from "next/navigation";
+
 
 export default function TransactionPage() {
   const [open, setOpen] = useState(false);
@@ -39,12 +42,18 @@ export default function TransactionPage() {
   const [failAlertMessage, setFailAlertMessage] = useState<string>("");
   const { ws } = useWebSocket();
   const { data: getPlayerByName } = useGetPlayerByUsername("Bank");
-  const { data: listPlayers, refetch: refetchPlayers } = useListPlayers();
+  const params = useParams();
+  const gameId = params?.gameId as string;
+  console.log('Game ID na TransactionPage:', gameId);
+  const { data: listPlayers, refetch: refetchPlayers } = useGetGamePlayerByGameId(gameId);
+  console.log('Lista de Players na TransactionPage:', listPlayers);
   const { data: listTransactions, refetch: refetchTransactions } =
     useListTransactions();
   const { refetch: refetchRanking } = useGetPlayerRanking();
   const { mutateAsync: updatePlayerMutate } = useUpdatePlayer();
   const { mutateAsync: createTransactionMutate } = useCreateTransaction();
+
+
 
   const updatePlayer = async (
     playerId: string,
@@ -108,11 +117,13 @@ export default function TransactionPage() {
   }
 
   function getPlayerReceiving() {
-    return (listPlayers ?? []).filter((player) => player.status === "RECEIVE");
+    if (!Array.isArray(listPlayers)) return [];
+    return listPlayers.filter((player: Player) => player.status === "RECEIVE");
   }
 
   function getPlayerPaying() {
-    return (listPlayers ?? []).filter((player) => player.status === "PAY");
+    if (!Array.isArray(listPlayers)) return [];
+    return listPlayers.filter((player: Player) => player.status === "PAY");
   }
 
   function isTransactionButtonEnabled() {
@@ -271,10 +282,10 @@ export default function TransactionPage() {
           listPlayers
             .filter((player) => player.username !== "Bank")
             .map((player) => {
-              const playerStatus = (status: string) => {
-                if (status === "IDLE") return "PAY";
-                if (status === "PAY") return "RECEIVE";
-                if (status === "RECEIVE") return "IDLE";
+              const playerStatus = (playerStatus: string) => {
+                if (playerStatus === "IDLE") return "PAY";
+                if (playerStatus === "PAY") return "RECEIVE";
+                if (playerStatus === "RECEIVE") return "IDLE";
                 return "IDLE";
               };
               const handleCardClick = async () => {
@@ -292,7 +303,7 @@ export default function TransactionPage() {
               };
               return (
                 <Grid
-                  key={player.id}
+                  key={player.playerId}
                   sx={{ width: '100%' }}
                 >
                   <PlayerCard player={player} onCardClick={handleCardClick} />
