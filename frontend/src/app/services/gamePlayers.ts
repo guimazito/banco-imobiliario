@@ -6,12 +6,12 @@ import {
 } from "@/app/types/gamePlayers";
 
 export async function listGamePlayers(gameId: string): Promise<GamePlayer[]> {
-  const { data } = await api.get<GamePlayer[]>(`/games/${gameId}/players`);
+  const { data } = await api.get<GamePlayer[]>(`/game-players/${gameId}/players`);
   return data;
 }
 
-export async function getGamePlayerById(gameId: string, playerId: string): Promise<GamePlayer | null> {
-  const { data } = await api.get<GamePlayer>(`/games/${gameId}/players/${playerId}`);
+export async function getGamePlayerByGameId(gameId: string): Promise<GamePlayer | null> {
+  const { data } = await api.get<GamePlayer>(`/game-players/${gameId}`);
   return data;
 }
 
@@ -25,6 +25,6 @@ export async function updateGamePlayer(
   playerId: string,
   updatedData: Partial<UpdateGamePlayerDto>
 ): Promise<GamePlayer> {
-  const { data } = await api.put<GamePlayer>(`/games/${gameId}/players/${playerId}`, updatedData);
+  const { data } = await api.put<GamePlayer>(`/game-players/${gameId}/players/${playerId}`, updatedData);
   return data;
 }

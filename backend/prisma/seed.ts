@@ -85,6 +85,13 @@ async function seed() {
         profileId: PlayerProfileConstants.USER,
       },
     }),
+    prisma.player.create({
+      data: {
+        username: "guimazito",
+        password: hashedUserPassword,
+        profileId: PlayerProfileConstants.USER,
+      },
+    }),
   ]);
 
   console.log("Creating GamePlayers...");

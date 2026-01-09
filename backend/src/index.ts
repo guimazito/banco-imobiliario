@@ -3,6 +3,7 @@ import express from "express";
 import router from "./router/index";
 import cookieParser from "cookie-parser";
 import { setCookieLanguage } from "./middlewares/setCookieLanguage";
+import session from "express-session";
 import { v4 as uuidv4 } from "uuid";
 import swaggerUi from "swagger-ui-express";
 import swaggerFile from "./output-swagger.json";
@@ -13,7 +14,7 @@ declare global {
   namespace Express {
     interface Player {
       id: string;
-      username: string;
+      profileId: string;
       [key: string]: any;
     }
     interface Request {
@@ -35,14 +36,14 @@ app.use(
 app.use(express.json());
 app.use(cookieParser());
 app.use(setCookieLanguage);
-// app.use(
-//   session({
-//     genid: () => uuidv4(),
-//     secret: process.env.SECRET_KEY ?? "minha-chave-segura",
-//     resave: true,
-//     saveUninitialized: true,
-//     cookie: { maxAge: 10 * 24 * 60 * 60 * 1000 }, // 10 days
-//   }));
+app.use(
+  session({
+    genid: () => uuidv4(),
+    secret: process.env.SECRET_KEY ?? "minha-chave-segura",
+    resave: true,
+    saveUninitialized: true,
+    cookie: { maxAge: 10 * 24 * 60 * 60 * 1000 }, // 10 days
+  }));
 
 const wss = new WebSocketServer({
   port: process.env.WS_PORT ? Number(process.env.WS_PORT) : 3002,

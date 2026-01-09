@@ -4,7 +4,7 @@ import { StatusCodes } from 'http-status-codes';
 import {
     createGamePlayer,
     getAllGamePlayers,
-    getGamePlayerById,
+    getGamePlayerByGameId,
     updateGamePlayer,
 } from './gamePlayer.service';
 
@@ -105,18 +105,12 @@ const update = async (req: Request, res: Response) => {
     }
 };
 
-const listGamePlayerById = async (req: Request, res: Response) => {
+const listGamePlayerByGameId = async (req: Request, res: Response) => {
     /*
-    #swagger.summary = 'Get a game player by Game ID and Player ID'
+    #swagger.summary = 'Get a game player by Game ID'
     #swagger.parameters['gameId'] = {
         in: 'path',
         description: 'Game ID',
-        required: true,
-        type: 'string'
-    }
-    #swagger.parameters['playerId'] = {
-        in: 'path',
-        description: 'Player ID',
         required: true,
         type: 'string'
     }
@@ -134,8 +128,8 @@ const listGamePlayerById = async (req: Request, res: Response) => {
     }
     */
     try {
-        const { gameId, playerId } = req.params;
-        const gamePlayer = await getGamePlayerById(gameId, playerId);
+        const { gameId } = req.params;
+        const gamePlayer = await getGamePlayerByGameId(gameId);
         res.status(StatusCodes.OK).json(gamePlayer);
     } catch (err) {
         gamePlayerError(res, err);
@@ -146,5 +140,5 @@ export default {
     index,
     create,
     update,
-    listGamePlayerById
+    listGamePlayerByGameId
 };

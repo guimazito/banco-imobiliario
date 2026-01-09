@@ -10,29 +10,39 @@ import {
   Typography,
 } from "@mui/material";
 import { useRouter } from "next/navigation";
+import { PlayerIcon } from "../types/playerIcon";
 import { useCreateGame } from "../hooks/useGames";
+import { PlayerStatus } from "../types/playerStatus";
 import { useCreateGamePlayer } from "../hooks/useGamePlayers";
+import { useAuth } from "@/app/components/AuthProvider/AuthContext";
 
 export default function HomePage() {
   const router = useRouter();
+  const { player } = useAuth();
+  console.log("Player no HomePage:", player);
+  const playerId = player?.playerId;
   const { mutateAsync: createGame } = useCreateGame();
   const { mutateAsync: createGamePlayer } = useCreateGamePlayer();
+  const playerStatus: PlayerStatus = "IDLE";
+  const playerIcon: PlayerIcon = "ACCOUNT_CIRCLE";
   const handleCreateGame = async () => {
+    if (!playerId) {
+      alert("Você precisa estar logado para criar uma partida.");
+      return;
+    }
     try {
       const game = await createGame({ status: "IN_PROGRESS" });
       await createGamePlayer({
         gameId: game.id,
-        playerId: "Host",
-        playerMoney: 0,
-        playerStatus: "IDLE",
-        playerIcon: "PIX"
+        playerId: typeof playerId === "string" ? playerId : "",
+        playerMoney: 25000,
+        playerStatus: playerStatus,
+        playerIcon: playerIcon,
       });
       if (game?.id) {
         router.push(`/game/${game.id}/transaction`);
-        // router.push(`/transaction/${game.id}`);
       }
-    } catch (err) {
-    }
+    } catch {}
   };
 
   return (
@@ -60,7 +70,11 @@ export default function HomePage() {
                 </Typography>
               </CardContent>
               <CardActions>
-                <Button variant="contained" color="primary" onClick={handleCreateGame}>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={handleCreateGame}
+                >
                   Novo Jogo
                 </Button>
               </CardActions>

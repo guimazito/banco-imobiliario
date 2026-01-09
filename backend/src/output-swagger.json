@@ -597,12 +597,12 @@
         }
       }
     },
-    "/v1/game-players/{gameId}/{playerId}": {
+    "/v1/game-players/{gameId}": {
       "get": {
         "tags": [
           "GamePlayers"
         ],
-        "summary": "Get a game player by Game ID and Player ID",
+        "summary": "Get a game player by Game ID",
         "description": "",
         "parameters": [
           {
@@ -611,13 +611,6 @@
             "required": true,
             "type": "string",
             "description": "Game ID"
-          },
-          {
-            "name": "playerId",
-            "in": "path",
-            "required": true,
-            "type": "string",
-            "description": "Player ID"
           }
         ],
         "responses": {
@@ -640,7 +633,9 @@
             }
           }
         }
-      },
+      }
+    },
+    "/v1/game-players/{gameId}/{playerId}": {
       "put": {
         "tags": [
           "GamePlayers"
