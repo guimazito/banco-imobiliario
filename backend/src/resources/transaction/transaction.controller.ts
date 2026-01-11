@@ -5,6 +5,7 @@ import {
   createTransaction,
   getTransactionById,
   getAllTransactions,
+  getTransactionsByGameId
 } from "./transaction.service";
 
 const index = async (req: Request, res: Response) => {
@@ -79,8 +80,34 @@ const listTransactionById = async (req: Request, res: Response) => {
   }
 };
 
+const listTransactionsByGameId = async (req: Request, res: Response) => {
+  /*
+    #swagger.summary = 'Get transactions by Game ID'
+    #swagger.responses[200] = {
+        description: 'Transactions retrieved successfully',
+        schema: { $ref: '#/definitions/Transaction' }
+    }
+    #swagger.responses[404] = {
+        description: 'Transactions not found',
+        schema: { $ref: '#/definitions/Error' }
+    }
+    #swagger.responses[500] = {
+        description: 'Internal Server Error',
+        schema: { $ref: '#/definitions/Error' }
+    }
+    */
+  try {
+    const gameId = req.params.gameId;
+    const transactions = await getTransactionsByGameId(gameId);
+    res.status(StatusCodes.OK).json(transactions);
+  } catch (err) {
+    transactionError(res, err);
+  }
+};
+
 export default {
   index,
   create,
   listTransactionById,
+  listTransactionsByGameId
 };

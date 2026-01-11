@@ -20,6 +20,11 @@ router.get(
     gameController.listGameById
 );
 
+router.get(
+    "/invite/:invite",
+    gameController.listGameByInvite
+);
+
 router.post(
     "/",
     validate(createGameSchema),

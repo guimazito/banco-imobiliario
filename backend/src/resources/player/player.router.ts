@@ -14,11 +14,6 @@ router.get(
     playerController.index
 );
 
-// router.get(
-//     "/ranking",
-//     playerController.listPlayerRanking
-// );
-
 router.get(
     "/username/:username",
     validate(playerUsernameSchema),

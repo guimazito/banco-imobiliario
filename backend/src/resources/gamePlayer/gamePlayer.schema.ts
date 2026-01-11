@@ -15,7 +15,7 @@ export const createGamePlayerSchema = Joi.object({
 });
 
 export const updateGamePlayerSchema = Joi.object({
-    playerMoney: Joi.number().valid(25000).optional,
+    playerMoney: Joi.number().optional(),
     playerStatus: Joi.string().valid(...Object.values(PlayerStatus)).optional(),
     playerIcon: Joi.string().valid(...Object.values(PlayerIcon)).optional(),
 });

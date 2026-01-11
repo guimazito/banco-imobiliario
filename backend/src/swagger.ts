@@ -77,6 +77,7 @@ const docSwagger = {
     },
     Game: {
       id: "1a2b3c4d-5e6f-7g8h-9i0j-k1l2m3n4o5p6",
+      invite: "ABCD12345",
       status: GameStatus.IN_PROGRESS,
       players: [
         {
@@ -95,9 +96,11 @@ const docSwagger = {
       deletedAt: null,
     },
     CreateGameDto: {
+      invite: "ABCD12345",
       status: GameStatus.IN_PROGRESS,
     },
     UpdateGameDto: {
+      invite: "ABCD12345",
       status: GameStatus.FINISHED,
     },
     GamePlayer: {

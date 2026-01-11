@@ -19,3 +19,10 @@ export async function getTransactionById(
   const { data } = await api.get<Transaction>(`/transactions/${transactionId}`);
   return data;
 }
+
+export async function getTransactionsByGameId(
+  gameId: string
+): Promise<Transaction[]> {
+  const { data } = await api.get<Transaction[]>(`/transactions/game/${gameId}`);
+  return data;
+}

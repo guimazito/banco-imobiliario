@@ -1,28 +1,29 @@
 "use client";
 
 import Alert from "@mui/material/Alert";
-import { Player } from "../types/player";
 import Snackbar from "@mui/material/Snackbar";
 import { Navbar } from "../components/Navbar";
+import { GamePlayer } from "../types/gamePlayers";
 import FailAlert from "../components/FailedAlert";
 import React, { useState, useEffect } from "react";
 import { PlayerCard } from "../components/PlayerCard";
+import { useGetGameById } from "@/app/hooks/useGames";
+import { useGameId } from "@/app/contexts/GameContext";
 import { RankingList } from "../components/RankingList";
 import { TransactionType } from "../types/transactionType";
 import { useWebSocket } from "../contexts/WebSocketContext";
+import { useGetPlayerByUsername } from "@/app/hooks/usePlayers";
 import { useGetGamePlayerByGameId } from "@/app/hooks/useGamePlayers";
 import { TransactionHistory } from "../components/TransactionHistory";
 import CheckCircleRoundedIcon from "@mui/icons-material/CheckCircleRounded";
 import {
-  useListTransactions,
   useCreateTransaction,
+  useGetTransactionsByGameId,
 } from "@/app/hooks/useTransactions";
 import {
-  useListPlayers,
-  useUpdatePlayer,
-  useGetPlayerByUsername,
-  useGetPlayerRanking,
-} from "@/app/hooks/usePlayers";
+  useUpdateGamePlayer,
+  useGetGamePlayerRankingByGameId,
+} from "@/app/hooks/useGamePlayers";
 import {
   IconButton,
   TextField,
@@ -32,8 +33,6 @@ import {
   Paper,
   Grid,
 } from "@mui/material";
-import { useParams } from "next/navigation";
-
 
 export default function TransactionPage() {
   const [open, setOpen] = useState(false);
@@ -41,28 +40,26 @@ export default function TransactionPage() {
   const [failAlertOpen, setFailAlertOpen] = useState(false);
   const [failAlertMessage, setFailAlertMessage] = useState<string>("");
   const { ws } = useWebSocket();
+  const { gameId } = useGameId();
   const { data: getPlayerByName } = useGetPlayerByUsername("Bank");
-  const params = useParams();
-  const gameId = params?.gameId as string;
-  console.log('Game ID na TransactionPage:', gameId);
-  const { data: listPlayers, refetch: refetchPlayers } = useGetGamePlayerByGameId(gameId);
-  console.log('Lista de Players na TransactionPage:', listPlayers);
+  const { data: code } = useGetGameById(gameId ?? "");  
+  const { data: listPlayers, refetch: refetchPlayers } =
+    useGetGamePlayerByGameId(gameId!);
   const { data: listTransactions, refetch: refetchTransactions } =
-    useListTransactions();
-  const { refetch: refetchRanking } = useGetPlayerRanking();
-  const { mutateAsync: updatePlayerMutate } = useUpdatePlayer();
+    useGetTransactionsByGameId(gameId!);
+  const { mutateAsync: updateGamePlayerMutate } = useUpdateGamePlayer();
   const { mutateAsync: createTransactionMutate } = useCreateTransaction();
+  const { refetch: refetchRanking } = useGetGamePlayerRankingByGameId(gameId!);
 
-
-
-  const updatePlayer = async (
+  const updateGamePlayer = async (
+    gameId: string,
     playerId: string,
-    updatedData: Partial<Player>
+    updatedData: Partial<GamePlayer>
   ) => {
     try {
-      await updatePlayerMutate({ playerId, updatedData });
+      await updateGamePlayerMutate({ gameId, playerId, updatedData });
     } catch (error) {
-      console.error("Error updating player:", error);
+      console.error("Error updating game player:", error);
     }
   };
 
@@ -118,12 +115,16 @@ export default function TransactionPage() {
 
   function getPlayerReceiving() {
     if (!Array.isArray(listPlayers)) return [];
-    return listPlayers.filter((player: Player) => player.status === "RECEIVE");
+    return listPlayers.filter(
+      (player: GamePlayer) => player.playerStatus === "RECEIVE"
+    );
   }
 
   function getPlayerPaying() {
     if (!Array.isArray(listPlayers)) return [];
-    return listPlayers.filter((player: Player) => player.status === "PAY");
+    return listPlayers.filter(
+      (player: GamePlayer) => player.playerStatus === "PAY"
+    );
   }
 
   function isTransactionButtonEnabled() {
@@ -150,20 +151,20 @@ export default function TransactionPage() {
 
   function addMoneyToPlayer() {
     const receiver = getPlayerReceiving()[0];
-    if (receiver) {
-      updatePlayer(receiver.id, {
-        money: receiver.money + inputValue,
-        status: "IDLE",
+    if (receiver && gameId) {
+      updateGamePlayer(gameId, receiver.playerId, {
+        playerMoney: receiver.playerMoney + inputValue,
+        playerStatus: "IDLE",
       });
     }
   }
 
   function removeMoneyToPlayer() {
     const payer = getPlayerPaying()[0];
-    if (payer) {
-      updatePlayer(payer.id, {
-        money: payer.money - inputValue,
-        status: "IDLE",
+    if (payer && gameId) {
+      updateGamePlayer(gameId, payer.playerId, {
+        playerMoney: payer.playerMoney - inputValue,
+        playerStatus: "IDLE",
       });
     }
   }
@@ -180,16 +181,16 @@ export default function TransactionPage() {
       addMoneyToPlayer();
       removeMoneyToPlayer();
       transactionDescription =
-        won.map((player) => player.username).join(", ") +
+        won.map((player) => player.player.username).join(", ") +
         " ganhou R$ " +
         new Intl.NumberFormat("pt-BR").format(inputValue) +
         " de " +
-        lose.map((player) => player.username).join(", ");
+        lose.map((player) => player.player.username).join(", ");
       transactionType = "BETWEEN_PLAYERS";
     } else if (hasOneReceiving) {
       addMoneyToPlayer();
       transactionDescription =
-        won.map((player) => player.username).join(", ") +
+        won.map((player) => player.player.username).join(", ") +
         " ganhou R$ " +
         new Intl.NumberFormat("pt-BR").format(inputValue) +
         " do Banco";
@@ -197,7 +198,7 @@ export default function TransactionPage() {
     } else if (hasOnePaying) {
       removeMoneyToPlayer();
       transactionDescription =
-        lose.map((player) => player.username).join(", ") +
+        lose.map((player) => player.player.username).join(", ") +
         " pagou R$ " +
         new Intl.NumberFormat("pt-BR").format(inputValue) +
         " para o Banco";
@@ -205,9 +206,11 @@ export default function TransactionPage() {
     }
 
     setInputValue(0);
-    const playerIdPay = hasOnePaying ? lose[0].id : getPlayerByName?.id ?? "";
+    const playerIdPay = hasOnePaying
+      ? lose[0].playerId
+      : getPlayerByName?.id ?? "";
     const playerIdReceive = hasOneReceiving
-      ? won[0].id
+      ? won[0].playerId
       : getPlayerByName?.id ?? "";
     await createTransactionMutate({
       amount: inputValue,
@@ -215,6 +218,7 @@ export default function TransactionPage() {
       type: transactionType,
       playerIdPay: playerIdPay,
       playerIdReceive: playerIdReceive,
+      gameId: gameId!,
     });
     handleClick();
     if (ws && ws.readyState === WebSocket.OPEN) {
@@ -230,7 +234,10 @@ export default function TransactionPage() {
 
   return (
     <Container maxWidth="md" sx={{ py: 3 }}>
-      <Navbar />
+      <Navbar
+        inviteCode={code?.invite ?? undefined}
+        gameId={gameId}
+      />
       <Paper elevation={3} sx={{ p: 3, mb: 3 }}>
         <Box display="flex" alignItems="center" gap={2}>
           <TextField
@@ -280,7 +287,7 @@ export default function TransactionPage() {
         {Array.isArray(listPlayers) &&
           listPlayers.length > 0 &&
           listPlayers
-            .filter((player) => player.username !== "Bank")
+            .filter((player) => player.player.username !== "Bank")
             .map((player) => {
               const playerStatus = (playerStatus: string) => {
                 if (playerStatus === "IDLE") return "PAY";
@@ -289,30 +296,28 @@ export default function TransactionPage() {
                 return "IDLE";
               };
               const handleCardClick = async () => {
-                await updatePlayer(player.id, {
-                  status: playerStatus(player.status),
+                if (!gameId) return;
+                await updateGamePlayer(gameId, player.playerId, {
+                  playerStatus: playerStatus(player.playerStatus),
                 });
                 if (ws && ws.readyState === WebSocket.OPEN) {
                   ws.send(
                     JSON.stringify({
                       type: "PLAYER_UPDATED",
-                      playerId: player.id,
+                      playerId: player.playerId,
                     })
                   );
                 }
               };
               return (
-                <Grid
-                  key={player.playerId}
-                  sx={{ width: '100%' }}
-                >
+                <Grid key={player.playerId} sx={{ width: "100%" }}>
                   <PlayerCard player={player} onCardClick={handleCardClick} />
                 </Grid>
               );
             })}
       </Grid>
       <TransactionHistory transactions={listTransactions ?? []} />
-      <RankingList />
+      <RankingList gameId={gameId ?? ""} />
     </Container>
   );
 }

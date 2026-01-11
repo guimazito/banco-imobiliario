@@ -7,6 +7,7 @@ export interface Transaction {
   type: TransactionType;
   playerIdPay: string;
   playerIdReceive: string;
+  gameId: string;
   createdAt: string;
 }
 
@@ -16,4 +17,5 @@ export interface CreateTransactionDto {
   type: TransactionType;
   playerIdPay: string;
   playerIdReceive: string;
+  gameId: string;
 }

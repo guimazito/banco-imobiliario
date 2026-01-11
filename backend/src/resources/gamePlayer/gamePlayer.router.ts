@@ -15,10 +15,29 @@ router.get(
 );
 
 router.get(
-    "/:gameId",
+    "/game/:gameId",
     validate(gamePlayerIdSchema),
     gamePlayerController.listGamePlayerByGameId
 );
+
+router.get(
+    "/player/:playerId",
+    validate(gamePlayerIdSchema),
+    gamePlayerController.listGamePlayerByPlayerId
+);
+
+router.get(
+    "/ranking/:gameId",
+    validate(gamePlayerIdSchema),
+    gamePlayerController.listGamePlayerRankingByGameId
+);
+
+router.get(
+    "/:gameId/:playerId",
+    validate(gamePlayerIdSchema),
+    gamePlayerController.listGamePlayerById
+);
+
 
 router.post(
     "/",

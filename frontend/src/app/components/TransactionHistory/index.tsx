@@ -45,7 +45,6 @@ export function TransactionHistory({ transactions }: { transactions: Transaction
         color: "#000000ff",
         borderRadius: 2,
         boxShadow: 2,
-        // width: "100%",
       }}
     >
       <CardContent sx={{ p: 0, m: 1 }}>

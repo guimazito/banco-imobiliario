@@ -1,8 +1,15 @@
 "use client";
 
 import { useMutation } from "@tanstack/react-query";
-import { login, logout, resetPassword } from "@/app/services/auth";
+import { signup, login, logout, resetPassword } from "@/app/services/auth";
 import { useAuth } from "@/app/components/AuthProvider/AuthContext";
+
+export function useSignup() {
+  return useMutation({
+    mutationFn: (payload: { username: string; password: string }) =>
+      signup(payload),
+  });
+}
 
 export function useLogin() {
   const { setPlayerFromToken } = useAuth();

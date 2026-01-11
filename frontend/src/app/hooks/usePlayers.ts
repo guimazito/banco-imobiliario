@@ -3,8 +3,7 @@ import {
   listPlayers,
   createPlayer,
   updatePlayer,
-  getPlayerByUsername,
-  getPlayerRanking,
+  getPlayerByUsername
 } from "@/app/services/players";
 import { CreatePlayerDto, UpdatePlayerDto } from "@/app/types/player";
 
@@ -19,13 +18,6 @@ export function useGetPlayerByUsername(username: string) {
   return useQuery({
     queryKey: ["player", username],
     queryFn: () => getPlayerByUsername(username),
-  });
-}
-
-export function useGetPlayerRanking() {
-  return useQuery({
-    queryKey: ["playerRanking"],
-    queryFn: getPlayerRanking,
   });
 }
 

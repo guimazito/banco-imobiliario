@@ -7,6 +7,13 @@ export interface GamePlayer {
   playerMoney: number;
   playerStatus: PlayerStatus;
   playerIcon: PlayerIcon;
+  player?: {
+    username: string;
+  };
+  game?: {
+    invite: string;
+    createdAt: string;
+  };
 }
 
 export interface CreateGamePlayerDto {

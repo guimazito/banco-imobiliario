@@ -10,9 +10,11 @@ import Toolbar from "@mui/material/Toolbar";
 import Divider from "@mui/material/Divider";
 import ListItem from "@mui/material/ListItem";
 import MenuIcon from "@mui/icons-material/Menu";
+import { useLogout } from "@/app/hooks/useAuth";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import ListItemText from "@mui/material/ListItemText";
+import { useGameId } from "@/app/contexts/GameContext";
 import { useRouter, usePathname } from "next/navigation";
 import ListItemButton from "@mui/material/ListItemButton";
 
@@ -22,41 +24,66 @@ interface Props {
    * You won't need it on your project.
    */
   window?: () => Window;
+  inviteCode?: string;
+  gameId?: string;
 }
 
 export function Navbar(props: Props) {
   const router = useRouter();
+  const { gameId, setGameId } = useGameId();
   const pathname = usePathname();
   const drawerWidth = 240;
-  const navItems = [/*"Novo Jogo", */"Transações", "Propriedades", "Balanço Final"];
-  const { window } = props;
+  let navItems: string[];
+  if ((pathname === "/home") || (pathname === "/about") || (pathname === "/contact")) {
+    navItems = ["Home", "Sobre", "Contato", "Sair"];
+  } else {
+    navItems = ["Home", "Transações", "Propriedades", "Balanço Final"];
+  }
+  const { window, inviteCode } = props;
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const handleDrawerToggle = () => {
     setMobileOpen((prevState) => !prevState);
   };
+  const { mutateAsync: doLogout, isPending } = useLogout();
+
+  const handleLogout = async () => {
+    setGameId("");
+    await doLogout();
+    router.push('/');
+  };
 
   const handleNavigation = (item: string) => {
-    if (item === "Transações") {
-      router.push("/transaction");
-    // } else if (item === "Novo Jogo") {
-    //   router.push("/new-game");
+    if (item === "Home") {
+      router.push("/home");
+    } else if (item === "Transações") {
+      router.push(`/game/${gameId}/transaction`);
     } else if (item === "Propriedades") {
-      router.push("/properties");
+      router.push(`/game/${gameId}/properties`);
     } else if (item === "Balanço Final") {
-      router.push("/final-balance");
+      router.push(`/game/${gameId}/final-balance`);
+    } else if (item === "Sair") {
+      handleLogout();
+    } else if (item === "Sobre") {
+      router.push("/about");
+    } else if (item === "Contato") {
+      router.push("/contact");
     }
   };
 
   const getPageTitle = () => {
     switch (pathname) {
-      case "/transaction":
+      case `/game/${gameId}/transaction`:
         return "TRANSAÇÕES";
-      // case "/new-game":
-      //   return "NOVO JOGO";
-      case "/properties":
+      case `/game/${gameId}/properties`:
         return "PROPRIEDADES";
-      case "/final-balance":
+      case `/game/${gameId}/final-balance`:
         return "BALANÇO FINAL";
+      case "/about":
+        return "SOBRE";
+      case "/contact":
+        return "CONTATO";
+      case "/home":
+        return "HOME";
       default:
         return "BANCO IMOBILIÁRIO APP";
     }
@@ -69,7 +96,8 @@ export function Navbar(props: Props) {
         textAlign: "center",
         bgcolor: "primary.dark",
         color: "#fff",
-        height: "100%",
+        height: "100vh",
+        position: "relative",
       }}
     >
       <Typography
@@ -96,6 +124,36 @@ export function Navbar(props: Props) {
           </ListItem>
         ))}
       </List>
+      {inviteCode && (
+        <Box
+          sx={{
+            position: "absolute",
+            bottom: 16,
+            left: 0,
+            width: "100%",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            textAlign: "center",
+          }}
+        >
+          <Divider sx={{ backgroundColor: "#2d2d2d", mb: 1 }} />
+          <Typography
+            variant="body2"
+            sx={{
+              color: "#fff",
+              fontWeight: 500,
+              letterSpacing: 1,
+              userSelect: "all",
+              width: "100%",
+              textAlign: "center",
+            }}
+          >
+            Convite: {inviteCode}
+          </Typography>
+        </Box>
+      )}
     </Box>
   );
 
@@ -129,26 +187,45 @@ export function Navbar(props: Props) {
             variant="h5"
             component="div"
             sx={{
-              flexGrow: 1,
-              textAlign: "center",
-              display: { xs: "block", sm: "none" },
               userSelect: "none",
               letterSpacing: 1,
+              minWidth: 180,
+              textAlign: "left",
+              ml: 2,
+              display: { xs: "block", sm: "block" },
             }}
           >
             {getPageTitle()}
           </Typography>
+          <Box sx={{ flexGrow: 1 }} />
           <Typography
             variant="h6"
             component="div"
             sx={{
-              flexGrow: 1,
               display: { xs: "none", sm: "block" },
               userSelect: "none",
               letterSpacing: 1,
             }}
           >
             Banco Imobiliário App
+            {inviteCode && (
+              <Typography
+                component="span"
+                variant="h6"
+                sx={{
+                  fontSize: "1rem",
+                  fontWeight: 400,
+                  color: "#ffd700",
+                  background: "rgba(0,0,0,0.08)",
+                  px: 1.5,
+                  borderRadius: 2,
+                  verticalAlign: "middle",
+                  display: "inline",
+                }}
+              >
+                Convite: {inviteCode}
+              </Typography>
+            )}
           </Typography>
           <Box sx={{ display: { xs: "none", sm: "block" } }}>
             {navItems.map((item) => (
@@ -162,8 +239,9 @@ export function Navbar(props: Props) {
                   "&:hover": { bgcolor: "primary.light" },
                 }}
                 onClick={() => handleNavigation(item)}
+                disabled={item === "Sair" && isPending}
               >
-                {item}
+                {item === "Sair" && isPending ? "Saindo..." : item}
               </Button>
             ))}
           </Box>

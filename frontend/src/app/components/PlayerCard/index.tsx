@@ -1,10 +1,10 @@
 "use client";
 
 import Card from "@mui/material/Card";
-import { Player } from "@/app/types/player";
 import PixIcon from "@mui/icons-material/Pix";
 import Typography from "@mui/material/Typography";
 import CardContent from "@mui/material/CardContent";
+import { GamePlayer } from "@/app/types/gamePlayers";
 import SavingsIcon from "@mui/icons-material/Savings";
 import CreditCardIcon from "@mui/icons-material/CreditCard";
 import ShoppingBagIcon from "@mui/icons-material/ShoppingBag";
@@ -13,7 +13,7 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
 
 export interface PlayerCardProps {
-  player: Player;
+  player: GamePlayer;
   onCardClick: () => void | Promise<void>;
 }
 
@@ -28,7 +28,7 @@ export function PlayerCard({ player, onCardClick }: PlayerCardProps) {
     IDLE: "#404040",
   };
 
-  const cardColor = cardColorMap[player.status] || "#404040";
+  const cardColor = cardColorMap[player.playerStatus] || "#404040";
 
   const cardAvatar = (name: string) => {
     switch (name) {
@@ -78,13 +78,13 @@ export function PlayerCard({ player, onCardClick }: PlayerCardProps) {
       >
         <div>
           <Typography variant="h6" component="div" sx={{ color: "#fff" }}>
-            {player.username}
+            {player.player?.username}
           </Typography>
           <Typography variant="body1" sx={{ color: "#e5e5e5", mt: 1 }}>
-            R$ {new Intl.NumberFormat("pt-BR").format(player.money)}
+            R$ {new Intl.NumberFormat("pt-BR").format(player.playerMoney)}
           </Typography>
         </div>
-        <div style={{ alignSelf: "flex-start" }}>{cardAvatar(player.icon)}</div>
+        <div style={{ alignSelf: "flex-start" }}>{cardAvatar(player.playerIcon)}</div>
       </CardContent>
     </Card>
   );
