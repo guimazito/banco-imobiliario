@@ -19,6 +19,12 @@ router.get(
   transactionController.listTransactionById
 );
 
+router.get(
+  "/game/:gameId",
+  validate(transactionIdSchema),
+  transactionController.listTransactionsByGameId
+);
+
 router.post(
   "/",
   validate(createTransactionSchema),

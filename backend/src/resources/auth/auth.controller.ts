@@ -79,41 +79,41 @@ const login = async (req: Request, res: Response) => {
   }
 };
 
-// const logout = async (req: Request, res: Response) => {
-//   /*
-//     #swagger.summary = 'Log out a player'
-//     #swagger.responses[200] = {
-//         description: 'Player logged out successfully.',
-//         schema: { $ref: '#/definitions/SuccessMessage' }
-//     }
-//     #swagger.responses[401] = {
-//         description: 'Unauthorized.',
-//         schema: { $ref: '#/definitions/Unauthorized' }
-//     }
-//     #swagger.responses[500] = {
-//         description: 'Internal server error.',
-//         schema: { $ref: '#/definitions/Error' }
-//     }
-//     */
-//   // Since JWT is stateless, logout can be handled on the client side by deleting the token.
-//   try {
-//     req.session.destroy((err) => {
-//       if (err) {
-//         res
-//           .status(StatusCodes.INTERNAL_SERVER_ERROR)
-//           .json({ message: "Erro ao encerrar a sessão" });
-//       } else {
-//         res.clearCookie("connect.sid");
-//         res
-//           .status(StatusCodes.OK)
-//           .json({ message: "Sessão encerrada com sucesso" });
-//       }
-//     });
-//   } catch (error) {
-//     authError(res, error);
-//     return;
-//   }
-// };
+const logout = async (req: Request, res: Response) => {
+  /*
+    #swagger.summary = 'Log out a player'
+    #swagger.responses[200] = {
+        description: 'Player logged out successfully.',
+        schema: { $ref: '#/definitions/SuccessMessage' }
+    }
+    #swagger.responses[401] = {
+        description: 'Unauthorized.',
+        schema: { $ref: '#/definitions/Unauthorized' }
+    }
+    #swagger.responses[500] = {
+        description: 'Internal server error.',
+        schema: { $ref: '#/definitions/Error' }
+    }
+    */
+  // Since JWT is stateless, logout can be handled on the client side by deleting the token.
+  try {
+    req.session.destroy((err) => {
+      if (err) {
+        res
+          .status(StatusCodes.INTERNAL_SERVER_ERROR)
+          .json({ message: "Erro ao encerrar a sessão" });
+      } else {
+        res.clearCookie("connect.sid");
+        res
+          .status(StatusCodes.OK)
+          .json({ message: "Sessão encerrada com sucesso" });
+      }
+    });
+  } catch (error) {
+    authError(res, error);
+    return;
+  }
+};
 
 const resetpassword = async (req: Request, res: Response) => {
   /*
@@ -149,5 +149,6 @@ const resetpassword = async (req: Request, res: Response) => {
 export default {
   signup,
   login,
+  logout,
   resetpassword 
 }

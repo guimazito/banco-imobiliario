@@ -1,13 +1,27 @@
 "use client";
 
 import React, { useState } from "react";
-import { Box, Button, Card, CardContent, CardActions, TextField, Typography, Link, Alert } from "@mui/material";
+import {
+  Box,
+  Button,
+  Card,
+  CardContent,
+  CardActions,
+  TextField,
+  Typography,
+  Link,
+  Alert,
+} from "@mui/material";
+import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
+import { useSignup } from "@/app/hooks/useAuth";
 
 export default function SignupPage() {
+  const router = useRouter();
   const [form, setForm] = useState({ username: "", password: "", confirm: "" });
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
-  const [loading, setLoading] = useState(false);
+  const { mutateAsync: signup, isPending } = useSignup();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -17,26 +31,45 @@ export default function SignupPage() {
     e.preventDefault();
     setError("");
     setSuccess("");
+    if (form.password.length < 6) {
+      setError("A senha deve ter pelo menos 6 caracteres.");
+      return;
+    }
     if (form.password !== form.confirm) {
       setError("As senhas não coincidem.");
       return;
     }
-    setLoading(true);
-    // Simulação de cadastro
-    setTimeout(() => {
-      setLoading(false);
-      setSuccess("Cadastro realizado com sucesso!");
-    }, 1000);
+    try {
+      await signup({ username: form.username, password: form.password });
+      toast.success("Cadastro realizado com sucesso!");
+      setForm({ username: "", password: "", confirm: "" });
+      router.push("/");
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (err: any) {
+      setError(err?.message || "Erro ao cadastrar usuário.");
+    }
   };
 
   return (
-    <Box sx={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", bgcolor: "#f5f5f5" }}>
+    <Box
+      sx={{
+        minHeight: "100vh",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        bgcolor: "#f5f5f5",
+      }}
+    >
       <Card sx={{ minWidth: 350, boxShadow: 3 }}>
         <CardContent>
           <Typography variant="h5" component="div" gutterBottom>
             Cadastro
           </Typography>
-          <Box component="form" onSubmit={handleSubmit} sx={{ mt: 2, display: "flex", flexDirection: "column", gap: 2 }}>
+          <Box
+            component="form"
+            onSubmit={handleSubmit}
+            sx={{ mt: 2, display: "flex", flexDirection: "column", gap: 2 }}
+          >
             <TextField
               label="Nome de usuário"
               name="username"
@@ -66,14 +99,20 @@ export default function SignupPage() {
             />
             {error && <Alert severity="error">{error}</Alert>}
             {success && <Alert severity="success">{success}</Alert>}
-            <Button type="submit" variant="contained" color="primary" disabled={loading} fullWidth>
-              {loading ? "Cadastrando..." : "Cadastrar"}
+            <Button
+              type="submit"
+              variant="contained"
+              color="primary"
+              disabled={isPending}
+              fullWidth
+            >
+              {isPending ? "Cadastrando..." : "Cadastrar"}
             </Button>
           </Box>
         </CardContent>
         <CardActions sx={{ justifyContent: "center" }}>
           <Typography variant="body2">
-            Já tem uma conta?{' '}
+            Já tem uma conta?{" "}
             <Link href="/" underline="hover">
               Entrar
             </Link>

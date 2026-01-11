@@ -22,6 +22,11 @@ router.post(
 );
 
 router.post(
+  "/logout",
+  authController.logout
+);
+
+router.post(
   "/reset-password",
   validate(resetPasswordSchema),
   authController.resetpassword

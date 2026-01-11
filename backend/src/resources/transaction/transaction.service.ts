@@ -21,6 +21,15 @@ export const getTransactionById = async (id: string): Promise<Transaction | null
     });
 };
 
+export const getTransactionsByGameId = async (gameId: string): Promise<Transaction[]> => {
+    return await prisma.transaction.findMany({
+        where: { gameId },
+        orderBy: {
+            createdAt: 'desc',
+        },
+    });
+};
+
 export const getAllTransactions = async (): Promise<Transaction[]> => {
     return await prisma.transaction.findMany({
         orderBy: {

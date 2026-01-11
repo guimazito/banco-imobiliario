@@ -8,11 +8,15 @@ import ListItem from "@mui/material/ListItem";
 import Typography from "@mui/material/Typography";
 import ListItemText from "@mui/material/ListItemText";
 import ListItemAvatar from "@mui/material/ListItemAvatar";
-import { useGetPlayerRanking } from "@/app/hooks/usePlayers";
 import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
+import { useGetGamePlayerRankingByGameId } from "@/app/hooks/useGamePlayers";
 
-export function RankingList() {
-  const { data: ranking } = useGetPlayerRanking();
+export interface RankingListProps {
+  gameId: string;
+}
+
+export function RankingList({ gameId }: RankingListProps) {
+  const { data: ranking } = useGetGamePlayerRankingByGameId(gameId);
 
   return (
     <Box mt={4} display="flex" justifyContent="center">
@@ -26,10 +30,10 @@ export function RankingList() {
         <List>
           {ranking &&
             ranking
-              .filter((player) => player.username !== "Bank")
+              .filter((player) => player.player?.username !== "Bank")
               .map((player, index) => (
                 <ListItem
-                  key={player.id}
+                  key={player.playerId}
                   sx={{
                     mb: 1,
                     borderRadius: 2,
@@ -52,10 +56,10 @@ export function RankingList() {
                   <ListItemText
                     primary={
                       <Typography fontWeight={index === 0 ? "bold" : "normal"}>
-                        {player.username}
+                        {player.player?.username}
                       </Typography>
                     }
-                    secondary={`R$ ${player.money}`}
+                    secondary={`R$ ${player.playerMoney.toLocaleString("pt-BR")}`}
                   />
                 </ListItem>
               ))}

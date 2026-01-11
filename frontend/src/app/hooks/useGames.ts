@@ -4,7 +4,8 @@ import {
     getGameById,
     createGame,
     updateGame,
-    deleteGame
+    deleteGame,
+    getGameByInvite
 } from "@/app/services/games";
 import { CreateGameDto, UpdateGameDto } from "@/app/types/game";
 
@@ -22,9 +23,15 @@ export function useGetGameById(gameId: string) {
     });
 }
 
+export function useGetGameByInvite(inviteCode: string) {
+    return useQuery({
+        queryKey: ["game-invite", inviteCode],
+        queryFn: () => getGameByInvite(inviteCode),
+    });
+}
+
 export function useCreateGame() {
     const queryClient = useQueryClient();
-
     return useMutation({
         mutationFn: (payload: CreateGameDto) => createGame(payload),
         onSuccess: () => {
@@ -35,7 +42,6 @@ export function useCreateGame() {
 
 export function useUpdateGame() {
     const queryClient = useQueryClient();
-
     return useMutation({
         mutationFn: ({
             gameId,
@@ -52,7 +58,6 @@ export function useUpdateGame() {
 
 export function useDeleteGame() {
     const queryClient = useQueryClient();
-
     return useMutation({
         mutationFn: (gameId: string) => deleteGame(gameId),
         onSuccess: () => {

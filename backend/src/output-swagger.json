@@ -110,6 +110,35 @@
         }
       }
     },
+    "/v1/auth/logout": {
+      "post": {
+        "tags": [
+          "Authentication"
+        ],
+        "summary": "Log out a player",
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "Player logged out successfully.",
+            "schema": {
+              "$ref": "#/definitions/SuccessMessage"
+            }
+          },
+          "401": {
+            "description": "Unauthorized.",
+            "schema": {
+              "$ref": "#/definitions/Unauthorized"
+            }
+          },
+          "500": {
+            "description": "Internal server error.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
     "/v1/auth/reset-password": {
       "post": {
         "tags": [
@@ -392,6 +421,43 @@
         }
       }
     },
+    "/v1/transactions/game/{gameId}": {
+      "get": {
+        "tags": [
+          "Transactions"
+        ],
+        "summary": "Get transactions by Game ID",
+        "description": "",
+        "parameters": [
+          {
+            "name": "gameId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Transactions retrieved successfully",
+            "schema": {
+              "$ref": "#/definitions/Transaction"
+            }
+          },
+          "404": {
+            "description": "Transactions not found",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
     "/v1/games/": {
       "get": {
         "tags": [
@@ -538,6 +604,44 @@
         }
       }
     },
+    "/v1/games/invite/{invite}": {
+      "get": {
+        "tags": [
+          "Games"
+        ],
+        "summary": "Get a game by Invite Code",
+        "description": "",
+        "parameters": [
+          {
+            "name": "invite",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Game Invite Code"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Game retrieved successfully",
+            "schema": {
+              "$ref": "#/definitions/Game"
+            }
+          },
+          "404": {
+            "description": "Game Not Found",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
     "/v1/game-players/": {
       "get": {
         "tags": [
@@ -597,7 +701,7 @@
         }
       }
     },
-    "/v1/game-players/{gameId}": {
+    "/v1/game-players/game/{gameId}": {
       "get": {
         "tags": [
           "GamePlayers"
@@ -635,7 +739,126 @@
         }
       }
     },
+    "/v1/game-players/player/{playerId}": {
+      "get": {
+        "tags": [
+          "GamePlayers"
+        ],
+        "summary": "Get a game player by Player ID",
+        "description": "",
+        "parameters": [
+          {
+            "name": "playerId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Player ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Game player retrieved successfully",
+            "schema": {
+              "$ref": "#/definitions/GamePlayer"
+            }
+          },
+          "404": {
+            "description": "Game Player Not Found",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/v1/game-players/ranking/{gameId}": {
+      "get": {
+        "tags": [
+          "GamePlayers"
+        ],
+        "summary": "Get a game player ranking by Game ID",
+        "description": "",
+        "parameters": [
+          {
+            "name": "gameId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Game ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Game player retrieved successfully",
+            "schema": {
+              "$ref": "#/definitions/GamePlayer"
+            }
+          },
+          "404": {
+            "description": "Game Player Not Found",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
     "/v1/game-players/{gameId}/{playerId}": {
+      "get": {
+        "tags": [
+          "GamePlayers"
+        ],
+        "summary": "Get a game player by Game ID and Player ID",
+        "description": "",
+        "parameters": [
+          {
+            "name": "gameId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Game ID"
+          },
+          {
+            "name": "playerId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Player ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Game player retrieved successfully",
+            "schema": {
+              "$ref": "#/definitions/GamePlayer"
+            }
+          },
+          "404": {
+            "description": "Game Player Not Found",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
       "put": {
         "tags": [
           "GamePlayers"
@@ -1069,6 +1292,10 @@
           "type": "string",
           "example": "1a2b3c4d-5e6f-7g8h-9i0j-k1l2m3n4o5p6"
         },
+        "invite": {
+          "type": "string",
+          "example": "ABCD12345"
+        },
         "status": {
           "type": "string",
           "example": "IN_PROGRESS"
@@ -1124,6 +1351,10 @@
     "CreateGameDto": {
       "type": "object",
       "properties": {
+        "invite": {
+          "type": "string",
+          "example": "ABCD12345"
+        },
         "status": {
           "type": "string",
           "example": "IN_PROGRESS"
@@ -1133,6 +1364,10 @@
     "UpdateGameDto": {
       "type": "object",
       "properties": {
+        "invite": {
+          "type": "string",
+          "example": "ABCD12345"
+        },
         "status": {
           "type": "string",
           "example": "FINISHED"

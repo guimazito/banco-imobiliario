@@ -6,6 +6,7 @@ import {
   getAllGames,
   getGameById,
   updateGame,
+  getGameByInvite
 } from "./game.service";
 
 const index = async (req: Request, res: Response) => {
@@ -53,6 +54,36 @@ const listGameById = async (req: Request, res: Response) => {
   try {
     const id = await getGameById(req.params.id);
     res.status(StatusCodes.OK).json(id);
+  } catch (err) {
+    gameError(res, err);
+  }
+};
+
+const listGameByInvite = async (req: Request, res: Response) => {
+  /*
+    #swagger.summary = 'Get a game by Invite Code'
+    #swagger.parameters['invite'] = {
+        in: 'path',
+        description: 'Game Invite Code',
+        required: true,
+        type: 'string'
+    }
+    #swagger.responses[200] = {
+        description: 'Game retrieved successfully',
+        schema: { $ref: '#/definitions/Game' }
+    }
+    #swagger.responses[404] = {
+        description: 'Game Not Found',
+        schema: { $ref: '#/definitions/Error' }
+    }
+    #swagger.responses[500] = {
+        description: 'Internal Server Error',
+        schema: { $ref: '#/definitions/Error' }
+    }
+    */
+  try {
+    const invite = await getGameByInvite(req.params.invite);
+    res.status(StatusCodes.OK).json(invite);
   } catch (err) {
     gameError(res, err);
   }
@@ -128,5 +159,6 @@ export default {
     index,
     create,
     update,
-    listGameById
+    listGameById,
+    listGameByInvite
 };

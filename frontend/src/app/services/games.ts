@@ -11,6 +11,11 @@ export async function getGameById(gameId: string): Promise<Game | null> {
   return data;
 }
 
+export async function getGameByInvite(inviteCode: string): Promise<Game | null> {
+  const { data } = await api.get<Game>(`/games/invite/${inviteCode}`);
+  return data;
+}
+
 export async function createGame(payload: CreateGameDto): Promise<Game> {
   const { data } = await api.post<Game>("/games", payload);
   return data;

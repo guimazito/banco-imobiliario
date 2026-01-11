@@ -1,5 +1,5 @@
-import { PrismaClient, Player } from "@prisma/client";
 import { genSalt, hash } from "bcryptjs";
+import { PrismaClient, Player } from "@prisma/client";
 import { CreatePlayerDto, UpdatePlayerDto } from "./player.types";
 
 const prisma = new PrismaClient();
@@ -35,14 +35,6 @@ export const getPlayerByUsername = async (username: string): Promise<Player | nu
     where: { username },
   });
 };
-
-// export const getPlayerRanking = async (): Promise<Player[]> => {
-//   return await prisma.player.findMany({
-//     orderBy: {
-//       money: "desc",
-//     },
-//   });
-// };
 
 export const getAllPlayers = async (): Promise<Player[]> => {
   return await prisma.player.findMany();

@@ -1,4 +1,5 @@
 import { PrismaClient } from "@prisma/client";
+import crypto from "crypto";
 import bcrypt from "bcryptjs";
 import {
   PlayerIcon,
@@ -29,12 +30,15 @@ async function seed() {
     skipDuplicates: true,
   });
 
-  console.log("Creating a Game...");
-  const game = await prisma.game.create({
-    data: {
-      status: GameStatus.IN_PROGRESS,
-    },
-  });
+  // console.log("Creating a Game...");
+  // const gameId = crypto.randomUUID();
+  // const game = await prisma.game.create({
+  //   data: {
+  //     id: gameId,
+  //     invite: parseInt(gameId.replace(/-/g, "").slice(0, 12), 16).toString(36).toUpperCase(),
+  //     status: GameStatus.IN_PROGRESS,
+  //   },
+  // });
 
   console.log("Creating Players...");
   const salt = await bcrypt.genSalt(
@@ -94,45 +98,45 @@ async function seed() {
     }),
   ]);
 
-  console.log("Creating GamePlayers...");
-  const gamePlayer = await Promise.all([
-    prisma.gamePlayer.create({
-      data: {
-        gameId: game.id,
-        playerId: players[1].id,
-        playerMoney: 2000,
-        playerStatus: PlayerStatus.IDLE,
-        playerIcon: PlayerIcon.PIX,
-      },
-    }),
-    prisma.gamePlayer.create({
-      data: {
-        gameId: game.id,
-        playerId: players[2].id,
-        playerMoney: 2000,
-        playerStatus: PlayerStatus.IDLE,
-        playerIcon: PlayerIcon.SAVINGS,
-      },
-    }),
-    prisma.gamePlayer.create({
-      data: {
-        gameId: game.id,
-        playerId: players[3].id,
-        playerMoney: 2000,
-        playerStatus: PlayerStatus.IDLE,
-        playerIcon: PlayerIcon.CREDIT_CARD,
-      },
-    }),
-    prisma.gamePlayer.create({
-      data: {
-        gameId: game.id,
-        playerId: players[4].id,
-        playerMoney: 2000,
-        playerStatus: PlayerStatus.IDLE,
-        playerIcon: PlayerIcon.POINT_OF_SALE,
-      },
-    }),
-  ]);
+//   console.log("Creating GamePlayers...");
+//   const gamePlayer = await Promise.all([
+//     prisma.gamePlayer.create({
+//       data: {
+//         gameId: game.id,
+//         playerId: players[2].id,
+//         playerMoney: 2000,
+//         playerStatus: PlayerStatus.IDLE,
+//         playerIcon: PlayerIcon.PIX,
+//       },
+//     }),
+//     prisma.gamePlayer.create({
+//       data: {
+//         gameId: game.id,
+//         playerId: players[3].id,
+//         playerMoney: 2000,
+//         playerStatus: PlayerStatus.IDLE,
+//         playerIcon: PlayerIcon.SAVINGS,
+//       },
+//     }),
+//     prisma.gamePlayer.create({
+//       data: {
+//         gameId: game.id,
+//         playerId: players[4].id,
+//         playerMoney: 2000,
+//         playerStatus: PlayerStatus.IDLE,
+//         playerIcon: PlayerIcon.CREDIT_CARD,
+//       },
+//     }),
+//     prisma.gamePlayer.create({
+//       data: {
+//         gameId: game.id,
+//         playerId: players[5].id,
+//         playerMoney: 2000,
+//         playerStatus: PlayerStatus.IDLE,
+//         playerIcon: PlayerIcon.POINT_OF_SALE,
+//       },
+//     }),
+//   ]);
 }
 
 seed()

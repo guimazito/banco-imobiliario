@@ -3,7 +3,10 @@ import {
     listGamePlayers,
     createGamePlayer,
     updateGamePlayer,
-    getGamePlayerByGameId
+    getGamePlayerId,
+    getGamePlayerByGameId,
+    getGamePlayerByPlayerId,
+    getGamePlayerRankingByGameId
 } from "@/app/services/gamePlayers";
 import { GamePlayer } from "@/app/types/gamePlayers";
 
@@ -21,9 +24,29 @@ export function useGetGamePlayerByGameId(gameId: string) {
     });
 }
 
+export function useGetGamePlayerByPlayerId(playerId: string) {
+    return useQuery({
+        queryKey: ["gamePlayerByPlayer", playerId],
+        queryFn: () => getGamePlayerByPlayerId(playerId),
+    });
+}
+
+export function useGetGamePlayerId(gameId: string, playerId: string) {
+    return useQuery({
+        queryKey: ["gamePlayer", gameId, playerId],
+        queryFn: () => getGamePlayerId(gameId, playerId),
+    });
+}
+
+export function useGetGamePlayerRankingByGameId(gameId: string) {
+    return useQuery({
+        queryKey: ["gamePlayerRanking", gameId],
+        queryFn: () => getGamePlayerRankingByGameId(gameId),
+    });
+}
+
 export function useCreateGamePlayer() {
     const queryClient = useQueryClient();
-
     return useMutation({
         mutationFn: (payload: Omit<GamePlayer, "id">) => createGamePlayer(payload),
         onSuccess: (_, payload) => {
@@ -34,7 +57,6 @@ export function useCreateGamePlayer() {
 
 export function useUpdateGamePlayer() {
     const queryClient = useQueryClient();
-
     return useMutation({
         mutationFn: ({
             gameId,

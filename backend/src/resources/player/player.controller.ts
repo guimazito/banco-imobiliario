@@ -5,7 +5,6 @@ import {
     createPlayer,
     getAllPlayers,
     updatePlayer,
-    // getPlayerRanking,
     getPlayerByUsername,
 } from "./player.service";
 
@@ -127,30 +126,9 @@ const listPlayerByUsername = async (req: Request, res: Response) => {
     }
 };
 
-// const listPlayerRanking = async (req: Request, res: Response) => {
-//     /*
-//     #swagger.summary = 'Get player ranking'
-//     #swagger.responses[200] = {
-//         description: 'Player ranking retrieved successfully',
-//         schema: { $ref: '#/definitions/Player' }
-//     }
-//     #swagger.responses[500] = {
-//         description: 'Internal Server Error',
-//         schema: { $ref: '#/definitions/Error' }
-//     }
-//     */
-//     try {
-//         const ranking = await getPlayerRanking();
-//         res.status(StatusCodes.OK).json(ranking);
-//     } catch (err) {
-//         playerError(res, err);
-//     }
-// };
-
 export default {
     index,
     create,
     update,
-    // listPlayerRanking,
     listPlayerByUsername
 }

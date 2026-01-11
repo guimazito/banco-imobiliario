@@ -7,6 +7,15 @@ import {
     ResetPasswordResponse,
 } from "../types/auth";
 
+export async function signup(payload: LoginDto): Promise<void> {
+  try {
+    await api.post('/auth/signup', payload);
+  } catch (err) {
+    console.error('Signup failed', err);
+    throw new Error('Não foi possível registrar o usuário');
+  }
+}
+
 export async function login(payload: LoginDto): Promise<string> {
   try {
     const { data } = await api.post<LoginResponse>('/auth/login', payload);

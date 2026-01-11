@@ -29,7 +29,7 @@ export const PageUnderConstruction: React.FC<IPageEmConstrucao> = ({
           {description}
         </Typography>
         <Stack direction="row" justifyContent="center" spacing={2}>
-          <Link href="/transaction" passHref legacyBehavior>
+          <Link href="/home" passHref legacyBehavior>
             <Button variant="contained" color="primary" component="a">
               Voltar ao início
             </Button>
