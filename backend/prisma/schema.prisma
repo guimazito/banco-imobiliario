@@ -1,0 +1,108 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+enum GameStatus {
+  IN_PROGRESS
+  FINISHED
+  CANCELLED
+}
+
+enum PlayerStatus {
+  IDLE
+  RECEIVE
+  PAY
+}
+
+enum PlayerIcon {
+  PIX
+  SAVINGS
+  CREDIT_CARD
+  POINT_OF_SALE
+  MONETIZATION
+  SHOPPING_BAG
+  ACCOUNT_CIRCLE
+}
+
+enum TransactionType {
+  BETWEEN_PLAYERS
+  PAY_TO_BANK
+  RECEIVE_FROM_BANK
+}
+
+model Game {
+  id        String     @id @default(uuid()) @db.Char(36)
+  invite    String     @unique @db.VarChar(20)
+  status    GameStatus @default(IN_PROGRESS)
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  deletedAt DateTime?  @db.DateTime(6)
+
+  transactions Transaction[]
+  gamePlayers  GamePlayer[]
+}
+
+model Player {
+  id        String    @id @default(uuid()) @db.Char(36)
+  username  String    @unique @db.VarChar(255)
+  password  String    @db.VarChar(255)
+  profileId String    @db.Char(36)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime? @db.DateTime(6)
+
+  transactionsPay     Transaction[] @relation("PlayerPay")
+  transactionsReceive Transaction[] @relation("PlayerReceive")
+  gamePlayers         GamePlayer[]
+  profile             PlayerProfile @relation(fields: [profileId], references: [id])
+}
+
+model GamePlayer {
+  gameId       String       @db.Char(36)
+  playerId     String       @db.Char(36)
+  playerMoney  Int          @default(25000)
+  playerStatus PlayerStatus @default(IDLE)
+  playerIcon   PlayerIcon   @default(ACCOUNT_CIRCLE)
+
+  game   Game   @relation(fields: [gameId], references: [id])
+  player Player @relation(fields: [playerId], references: [id])
+
+  @@id([gameId, playerId])
+}
+
+model Transaction {
+  id              String          @id @default(uuid()) @db.Char(36)
+  amount          Int
+  description     String          @db.VarChar(255)
+  type            TransactionType @default(BETWEEN_PLAYERS)
+  playerIdPay     String          @db.Char(36)
+  playerIdReceive String          @db.Char(36)
+  gameId          String          @db.Char(36)
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+  deletedAt       DateTime?       @db.DateTime(6)
+
+  playerPay     Player @relation("PlayerPay", fields: [playerIdPay], references: [id])
+  playerReceive Player @relation("PlayerReceive", fields: [playerIdReceive], references: [id])
+  game          Game   @relation(fields: [gameId], references: [id])
+}
+
+model PlayerProfile {
+  id          String    @id @default(uuid()) @db.Char(36)
+  profileName String    @db.VarChar(50)
+  description String?   @db.VarChar(255)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  deletedAt   DateTime? @db.DateTime(6)
+
+  players Player[]
+}
+
+/**
+ * Generates the Prisma Client: npx prisma generate
+ */

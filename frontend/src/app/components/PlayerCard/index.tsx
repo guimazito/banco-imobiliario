@@ -1,0 +1,91 @@
+"use client";
+
+import Card from "@mui/material/Card";
+import PixIcon from "@mui/icons-material/Pix";
+import Typography from "@mui/material/Typography";
+import CardContent from "@mui/material/CardContent";
+import { GamePlayer } from "@/app/types/gamePlayers";
+import SavingsIcon from "@mui/icons-material/Savings";
+import CreditCardIcon from "@mui/icons-material/CreditCard";
+import ShoppingBagIcon from "@mui/icons-material/ShoppingBag";
+import PointOfSaleIcon from "@mui/icons-material/PointOfSale";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
+
+export interface PlayerCardProps {
+  player: GamePlayer;
+  onCardClick: () => void | Promise<void>;
+}
+
+export function PlayerCard({ player, onCardClick }: PlayerCardProps) {
+  const handleClick = async () => {
+    await onCardClick();
+  };
+
+  const cardColorMap: { [key: string]: string } = {
+    PAY: "#7f1d1d",
+    RECEIVE: "#14532d",
+    IDLE: "#404040",
+  };
+
+  const cardColor = cardColorMap[player.playerStatus] || "#404040";
+
+  const cardAvatar = (name: string) => {
+    switch (name) {
+      case "PIX":
+        return <PixIcon fontSize="large" />;
+      case "SAVINGS":
+        return <SavingsIcon fontSize="large" />;
+      case "CREDIT_CARD":
+        return <CreditCardIcon fontSize="large" />;
+      case "POINT_OF_SALE":
+        return <PointOfSaleIcon fontSize="large" />;
+      case "MONETIZATION":
+        return <MonetizationOnIcon fontSize="large" />;
+      case "SHOPPING_BAG":
+        return <ShoppingBagIcon fontSize="large" />;
+      default:
+        return <AccountCircleIcon fontSize="large" />;
+    }
+  };
+
+  return (
+    <Card
+      onClick={handleClick}
+      sx={{
+        backgroundColor: cardColor,
+        color: "#fff",
+        borderRadius: 2,
+        boxShadow: 2,
+        cursor: "pointer",
+        userSelect: "none",
+        transition: "box-shadow 0.2s",
+        "&:hover": { boxShadow: 6 },
+        mb: 1,
+        width: '100%',
+        alignSelf: 'stretch',
+        display: 'flex',
+        flexDirection: 'column',
+      }}
+    >
+      <CardContent
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          p: 2,
+        }}
+      >
+        <div>
+          <Typography variant="h6" component="div" sx={{ color: "#fff" }}>
+            {player.player?.username}
+          </Typography>
+          <Typography variant="body1" sx={{ color: "#e5e5e5", mt: 1 }}>
+            R$ {new Intl.NumberFormat("pt-BR").format(player.playerMoney)}
+          </Typography>
+        </div>
+        <div style={{ alignSelf: "flex-start" }}>{cardAvatar(player.playerIcon)}</div>
+      </CardContent>
+    </Card>
+  );
+}
