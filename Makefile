@@ -6,9 +6,16 @@ endif
 up:
 	$(DOCKER_COMPOSE) -f docker-compose.yml up -d --remove-orphans
 
+up-production:
+	$(DOCKER_COMPOSE) -f docker-compose.production.yml up -d --remove-orphans
+
 build:
 	$(DOCKER_COMPOSE) down -v
 	$(DOCKER_COMPOSE) -f docker-compose.yml up -d --build
+
+build-production:
+	$(DOCKER_COMPOSE) down -v
+	$(DOCKER_COMPOSE) -f docker-compose.production.yml up -d --build
 
 down:
 	$(DOCKER_COMPOSE) down

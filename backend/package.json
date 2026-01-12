@@ -51,6 +51,7 @@
     "prettier": "^3.2.2",
     "prisma": "^6.19.0",
     "ts-node": "^10.9.2",
+    "tsc-alias": "^1.8.16",
     "tsx": "^4.21.0",
     "typescript": "^5.2.2",
     "unplugin-fonts": "^1.1.1",

@@ -115,15 +115,15 @@ export default function NewGamePage() {
   };
 
   const handleSubmit = async (e?: React.FormEvent) => {
-    if (e) e.preventDefault();
-    for (const player of players) {
-      await onSubmit({
-        username: player.username.trim(),
-        money: money.toString(),
-        status: "IDLE",
-        icon: player.icon,
-      });
-    }
+    // if (e) e.preventDefault();
+    // for (const player of players) {
+    //   await onSubmit({
+    //     username: player.username.trim(),
+    //     money: money.toString(),
+    //     status: "IDLE",
+    //     icon: player.icon,
+    //   });
+    // }
     setOpen(false);
     router.push("/transaction");
   };
