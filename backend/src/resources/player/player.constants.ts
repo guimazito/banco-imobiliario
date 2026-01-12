@@ -1,0 +1,15 @@
+export enum PlayerStatus {
+  IDLE = "IDLE",
+  RECEIVE = "RECEIVE",
+  PAY = "PAY",
+}
+
+export enum PlayerIcon {
+  PIX = "PIX",
+  SAVINGS = "SAVINGS",
+  CREDIT_CARD = "CREDIT_CARD",
+  POINT_OF_SALE = "POINT_OF_SALE",
+  MONETIZATION = "MONETIZATION",
+  SHOPPING_BAG = "SHOPPING_BAG",
+  ACCOUNT_CIRCLE = "ACCOUNT_CIRCLE",
+}

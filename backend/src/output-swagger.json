@@ -1,0 +1,1558 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Banco Imobiliário API",
+    "description": "Documentação da API Banco Imobiliário",
+    "version": "1.0.0"
+  },
+  "host": "localhost:3000",
+  "basePath": "/",
+  "schemes": [
+    "http"
+  ],
+  "paths": {
+    "/v1/auth/signup": {
+      "post": {
+        "tags": [
+          "Authentication"
+        ],
+        "summary": "Register a new player",
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/SignUpDto"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Player registered successfully",
+            "schema": {
+              "$ref": "#/definitions/Player"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/v1/auth/login": {
+      "post": {
+        "tags": [
+          "Authentication"
+        ],
+        "summary": "Log in a player",
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/LoginDto"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Player logged in successfully",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "example": "object"
+                },
+                "properties": {
+                  "type": "object",
+                  "properties": {
+                    "token": {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "example": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/v1/auth/logout": {
+      "post": {
+        "tags": [
+          "Authentication"
+        ],
+        "summary": "Log out a player",
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "Player logged out successfully.",
+            "schema": {
+              "$ref": "#/definitions/SuccessMessage"
+            }
+          },
+          "401": {
+            "description": "Unauthorized.",
+            "schema": {
+              "$ref": "#/definitions/Unauthorized"
+            }
+          },
+          "500": {
+            "description": "Internal server error.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/v1/auth/reset-password": {
+      "post": {
+        "tags": [
+          "Authentication"
+        ],
+        "summary": "Reset player password",
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/ResetPasswordDto"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Password reset successfully",
+            "schema": {
+              "$ref": "#/definitions/SuccessMessage"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/v1/players/": {
+      "get": {
+        "tags": [
+          "Players"
+        ],
+        "summary": "List all players",
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "List of players",
+            "schema": {
+              "$ref": "#/definitions/Player"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Players"
+        ],
+        "summary": "Create a new player",
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/CreatePlayerDto"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Player created successfully",
+            "schema": {
+              "$ref": "#/definitions/Player"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/v1/players/username/{username}": {
+      "get": {
+        "tags": [
+          "Players"
+        ],
+        "summary": "Get a player by username",
+        "description": "",
+        "parameters": [
+          {
+            "name": "username",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Player Username"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Player retrieved successfully",
+            "schema": {
+              "$ref": "#/definitions/Player"
+            }
+          },
+          "404": {
+            "description": "Player not found",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/v1/players/{id}": {
+      "put": {
+        "tags": [
+          "Players"
+        ],
+        "summary": "Update a player by ID",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Player ID"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/UpdatePlayerDto"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Player updated successfully",
+            "schema": {
+              "$ref": "#/definitions/Player"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "404": {
+            "description": "Player not found",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/v1/transactions/": {
+      "get": {
+        "tags": [
+          "Transactions"
+        ],
+        "summary": "List all transactions",
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "List of transactions",
+            "schema": {
+              "$ref": "#/definitions/Transaction"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Transactions"
+        ],
+        "summary": "Create a new transaction",
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/CreateTransactionDto"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Transaction created successfully",
+            "schema": {
+              "$ref": "#/definitions/Transaction"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/v1/transactions/{id}": {
+      "get": {
+        "tags": [
+          "Transactions"
+        ],
+        "summary": "Get a transaction by ID",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Transaction retrieved successfully",
+            "schema": {
+              "$ref": "#/definitions/Transaction"
+            }
+          },
+          "404": {
+            "description": "Transaction not found",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/v1/transactions/game/{gameId}": {
+      "get": {
+        "tags": [
+          "Transactions"
+        ],
+        "summary": "Get transactions by Game ID",
+        "description": "",
+        "parameters": [
+          {
+            "name": "gameId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Transactions retrieved successfully",
+            "schema": {
+              "$ref": "#/definitions/Transaction"
+            }
+          },
+          "404": {
+            "description": "Transactions not found",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/v1/games/": {
+      "get": {
+        "tags": [
+          "Games"
+        ],
+        "summary": "List all games",
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "List of games",
+            "schema": {
+              "$ref": "#/definitions/Game"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Games"
+        ],
+        "summary": "Create a new game",
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/CreateGameDto"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Game created successfully",
+            "schema": {
+              "$ref": "#/definitions/Game"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/v1/games/{id}": {
+      "get": {
+        "tags": [
+          "Games"
+        ],
+        "summary": "Get a game by ID",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Game ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Game retrieved successfully",
+            "schema": {
+              "$ref": "#/definitions/Game"
+            }
+          },
+          "404": {
+            "description": "Game Not Found",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Games"
+        ],
+        "summary": "Update an existing game",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Game ID"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/UpdateGameDto"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Game updated successfully",
+            "schema": {
+              "$ref": "#/definitions/Game"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "404": {
+            "description": "Game Not Found",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/v1/games/invite/{invite}": {
+      "get": {
+        "tags": [
+          "Games"
+        ],
+        "summary": "Get a game by Invite Code",
+        "description": "",
+        "parameters": [
+          {
+            "name": "invite",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Game Invite Code"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Game retrieved successfully",
+            "schema": {
+              "$ref": "#/definitions/Game"
+            }
+          },
+          "404": {
+            "description": "Game Not Found",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/v1/game-players/": {
+      "get": {
+        "tags": [
+          "GamePlayers"
+        ],
+        "summary": "List all game players",
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "List of game players",
+            "schema": {
+              "$ref": "#/definitions/GamePlayer"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "GamePlayers"
+        ],
+        "summary": "Create a new game player",
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/CreateGamePlayerDto"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Game player created successfully",
+            "schema": {
+              "$ref": "#/definitions/GamePlayer"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/v1/game-players/game/{gameId}": {
+      "get": {
+        "tags": [
+          "GamePlayers"
+        ],
+        "summary": "Get a game player by Game ID",
+        "description": "",
+        "parameters": [
+          {
+            "name": "gameId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Game ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Game player retrieved successfully",
+            "schema": {
+              "$ref": "#/definitions/GamePlayer"
+            }
+          },
+          "404": {
+            "description": "Game Player Not Found",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/v1/game-players/player/{playerId}": {
+      "get": {
+        "tags": [
+          "GamePlayers"
+        ],
+        "summary": "Get a game player by Player ID",
+        "description": "",
+        "parameters": [
+          {
+            "name": "playerId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Player ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Game player retrieved successfully",
+            "schema": {
+              "$ref": "#/definitions/GamePlayer"
+            }
+          },
+          "404": {
+            "description": "Game Player Not Found",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/v1/game-players/ranking/{gameId}": {
+      "get": {
+        "tags": [
+          "GamePlayers"
+        ],
+        "summary": "Get a game player ranking by Game ID",
+        "description": "",
+        "parameters": [
+          {
+            "name": "gameId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Game ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Game player retrieved successfully",
+            "schema": {
+              "$ref": "#/definitions/GamePlayer"
+            }
+          },
+          "404": {
+            "description": "Game Player Not Found",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/v1/game-players/{gameId}/{playerId}": {
+      "get": {
+        "tags": [
+          "GamePlayers"
+        ],
+        "summary": "Get a game player by Game ID and Player ID",
+        "description": "",
+        "parameters": [
+          {
+            "name": "gameId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Game ID"
+          },
+          {
+            "name": "playerId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Player ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Game player retrieved successfully",
+            "schema": {
+              "$ref": "#/definitions/GamePlayer"
+            }
+          },
+          "404": {
+            "description": "Game Player Not Found",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "GamePlayers"
+        ],
+        "summary": "Update a game player by ID",
+        "description": "",
+        "parameters": [
+          {
+            "name": "gameId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Game ID"
+          },
+          {
+            "name": "playerId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Player ID"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/UpdateGamePlayerDto"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Game player updated successfully",
+            "schema": {
+              "$ref": "#/definitions/GamePlayer"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "404": {
+            "description": "Game Player Not Found",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/v1/player-profiles/": {
+      "get": {
+        "tags": [
+          "PlayerProfiles"
+        ],
+        "summary": "List all player profiles.",
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "Player profiles retrieved successfully.",
+            "schema": {
+              "$ref": "#/definitions/PlayerProfile"
+            }
+          },
+          "500": {
+            "description": "Internal server error.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "PlayerProfiles"
+        ],
+        "summary": "Create new player profile.",
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/CreatePlayerProfileDto"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Player profile created successfully.",
+            "schema": {
+              "$ref": "#/definitions/PlayerProfile"
+            }
+          },
+          "400": {
+            "description": "Bad request.",
+            "schema": {
+              "$ref": "#/definitions/BadRequest"
+            }
+          },
+          "500": {
+            "description": "Internal server error.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/v1/player-profiles/{id}": {
+      "get": {
+        "tags": [
+          "PlayerProfiles"
+        ],
+        "summary": "Get player profile by ID.",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Player profile retrieved successfully.",
+            "schema": {
+              "$ref": "#/definitions/PlayerProfile"
+            }
+          },
+          "404": {
+            "description": "Player profile not found.",
+            "schema": {
+              "$ref": "#/definitions/NotFound"
+            }
+          },
+          "500": {
+            "description": "Internal server error.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "PlayerProfiles"
+        ],
+        "summary": "Update player profile by ID.",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/UpdatePlayerProfileDto"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Player profile updated successfully.",
+            "schema": {
+              "$ref": "#/definitions/PlayerProfile"
+            }
+          },
+          "400": {
+            "description": "Bad request.",
+            "schema": {
+              "$ref": "#/definitions/BadRequest"
+            }
+          },
+          "404": {
+            "description": "Player profile not found.",
+            "schema": {
+              "$ref": "#/definitions/NotFound"
+            }
+          },
+          "500": {
+            "description": "Internal server error.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "PlayerProfiles"
+        ],
+        "summary": "Delete player profile by ID.",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Player profile deleted successfully.",
+            "schema": {
+              "$ref": "#/definitions/PlayerProfile"
+            }
+          },
+          "404": {
+            "description": "Player profile not found.",
+            "schema": {
+              "$ref": "#/definitions/NotFound"
+            }
+          },
+          "500": {
+            "description": "Internal server error.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "SignUpDto": {
+      "type": "object",
+      "properties": {
+        "username": {
+          "type": "string",
+          "example": "joao.silva"
+        },
+        "password": {
+          "type": "string",
+          "example": "senha123"
+        }
+      }
+    },
+    "LoginDto": {
+      "type": "object",
+      "properties": {
+        "username": {
+          "type": "string",
+          "example": "joao.silva"
+        },
+        "password": {
+          "type": "string",
+          "example": "senha123"
+        }
+      }
+    },
+    "ChangePasswordDto": {
+      "type": "object",
+      "properties": {
+        "oldPassword": {
+          "type": "string",
+          "example": "senha123"
+        },
+        "newPassword": {
+          "type": "string",
+          "example": "novaSenha456"
+        }
+      }
+    },
+    "ResetPasswordDto": {
+      "type": "object",
+      "properties": {
+        "token": {
+          "type": "string",
+          "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjhhMjA1M2RlLTVkOTItNGM0My05N2MwLWM5YjJiMGQ1NjcwMyIsIm5hbWUiOiJBbmEgUGVyZWlyYSIsImVtYWlsIjoiYW5hX3BlcmlyYUBoZW1vdHJhY2suY29tIiwicHJvZmlsZUlkIjoiQURNSU4iLCJibG9vZENlbnRlcklkIjoiMDBjNmZiMmMtYTI4MC00MzFjLWIxMmYtNmU2YTc4ZjdhN2YwIiwiaWF0IjoxNjkyNTI0NzI1fQ.sJt9H3z8n5X1mX0F6vE3K1Zl5H3z8n5X1mX0F6vE3K1Zl5"
+        },
+        "newPassword": {
+          "type": "string",
+          "example": "novaSenha456"
+        }
+      }
+    },
+    "AuthToken": {
+      "type": "object",
+      "properties": {
+        "token": {
+          "type": "string",
+          "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjhhMjA1M2RlLTVkOTItNGM0My05N2MwLWM5YjJiMGQ1NjcwMyIsIm5hbWUiOiJBbmEgUGVyZWlyYSIsImVtYWlsIjoiYW5hX3BlcmlyYUBoZW1vdHJhY2suY29tIiwicHJvZmlsZUlkIjoiQURNSU4iLCJibG9vZENlbnRlcklkIjoiMDBjNmZiMmMtYTI4MC00MzFjLWIxMmYtNmU2YTc4ZjdhN2YwIiwiaWF0IjoxNjkyNTI0NzI1fQ.sJt9H3z8n5X1mX0F6vE3K1Zl5H3z8n5X1mX0F6vE3K1Zl5"
+        }
+      }
+    },
+    "Player": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "example": "8a2053de-5d92-4c43-97c0-c9b2b0d56703"
+        },
+        "username": {
+          "type": "string",
+          "example": "João Silva"
+        },
+        "profileId": {
+          "type": "string",
+          "example": "b3c1f8d2-4e5a-4c6b-9f0d-7e8f9a0b1c2d"
+        },
+        "createdAt": {
+          "type": "string",
+          "example": "2025-09-16T19:27:15.645Z"
+        },
+        "updatedAt": {
+          "type": "string",
+          "example": "2025-09-16T19:27:15.645Z"
+        },
+        "deletedAt": {}
+      }
+    },
+    "CreatePlayerDto": {
+      "type": "object",
+      "properties": {
+        "username": {
+          "type": "string",
+          "example": "João Silva"
+        },
+        "password": {
+          "type": "string",
+          "example": "senha123"
+        },
+        "profileId": {
+          "type": "string",
+          "example": "b3c1f8d2-4e5a-4c6b-9f0d-7e8f9a0b1c2d"
+        }
+      }
+    },
+    "UpdatePlayerDto": {
+      "type": "object",
+      "properties": {
+        "username": {
+          "type": "string",
+          "example": "João Silva"
+        },
+        "profileId": {
+          "type": "string",
+          "example": "b3c1f8d2-4e5a-4c6b-9f0d-7e8f9a0b1c2d"
+        }
+      }
+    },
+    "Transaction": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "example": "d4f7e8c2-3b6a-4f1e-9f3b-2c8e4f5a6b7c"
+        },
+        "amount": {
+          "type": "string",
+          "example": "200"
+        },
+        "description": {
+          "type": "string",
+          "example": "João fez pagamento de R$200 para Maria"
+        },
+        "type": {
+          "type": "string",
+          "example": "BETWEEN_PLAYERS"
+        },
+        "playerIdPay": {
+          "type": "string",
+          "example": "8a2053de-5d92-4c43-97c0-c9b2b0d56703"
+        },
+        "playerIdReceive": {
+          "type": "string",
+          "example": "9a2053de-5d92-4c43-97c0-c9b2b0d56704"
+        },
+        "gameId": {
+          "type": "string",
+          "example": "1a2b3c4d-5e6f-7g8h-9i0j-k1l2m3n4o5p6"
+        },
+        "createdAt": {
+          "type": "string",
+          "example": "2025-09-16T19:27:15.645Z"
+        },
+        "updatedAt": {
+          "type": "string",
+          "example": "2025-09-16T19:27:15.645Z"
+        },
+        "deletedAt": {}
+      }
+    },
+    "CreateTransactionDto": {
+      "type": "object",
+      "properties": {
+        "amount": {
+          "type": "string",
+          "example": "200"
+        },
+        "description": {
+          "type": "string",
+          "example": "João fez pagamento de R$200 para Maria"
+        },
+        "type": {
+          "type": "string",
+          "example": "BETWEEN_PLAYERS"
+        },
+        "playerIdPay": {
+          "type": "string",
+          "example": "8a2053de-5d92-4c43-97c0-c9b2b0d56703"
+        },
+        "playerIdReceive": {
+          "type": "string",
+          "example": "9a2053de-5d92-4c43-97c0-c9b2b0d56704"
+        },
+        "gameId": {
+          "type": "string",
+          "example": "1a2b3c4d-5e6f-7g8h-9i0j-k1l2m3n4o5p6"
+        }
+      }
+    },
+    "Game": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "example": "1a2b3c4d-5e6f-7g8h-9i0j-k1l2m3n4o5p6"
+        },
+        "invite": {
+          "type": "string",
+          "example": "ABCD12345"
+        },
+        "status": {
+          "type": "string",
+          "example": "IN_PROGRESS"
+        },
+        "players": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "example": "8a2053de-5d92-4c43-97c0-c9b2b0d56703"
+              },
+              "username": {
+                "type": "string",
+                "example": "João Silva"
+              },
+              "money": {
+                "type": "number",
+                "example": 1500
+              },
+              "status": {
+                "type": "string",
+                "example": "IDLE"
+              },
+              "icon": {
+                "type": "string",
+                "example": "ACCOUNT_CIRCLE"
+              },
+              "createdAt": {
+                "type": "string",
+                "example": "2025-09-16T19:27:15.645Z"
+              },
+              "updatedAt": {
+                "type": "string",
+                "example": "2025-09-16T19:27:15.645Z"
+              },
+              "deletedAt": {}
+            }
+          }
+        },
+        "createdAt": {
+          "type": "string",
+          "example": "2025-09-16T19:27:15.645Z"
+        },
+        "updatedAt": {
+          "type": "string",
+          "example": "2025-09-16T19:27:15.645Z"
+        },
+        "deletedAt": {}
+      }
+    },
+    "CreateGameDto": {
+      "type": "object",
+      "properties": {
+        "invite": {
+          "type": "string",
+          "example": "ABCD12345"
+        },
+        "status": {
+          "type": "string",
+          "example": "IN_PROGRESS"
+        }
+      }
+    },
+    "UpdateGameDto": {
+      "type": "object",
+      "properties": {
+        "invite": {
+          "type": "string",
+          "example": "ABCD12345"
+        },
+        "status": {
+          "type": "string",
+          "example": "FINISHED"
+        }
+      }
+    },
+    "GamePlayer": {
+      "type": "object",
+      "properties": {
+        "gameId": {
+          "type": "string",
+          "example": "1a2b3c4d-5e6f-7g8h-9i0j-k1l2m3n4o5p6"
+        },
+        "playerId": {
+          "type": "string",
+          "example": "8a2053de-5d92-4c43-97c0-c9b2b0d56703"
+        },
+        "playerMoney": {
+          "type": "number",
+          "example": 1500
+        },
+        "playerStatus": {
+          "type": "string",
+          "example": "IDLE"
+        },
+        "playerIcon": {
+          "type": "string",
+          "example": "ACCOUNT_CIRCLE"
+        }
+      }
+    },
+    "CreateGamePlayerDto": {
+      "type": "object",
+      "properties": {
+        "gameId": {
+          "type": "string",
+          "example": "1a2b3c4d-5e6f-7g8h-9i0j-k1l2m3n4o5p6"
+        },
+        "playerId": {
+          "type": "string",
+          "example": "8a2053de-5d92-4c43-97c0-c9b2b0d56703"
+        },
+        "playerMoney": {
+          "type": "number",
+          "example": 1500
+        },
+        "playerStatus": {
+          "type": "string",
+          "example": "PAY"
+        },
+        "playerIcon": {
+          "type": "string",
+          "example": "ACCOUNT_CIRCLE"
+        }
+      }
+    },
+    "UpdateGamePlayerDto": {
+      "type": "object",
+      "properties": {
+        "playerMoney": {
+          "type": "number",
+          "example": 2000
+        },
+        "playerStatus": {
+          "type": "string",
+          "example": "IDLE"
+        },
+        "playerIcon": {
+          "type": "string",
+          "example": "ACCOUNT_CIRCLE"
+        }
+      }
+    },
+    "PlayerProfile": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "example": "a1b2c3d4-e5f6-7g8h-9i0j-k1l2m3n4o5p6"
+        },
+        "profileName": {
+          "type": "string",
+          "example": "Perfil Padrão"
+        },
+        "description": {
+          "type": "string",
+          "example": "Este é o perfil padrão do jogador."
+        },
+        "createdAt": {
+          "type": "string",
+          "example": "2025-09-16T19:27:15.645Z"
+        },
+        "updatedAt": {
+          "type": "string",
+          "example": "2025-09-16T19:27:15.645Z"
+        },
+        "deletedAt": {}
+      }
+    },
+    "CreatePlayerProfileDto": {
+      "type": "object",
+      "properties": {
+        "profileName": {
+          "type": "string",
+          "example": "Perfil Padrão"
+        },
+        "description": {
+          "type": "string",
+          "example": "Este é o perfil padrão do jogador."
+        }
+      }
+    },
+    "UpdatePlayerProfileDto": {
+      "type": "object",
+      "properties": {
+        "profileName": {
+          "type": "string",
+          "example": "Perfil Avançado"
+        },
+        "description": {
+          "type": "string",
+          "example": "Este é o perfil avançado do jogador."
+        }
+      }
+    },
+    "SuccessMessage": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "example": "Operation completed successfully."
+        }
+      }
+    },
+    "BadRequest": {
+      "type": "object",
+      "properties": {
+        "error": {
+          "type": "string",
+          "example": "Error details"
+        },
+        "message": {
+          "type": "string",
+          "example": "Bad request message"
+        }
+      }
+    },
+    "Unauthorized": {
+      "type": "object",
+      "properties": {
+        "error": {
+          "type": "string",
+          "example": "Error details"
+        },
+        "message": {
+          "type": "string",
+          "example": "Unauthorized message"
+        }
+      }
+    },
+    "NotFound": {
+      "type": "object",
+      "properties": {
+        "error": {
+          "type": "string",
+          "example": "Error details"
+        },
+        "message": {
+          "type": "string",
+          "example": "Not found message"
+        }
+      }
+    },
+    "Error": {
+      "type": "object",
+      "properties": {
+        "error": {
+          "type": "string",
+          "example": "Error details"
+        },
+        "message": {
+          "type": "string",
+          "example": "Error message"
+        }
+      }
+    }
+  }
+}

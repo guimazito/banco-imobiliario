@@ -1,0 +1,5 @@
+export enum TransactionType {
+  BETWEEN_PLAYERS = "BETWEEN_PLAYERS",
+  PAY_TO_BANK = "PAY_TO_BANK",
+  RECEIVE_FROM_BANK = "RECEIVE_FROM_BANK",
+}

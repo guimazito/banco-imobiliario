@@ -1,0 +1,31 @@
+FROM node:18.18 AS build
+
+WORKDIR /appbuild
+
+COPY package.json .
+COPY package-lock.json .
+COPY tsconfig.json .
+COPY ./src ./src
+COPY ./prisma ./prisma
+
+RUN npm ci
+RUN npm run build
+
+FROM node:18.18-slim
+
+WORKDIR /app
+
+RUN apt-get update -y && apt-get install -y openssl
+
+COPY --from=build /appbuild/dist ./dist
+COPY --from=build /appbuild/package.json .
+COPY --from=build /appbuild/package-lock.json .
+COPY --from=build /appbuild/node_modules ./node_modules
+COPY --from=build /appbuild/prisma ./prisma
+COPY .env .
+
+RUN npm ci --omit=dev
+
+EXPOSE 3000
+
+CMD npx prisma migrate deploy && npm run seed && npm start
