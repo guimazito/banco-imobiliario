@@ -44,7 +44,6 @@ services:
       - '8080:8080'
     networks:
       - banco_imobiliario_network
-    command: sh -c "npm install && npm run dev"
 
   nginx:
     image: nginx:1.25-alpine
