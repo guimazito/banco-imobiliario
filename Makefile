@@ -14,7 +14,6 @@ build:
 	$(DOCKER_COMPOSE) -f docker-compose.yml up -d --build
 
 build-production:
-	$(DOCKER_COMPOSE) down -v
 	$(DOCKER_COMPOSE) -f docker-compose.production.yml up -d --build
 
 down:
