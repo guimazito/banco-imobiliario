@@ -4,11 +4,13 @@ import { GameStatus } from "./resources/game/game.constants";
 import { PlayerStatus, PlayerIcon } from "./resources/player/player.constants";
 import { TransactionType } from "./resources/transaction/transaction.constants";
 import { PlayerProfileConstants } from './resources/playerProfile/playerProfile.constants';
-import { profile } from "console";
 
 dotenv.config();
 
-const HOST = process.env.HOST || "localhost";
+const HOST =
+  process.env.NODE_ENV === "production"
+    ? "http://srv1157706.hstgr.cloud"
+    : process.env.HOST || "localhost";
 const PORT = process.env.PORT || "3000";
 
 const docSwagger = {
