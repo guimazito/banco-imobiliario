@@ -4,11 +4,11 @@ import router from "./router/index";
 import cookieParser from "cookie-parser";
 import { setCookieLanguage } from "./middlewares/setCookieLanguage";
 import session from "express-session";
-import { v4 as uuidv4 } from "uuid";
 import swaggerUi from "swagger-ui-express";
 import swaggerFile from "./output-swagger.json";
 import cors from "cors";
 import { WebSocketServer } from "ws";
+import crypto from "crypto";
 
 declare global {
   namespace Express {
@@ -38,7 +38,7 @@ app.use(cookieParser());
 app.use(setCookieLanguage);
 app.use(
   session({
-    genid: () => uuidv4(),
+    genid: () => crypto.randomUUID(),
     secret: process.env.SECRET_KEY ?? "minha-chave-segura",
     resave: true,
     saveUninitialized: true,
