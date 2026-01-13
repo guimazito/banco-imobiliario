@@ -25,6 +25,9 @@ clear-db:
 seed:
 	$(DOCKER_COMPOSE) exec banco_imobiliario_backend npx ts-node prisma/seed.ts
 
+seed-production:
+	$(DOCKER_COMPOSE) exec banco_imobiliario_backend node dist/prisma/seed.js
+
 logs-%:
 	docker logs -f banco_imobiliario_$*
 
