@@ -6,14 +6,14 @@ endif
 up:
 	$(DOCKER_COMPOSE) -f docker-compose.yml up -d --remove-orphans
 
-up-production:
+up-prod:
 	$(DOCKER_COMPOSE) -f docker-compose.production.yml up -d --remove-orphans
 
 build:
 	$(DOCKER_COMPOSE) down -v
 	$(DOCKER_COMPOSE) -f docker-compose.yml up -d --build
 
-build-production:
+build-prod:
 	$(DOCKER_COMPOSE) -f docker-compose.production.yml up -d --build
 
 down:
@@ -25,7 +25,7 @@ clear-db:
 seed:
 	$(DOCKER_COMPOSE) exec banco_imobiliario_backend npx ts-node prisma/seed.ts
 
-seed-production:
+seed-prod:
 	$(DOCKER_COMPOSE) exec banco_imobiliario_backend node dist/prisma/seed.js
 
 logs-%:
@@ -46,4 +46,4 @@ swagger:
 	$(DOCKER_COMPOSE) exec banco_imobiliario_backend npx ts-node src/swagger.ts
 
 swagger-prod:
-	$(DOCKER_COMPOSE) exec banco_imobiliario_backend bash -c "NODE_ENV=production npx ts-node src/swagger.ts && NODE_ENV=production node scripts/generate-swagger.js"
+	$(DOCKER_COMPOSE) exec banco_imobiliario_backend bash -c "NODE_ENV=production node dist/src/swagger.js && NODE_ENV=production node scripts/generate-swagger.js"
