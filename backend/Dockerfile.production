@@ -7,6 +7,7 @@ COPY package-lock.json .
 COPY tsconfig.json .
 COPY ./src ./src
 COPY ./prisma ./prisma
+COPY ./scripts ./scripts
 
 RUN npm ci
 RUN npm run build
@@ -22,6 +23,7 @@ COPY --from=build /appbuild/package.json .
 COPY --from=build /appbuild/package-lock.json .
 COPY --from=build /appbuild/node_modules ./node_modules
 COPY --from=build /appbuild/prisma ./prisma
+COPY --from=build /appbuild/scripts ./scripts
 COPY .env .
 
 RUN npm ci --omit=dev
