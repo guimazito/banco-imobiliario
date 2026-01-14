@@ -9,7 +9,7 @@ dotenv.config();
 
 const HOST =
   process.env.NODE_ENV === "production"
-    ? "http://srv1157706.hstgr.cloud"
+    ? "http://inovax.cloud"
     : process.env.HOST || "localhost";
 const PORT = process.env.PORT || "3000";
 
@@ -163,6 +163,10 @@ const docSwagger = {
 };
 
 const outputSwagger = "./output-swagger.json";
-const router = ["./router/index.ts"];
+const router = [
+  process.env.NODE_ENV === "production"
+    ? "./dist/src/router/index.js"
+    : "./router/index.ts",
+];
 
 swaggerAutogen(outputSwagger, router, docSwagger);
