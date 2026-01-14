@@ -4,7 +4,7 @@ const swagger = require('../dist/src/output-swagger.json');
 const isProd = process.env.NODE_ENV === 'production';
 
 swagger.host = isProd
-  ? 'inovax.cloud'
+  ? 'inovax.cloud:3000'
   : 'localhost:3000';
 
 swagger.schemes = isProd ? ['http'] : ['http'];
