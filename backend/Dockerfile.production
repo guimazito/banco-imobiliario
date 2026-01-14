@@ -10,7 +10,9 @@ COPY ./prisma ./prisma
 COPY ./scripts ./scripts
 
 RUN npm ci
-RUN npm run build
+RUN npm run build \
+	&& NODE_ENV=production node dist/src/swagger.js \
+	&& NODE_ENV=production node scripts/generate-swagger.js
 
 FROM node:18.18-slim
 
