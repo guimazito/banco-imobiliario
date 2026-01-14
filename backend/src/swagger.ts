@@ -162,14 +162,7 @@ const docSwagger = {
   },
 };
 
-const outputSwagger = 
-  process.env.NODE_ENV === "production"
-    ? "./dist/src/output-swagger.json"
-    : "./output-swagger.json";
-const router = [
-  process.env.NODE_ENV === "production"
-    ? "./dist/src/router/index.js"
-    : "./router/index.ts",
-];
+const outputSwagger = './output-swagger.json';
+const router = ['./router/index.ts'];
 
 swaggerAutogen(outputSwagger, router, docSwagger);
