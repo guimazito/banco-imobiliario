@@ -74,8 +74,12 @@ wss.on("connection", (ws) => {
   );
 });
 
-app.use("/api", swaggerUi.serve, swaggerUi.setup(swaggerFile));
+
+// Rotas reais da API primeiro
 app.use(router);
+
+// Swagger UI apenas em /api/docs
+app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(swaggerFile));
 
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
