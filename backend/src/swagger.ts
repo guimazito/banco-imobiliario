@@ -9,7 +9,7 @@ dotenv.config();
 
 const HOST =
   process.env.NODE_ENV === "production"
-    ? "http://inovax.cloud"
+    ? "inovax.cloud/banco-imobiliario/api"
     : process.env.HOST || "localhost";
 const PORT = process.env.PORT || "3000";
 
