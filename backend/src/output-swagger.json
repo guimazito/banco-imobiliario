@@ -5,7 +5,7 @@
     "description": "Documentação da API Banco Imobiliário",
     "version": "1.0.0"
   },
-  "host": "inovax.cloud/api",
+  "host": "inovax.cloud/banco-imobiliario/api",
   "basePath": "/",
   "schemes": [
     "https"
