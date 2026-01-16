@@ -6,7 +6,7 @@
     "version": "1.0.0"
   },
   "host": "inovax.cloud",
-  "basePath": "/banco-imobiliario/api/v1",
+  "basePath": "/api",
   "schemes": [
     "https"
   ],
