@@ -4,10 +4,14 @@ const swagger = require('../dist/src/output-swagger.json');
 const isProd = process.env.NODE_ENV === 'production';
 
 swagger.host = isProd
-  ? 'inovax.cloud:3000'
+  ? 'inovax.cloud'
   : 'localhost:3000';
 
-swagger.schemes = isProd ? ['http'] : ['http'];
+swagger.basePath = isProd
+  ? '/api'
+  : '/api';
+
+swagger.schemes = isProd ? ['https'] : ['http'];
 
 fs.writeFileSync(
   './dist/src/output-swagger.json',
