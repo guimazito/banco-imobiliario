@@ -9,7 +9,6 @@ import {
   CardActions,
   TextField,
   Typography,
-  Link,
   Alert,
 } from "@mui/material";
 import { toast } from "react-toastify";
@@ -113,9 +112,12 @@ export default function SignupPage() {
         <CardActions sx={{ justifyContent: "center" }}>
           <Typography variant="body2">
             Já tem uma conta?{" "}
-            <Link href="/" underline="hover">
+            <Button
+              variant="text"
+              onClick={() => router.push("/")}
+            >
               Entrar
-            </Link>
+            </Button>
           </Typography>
         </CardActions>
       </Card>
