@@ -10,7 +10,6 @@ import {
   CardActions,
   TextField,
   Typography,
-  Link,
   Alert,
 } from "@mui/material";
 import { useLogin } from '@/app/hooks/useAuth';
@@ -92,7 +91,6 @@ export default function LoginPage() {
             Não tem uma conta?{" "}
             <Button 
               variant="text"
-              underline="hover"
               onClick={() => router.push("/signup")}
             >
               Cadastre-se
