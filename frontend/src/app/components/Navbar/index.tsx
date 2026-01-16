@@ -34,7 +34,7 @@ export function Navbar(props: Props) {
   const pathname = usePathname();
   const drawerWidth = 240;
   let navItems: string[];
-  if ((pathname === "/home") || (pathname === "/about") || (pathname === "/contact")) {
+  if ((pathname === "/home/") || (pathname === "/about/") || (pathname === "/contact/")) {
     navItems = ["Home", "Sobre", "Contato", "Sair"];
   } else {
     navItems = ["Home", "Transações", "Propriedades", "Balanço Final"];
@@ -54,35 +54,40 @@ export function Navbar(props: Props) {
 
   const handleNavigation = (item: string) => {
     if (item === "Home") {
-      router.push("/home");
+      router.push("/home/");
     } else if (item === "Transações") {
-      router.push(`/game/${gameId}/transaction`);
+      router.push(`/game/${gameId}/transaction/`);
     } else if (item === "Propriedades") {
-      router.push(`/game/${gameId}/properties`);
+      router.push(`/game/${gameId}/properties/`);
     } else if (item === "Balanço Final") {
-      router.push(`/game/${gameId}/final-balance`);
+      router.push(`/game/${gameId}/final-balance/`);
     } else if (item === "Sair") {
       handleLogout();
     } else if (item === "Sobre") {
-      router.push("/about");
+      router.push("/about/");
     } else if (item === "Contato") {
-      router.push("/contact");
+      router.push("/contact/");
     }
   };
 
+  const basePath = "/banco-imobiliario";
+  const cleanPath = pathname.startsWith(basePath)
+    ? pathname.slice(basePath.length)
+    : pathname;
+
   const getPageTitle = () => {
-    switch (pathname) {
-      case `/game/${gameId}/transaction`:
+    switch (cleanPath) {
+      case `/game/${gameId}/transaction/`:
         return "TRANSAÇÕES";
-      case `/game/${gameId}/properties`:
+      case `/game/${gameId}/properties/`:
         return "PROPRIEDADES";
-      case `/game/${gameId}/final-balance`:
+      case `/game/${gameId}/final-balance/`:
         return "BALANÇO FINAL";
-      case "/about":
+      case "/about/":
         return "SOBRE";
-      case "/contact":
+      case "/contact/":
         return "CONTATO";
-      case "/home":
+      case "/home/":
         return "HOME";
       default:
         return "BANCO IMOBILIÁRIO APP";
