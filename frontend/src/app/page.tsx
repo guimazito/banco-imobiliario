@@ -90,9 +90,13 @@ export default function LoginPage() {
         <CardActions sx={{ justifyContent: "center" }}>
           <Typography variant="body2">
             Não tem uma conta?{" "}
-            <Link href="/signup" underline="hover">
+            <Button 
+              variant="text"
+              underline="hover"
+              onClick={() => router.push("/signup")}
+            >
               Cadastre-se
-            </Link>
+            </Button>
           </Typography>
         </CardActions>
       </Card>
