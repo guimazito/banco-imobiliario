@@ -11,7 +11,6 @@ import {
   TextField,
 } from "@mui/material";
 import {
-  useGetGamePlayerId,
   useGetGamePlayerByPlayerId,
 } from "@/app/hooks/useGamePlayers";
 import { useState } from "react";
