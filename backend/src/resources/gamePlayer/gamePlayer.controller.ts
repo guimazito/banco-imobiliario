@@ -9,6 +9,7 @@ import {
   getGamePlayerByPlayerId,
   updateGamePlayer,
   getGamePlayerRankingByGameId,
+  getGamePlayerUsedAvatarByGameId
 } from "./gamePlayer.service";
 
 const index = async (req: Request, res: Response) => {
@@ -234,6 +235,37 @@ const listGamePlayerRankingByGameId = async (req: Request, res: Response) => {
   }
 };
 
+const listGamePlayerUsedAvatarByGameId = async (req: Request, res: Response) => {
+  /*
+    #swagger.summary = 'Get used avatars in a game by Game ID'
+    #swagger.parameters['gameId'] = {
+        in: 'path',
+        description: 'Game ID',
+        required: true,
+        type: 'string'
+    }
+    #swagger.responses[200] = {
+        description: 'List of used avatars retrieved successfully',
+        schema: { type: 'array', items: { type: 'string' } }
+    }
+    #swagger.responses[404] = {
+        description: 'Game Not Found',
+        schema: { $ref: '#/definitions/Error' }
+    }
+    #swagger.responses[500] = {
+        description: 'Internal Server Error',
+        schema: { $ref: '#/definitions/Error' }
+    }
+    */
+  try {
+    const { gameId } = req.params;
+    const usedAvatars = await getGamePlayerUsedAvatarByGameId(gameId);
+    res.status(StatusCodes.OK).json(usedAvatars);
+  } catch (err) {
+    gamePlayerError(res, err);
+  }
+};
+
 export default {
   index,
   create,
@@ -242,4 +274,5 @@ export default {
   listGamePlayerByGameId,
   listGamePlayerByPlayerId,
   listGamePlayerRankingByGameId,
+  listGamePlayerUsedAvatarByGameId
 };

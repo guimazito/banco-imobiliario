@@ -21,6 +21,12 @@ router.get(
 );
 
 router.get(
+    "/used-avatars/:gameId",
+    validate(gamePlayerIdSchema),
+    gamePlayerController.listGamePlayerUsedAvatarByGameId
+);
+
+router.get(
     "/player/:playerId",
     validate(gamePlayerIdSchema),
     gamePlayerController.listGamePlayerByPlayerId
