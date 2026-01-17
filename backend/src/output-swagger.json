@@ -5,13 +5,13 @@
     "description": "Documentação da API Banco Imobiliário",
     "version": "1.0.0"
   },
-  "host": "inovax.cloud",
-  "basePath": "/api",
+  "host": "localhost:3000",
+  "basePath": "/",
   "schemes": [
-    "https"
+    "http"
   ],
   "paths": {
-    "/v1/auth/signup": {
+    "/api/v1/auth/signup": {
       "post": {
         "tags": [
           "Authentication"
@@ -49,7 +49,7 @@
         }
       }
     },
-    "/v1/auth/login": {
+    "/api/v1/auth/login": {
       "post": {
         "tags": [
           "Authentication"
@@ -110,7 +110,7 @@
         }
       }
     },
-    "/v1/auth/logout": {
+    "/api/v1/auth/logout": {
       "post": {
         "tags": [
           "Authentication"
@@ -139,7 +139,7 @@
         }
       }
     },
-    "/v1/auth/reset-password": {
+    "/api/v1/auth/reset-password": {
       "post": {
         "tags": [
           "Authentication"
@@ -177,7 +177,7 @@
         }
       }
     },
-    "/v1/players/": {
+    "/api/v1/players/": {
       "get": {
         "tags": [
           "Players"
@@ -236,7 +236,7 @@
         }
       }
     },
-    "/v1/players/username/{username}": {
+    "/api/v1/players/username/{username}": {
       "get": {
         "tags": [
           "Players"
@@ -274,7 +274,7 @@
         }
       }
     },
-    "/v1/players/{id}": {
+    "/api/v1/players/{id}": {
       "put": {
         "tags": [
           "Players"
@@ -325,7 +325,7 @@
         }
       }
     },
-    "/v1/transactions/": {
+    "/api/v1/transactions/": {
       "get": {
         "tags": [
           "Transactions"
@@ -384,7 +384,7 @@
         }
       }
     },
-    "/v1/transactions/{id}": {
+    "/api/v1/transactions/{id}": {
       "get": {
         "tags": [
           "Transactions"
@@ -421,7 +421,7 @@
         }
       }
     },
-    "/v1/transactions/game/{gameId}": {
+    "/api/v1/transactions/game/{gameId}": {
       "get": {
         "tags": [
           "Transactions"
@@ -458,7 +458,7 @@
         }
       }
     },
-    "/v1/games/": {
+    "/api/v1/games/": {
       "get": {
         "tags": [
           "Games"
@@ -517,7 +517,7 @@
         }
       }
     },
-    "/v1/games/{id}": {
+    "/api/v1/games/{id}": {
       "get": {
         "tags": [
           "Games"
@@ -604,7 +604,7 @@
         }
       }
     },
-    "/v1/games/invite/{invite}": {
+    "/api/v1/games/invite/{invite}": {
       "get": {
         "tags": [
           "Games"
@@ -642,7 +642,7 @@
         }
       }
     },
-    "/v1/game-players/": {
+    "/api/v1/game-players/": {
       "get": {
         "tags": [
           "GamePlayers"
@@ -701,7 +701,7 @@
         }
       }
     },
-    "/v1/game-players/game/{gameId}": {
+    "/api/v1/game-players/game/{gameId}": {
       "get": {
         "tags": [
           "GamePlayers"
@@ -739,7 +739,63 @@
         }
       }
     },
-    "/v1/game-players/player/{playerId}": {
+    "/api/v1/game-players/used-avatars/{gameId}": {
+      "get": {
+        "tags": [
+          "GamePlayers"
+        ],
+        "summary": "Get used avatars in a game by Game ID",
+        "description": "",
+        "parameters": [
+          {
+            "name": "gameId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Game ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of used avatars retrieved successfully",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "example": "array"
+                },
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "example": "string"
+                    }
+                  }
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "404": {
+            "description": "Game Not Found",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/game-players/player/{playerId}": {
       "get": {
         "tags": [
           "GamePlayers"
@@ -777,7 +833,7 @@
         }
       }
     },
-    "/v1/game-players/ranking/{gameId}": {
+    "/api/v1/game-players/ranking/{gameId}": {
       "get": {
         "tags": [
           "GamePlayers"
@@ -815,7 +871,7 @@
         }
       }
     },
-    "/v1/game-players/{gameId}/{playerId}": {
+    "/api/v1/game-players/{gameId}/{playerId}": {
       "get": {
         "tags": [
           "GamePlayers"
@@ -916,7 +972,7 @@
         }
       }
     },
-    "/v1/player-profiles/": {
+    "/api/v1/player-profiles/": {
       "get": {
         "tags": [
           "PlayerProfiles"
@@ -975,7 +1031,7 @@
         }
       }
     },
-    "/v1/player-profiles/{id}": {
+    "/api/v1/player-profiles/{id}": {
       "get": {
         "tags": [
           "PlayerProfiles"

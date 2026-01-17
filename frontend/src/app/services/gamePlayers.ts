@@ -15,6 +15,11 @@ export async function getGamePlayerByGameId(gameId: string): Promise<GamePlayer 
   return data;
 }
 
+export async function getGamePlayerUsedAvatarByGameId(gameId: string): Promise<string[]> {
+  const { data } = await api.get<string[]>(`/game-players/used-avatars/${gameId}`);
+  return data;
+}
+
 export async function getGamePlayerByPlayerId(playerId: string): Promise<GamePlayer[]> {
   const { data } = await api.get<GamePlayer[]>(`/game-players/player/${playerId}`);
   return data;
