@@ -49,6 +49,7 @@ const iconArray: PlayerIcon[] = [
 export default function HomePage() {
   const router = useRouter();
   const { player } = useAuth();
+  console.log("Player no HomePage:", player);
   const { setGameId } = useGameId();
   const playerId = player?.playerId;
   const playerStatus: PlayerStatus = "IDLE";
@@ -60,8 +61,9 @@ export default function HomePage() {
   const { data: recentGames } = useGetGamePlayerByPlayerId(
     typeof playerId === "string" ? playerId : "",
   );
+  const [createMode, setCreateMode] = useState<"new" | "join" | null>(null);
   // Avatar
-  const [playerIcon, setPlayerIcon] = useState<PlayerIcon>("ACCOUNT_CIRCLE");
+  const [playerIcon, setPlayerIcon] = useState<PlayerIcon>();
   const [usedAvatars, setUsedAvatars] = useState<PlayerIcon[]>([]);
   const iconMap: Record<PlayerIcon, JSX.Element> = {
     PIX: <PixIcon fontSize="large" color="primary" />,
@@ -73,31 +75,36 @@ export default function HomePage() {
     MONETIZATION: <MonetizationOnIcon fontSize="large" color="primary" />,
   };
 
-  const handleCreateGame = async () => {
+  const handleCreateGame = () => {
     if (!playerId) {
       toast.error("Você precisa estar logado para criar uma partida.");
       return;
     }
-    try {
-      const game = await createGame({ status: "IN_PROGRESS" });
-      await createGamePlayer({
-        gameId: game.id,
-        playerId: typeof playerId === "string" ? playerId : "",
-        playerMoney: 25000,
-        playerStatus: playerStatus,
-        playerIcon: playerIcon,
-      });
-      setGameId(game.id);
-      router.push(`/game/${game.id}/transaction`);
-    } catch {}
+    setCreateMode("new");
+    setIconModalOpen(true);
   };
 
   const handleJoinGame = async (e: React.FormEvent) => {
     e.preventDefault();
+    setPlayerIcon(undefined);
     if (!getGameByInvite?.id) {
       toast.error("Código de convite inválido ou partida não encontrada.");
       return;
     }
+    const { getGamePlayerTotalCountByGameId } = await import(
+      "@/app/services/gamePlayers"
+    );
+    const totalPlayers = await getGamePlayerTotalCountByGameId(
+      getGameByInvite.id,
+    );
+    if (totalPlayers >= 6) {
+      toast.error("A partida já atingiu o número máximo de jogadores.");
+      return;
+    }
+    const { getGamePlayerUsedAvatarByGameId } =
+      await import("@/app/services/gamePlayers");
+    const avatars = await getGamePlayerUsedAvatarByGameId(getGameByInvite.id);
+    setUsedAvatars(avatars as PlayerIcon[]);
     try {
       const { getGamePlayerId } = await import("@/app/services/gamePlayers");
       const existing = await getGamePlayerId(
@@ -112,18 +119,46 @@ export default function HomePage() {
     } catch {
       toast.error("Erro ao verificar jogador na partida.");
     }
-  };
+  };  
 
   const handleConfirmIcon = async () => {
     setIconModalOpen(false);
+    if (!playerIcon) {
+      toast.error("Selecione um avatar antes de confirmar.");
+      setCreateMode(null);
+      return;
+    }
+    if (createMode === "new") {
+      try {
+        const game = await createGame({ status: "IN_PROGRESS" });
+        await createGamePlayer({
+          gameId: game.id,
+          playerId: typeof playerId === "string" ? playerId : "",
+          playerMoney: 25000,
+          playerStatus: playerStatus,
+          playerIcon: playerIcon,
+        });
+        setGameId(game.id);
+        setCreateMode(null);
+        router.push(`/game/${game.id}/transaction`);
+      } catch {
+        toast.error("Erro ao criar partida.");
+        setCreateMode(null);
+      }
+      return;
+    }
     if (!getGameByInvite?.id) {
       toast.error("Partida não encontrada.");
+      setCreateMode(null);
       return;
     }
     const { getGamePlayerUsedAvatarByGameId } =
       await import("@/app/services/gamePlayers");
     const avatars = await getGamePlayerUsedAvatarByGameId(getGameByInvite.id);
-    setUsedAvatars(avatars as PlayerIcon[]);
+    if ((avatars as PlayerIcon[]).includes(playerIcon)) {
+      toast.error("Este ícone já está sendo usado por outro jogador.");
+      return;
+    }
     try {
       await createGamePlayer({
         gameId: getGameByInvite.id,
@@ -133,9 +168,11 @@ export default function HomePage() {
         playerIcon: playerIcon,
       });
       setGameId(getGameByInvite.id);
+      setCreateMode(null);
       router.push(`/game/${getGameByInvite.id}/transaction`);
     } catch {
       toast.error("Erro ao entrar na partida.");
+      setCreateMode(null);
     }
   };
 
@@ -274,29 +311,44 @@ export default function HomePage() {
             {iconArray.map((iconName) => {
               const isUsed = usedAvatars.includes(iconName);
               return (
-                <Tooltip
+                <Box
                   key={iconName}
-                  title={isUsed ? "Já utilizado" : iconName}
-                  arrow
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                  }}
                 >
-                  <span>
-                    <IconButton
-                      color={playerIcon === iconName ? "primary" : "default"}
-                      onClick={() => !isUsed && setPlayerIcon(iconName)}
-                      disabled={isUsed}
-                      sx={{
-                        cursor: isUsed ? "not-allowed" : "pointer",
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                      }}
+                  <Tooltip title={isUsed ? "Em uso" : iconName} arrow>
+                    <span>
+                      <IconButton
+                        color={playerIcon === iconName ? "primary" : "default"}
+                        onClick={() => !isUsed && setPlayerIcon(iconName)}
+                        disabled={isUsed}
+                        sx={{
+                          cursor: isUsed ? "not-allowed" : "pointer",
+                          display: "flex",
+                          justifyContent: "center",
+                          alignItems: "center",
+                        }}
+                      >
+                        {React.cloneElement(iconMap[iconName], {
+                          color:
+                            playerIcon === iconName ? "primary" : "disabled",
+                        })}
+                      </IconButton>
+                    </span>
+                  </Tooltip>
+                  {isUsed && (
+                    <Typography
+                      variant="caption"
+                      color="error"
+                      sx={{ mt: 0.5 }}
                     >
-                      {React.cloneElement(iconMap[iconName], {
-                        color: playerIcon === iconName ? "primary" : "disabled",
-                      })}
-                    </IconButton>
-                  </span>
-                </Tooltip>
+                      Em uso
+                    </Typography>
+                  )}
+                </Box>
               );
             })}
           </Box>
@@ -313,6 +365,7 @@ export default function HomePage() {
             onClick={handleConfirmIcon}
             variant="contained"
             color="primary"
+            disabled={!playerIcon}
           >
             Confirmar
           </Button>
