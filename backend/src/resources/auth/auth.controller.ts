@@ -4,19 +4,18 @@ import { StatusCodes } from "http-status-codes";
 import {
   signUp,
   logIn,
-  forgotPassword,
   resetPassword
 } from "./auth.service";
 import {
   SignUpDto,
   LoginDto,
-  ForgotPasswordDto,
   ResetPasswordDto,
 } from "./auth.types";
 
 const signup = async (req: Request, res: Response) => {
   /*
     #swagger.summary = 'Register a new player'
+    #swagger.security = [{ "bearerAuth": [] }]
     #swagger.parameters['body'] = {
         in: 'body',
         schema: { $ref: '#/definitions/SignUpDto' }
@@ -82,6 +81,7 @@ const login = async (req: Request, res: Response) => {
 const logout = async (req: Request, res: Response) => {
   /*
     #swagger.summary = 'Log out a player'
+    #swagger.security = [{ "bearerAuth": [] }]
     #swagger.responses[200] = {
         description: 'Player logged out successfully.',
         schema: { $ref: '#/definitions/SuccessMessage' }
@@ -95,7 +95,6 @@ const logout = async (req: Request, res: Response) => {
         schema: { $ref: '#/definitions/Error' }
     }
     */
-  // Since JWT is stateless, logout can be handled on the client side by deleting the token.
   try {
     req.session.destroy((err) => {
       if (err) {
