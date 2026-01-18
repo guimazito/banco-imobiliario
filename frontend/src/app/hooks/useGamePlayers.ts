@@ -7,7 +7,8 @@ import {
     getGamePlayerByGameId,
     getGamePlayerByPlayerId,
     getGamePlayerRankingByGameId,
-    getGamePlayerUsedAvatarByGameId
+    getGamePlayerUsedAvatarByGameId,
+    getGamePlayerTotalCountByGameId
 } from "@/app/services/gamePlayers";
 import { GamePlayer } from "@/app/types/gamePlayers";
 
@@ -29,6 +30,13 @@ export function useGetGamePlayerUsedAvatarByGameId(gameId: string) {
     return useQuery({
         queryKey: ["gamePlayerUsedAvatars", gameId],
         queryFn: () => getGamePlayerUsedAvatarByGameId(gameId),
+    });
+}
+
+export function useGetGamePlayerTotalCountByGameId(gameId: string) {
+    return useQuery({
+        queryKey: ["gamePlayerTotalCount", gameId],
+        queryFn: () => getGamePlayerTotalCountByGameId(gameId),
     });
 }
 
