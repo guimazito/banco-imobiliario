@@ -14,7 +14,7 @@ const prisma = new PrismaClient();
 export async function signUp(data: SignUpDto): Promise<Player> {
   const hashedPassword = await hash(
     data.password,
-    process.env.ROUNDS_BCRYPT ? parseInt(process.env.ROUNDS_BCRYPT) : 10
+    process.env.ROUNDS_BCRYPT ? parseInt(process.env.ROUNDS_BCRYPT) : 10,
   );
 
   const newPlayer = await prisma.player.create({
@@ -44,16 +44,20 @@ export async function logIn(data: LoginDto): Promise<string> {
   }
 
   const token = jwt.sign(
-    { playerId: player.id, username: player.username },
+    {
+      playerId: player.id,
+      username: player.username,
+      profileId: player.profileId,
+    },
     process.env.JWT_SECRET as string,
-    { expiresIn: "1d" }
+    { expiresIn: "1d" },
   );
 
   return token;
 }
 
 export async function forgotPassword(
-  data: ForgotPasswordDto
+  data: ForgotPasswordDto,
 ): Promise<string | null> {
   const player = await prisma.player.findUnique({
     where: { username: data.username },
@@ -69,7 +73,7 @@ export async function forgotPassword(
     const resetToken = jwt.sign(
       resetPayload,
       process.env.JWT_SECRET as string,
-      { expiresIn: "1h" }
+      { expiresIn: "1h" },
     );
 
     return resetToken;
@@ -82,7 +86,7 @@ export async function resetPassword(data: ResetPasswordDto): Promise<boolean> {
   try {
     const decodedToken = jwt.verify(
       data.token,
-      process.env.JWT_SECRET as string
+      process.env.JWT_SECRET as string,
     ) as any;
 
     if (decodedToken.purpose !== "password-reset") {
@@ -99,7 +103,7 @@ export async function resetPassword(data: ResetPasswordDto): Promise<boolean> {
 
     const hashedPassword = await hash(
       data.newPassword,
-      process.env.ROUNDS_BCRYPT ? parseInt(process.env.ROUNDS_BCRYPT) : 10
+      process.env.ROUNDS_BCRYPT ? parseInt(process.env.ROUNDS_BCRYPT) : 10,
     );
 
     await prisma.player.update({
