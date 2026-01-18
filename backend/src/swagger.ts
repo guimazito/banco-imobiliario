@@ -19,6 +19,14 @@ const docSwagger = {
     description: "Documentação da API Banco Imobiliário",
     version: "1.0.0",
   },
+  securityDefinitions: {
+    bearerAuth: {
+      type: 'apiKey',
+      name: 'Authorization',
+      in: 'header',
+      description: 'Insira o token JWT no formato: Bearer {token}',
+    },
+  },
   host: `${HOST}:${PORT}`,
   definitions: {
     SignUpDto: {
