@@ -9,7 +9,8 @@ import {
   getGamePlayerByPlayerId,
   updateGamePlayer,
   getGamePlayerRankingByGameId,
-  getGamePlayerUsedAvatarByGameId
+  getGamePlayerUsedAvatarByGameId,
+  getGamePlayerTotalCountByGameId
 } from "./gamePlayer.service";
 
 const index = async (req: Request, res: Response) => {
@@ -266,6 +267,37 @@ const listGamePlayerUsedAvatarByGameId = async (req: Request, res: Response) => 
   }
 };
 
+const listGamePlayerTotalCountByGameId = async (req: Request, res: Response) => {
+  /*
+    #swagger.summary = 'Get total count of game players by Game ID'
+    #swagger.parameters['gameId'] = {
+        in: 'path',
+        description: 'Game ID',
+        required: true,
+        type: 'string'
+    }
+    #swagger.responses[200] = {
+        description: 'Total count of game players retrieved successfully',
+        schema: { type: 'number' }
+    }
+    #swagger.responses[404] = {
+        description: 'Game Not Found',
+        schema: { $ref: '#/definitions/Error' }
+    }
+    #swagger.responses[500] = {
+        description: 'Internal Server Error',
+        schema: { $ref: '#/definitions/Error' }
+    }
+    */
+  try {
+    const { gameId } = req.params;
+    const totalCount = await getGamePlayerTotalCountByGameId(gameId);
+    res.status(StatusCodes.OK).json(totalCount);
+  } catch (err) {
+    gamePlayerError(res, err);
+  }
+};
+
 export default {
   index,
   create,
@@ -274,5 +306,6 @@ export default {
   listGamePlayerByGameId,
   listGamePlayerByPlayerId,
   listGamePlayerRankingByGameId,
-  listGamePlayerUsedAvatarByGameId
+  listGamePlayerUsedAvatarByGameId,
+  listGamePlayerTotalCountByGameId
 };
