@@ -795,6 +795,53 @@
         }
       }
     },
+    "/api/v1/game-players/count/{gameId}": {
+      "get": {
+        "tags": [
+          "GamePlayers"
+        ],
+        "summary": "Get total count of game players by Game ID",
+        "description": "",
+        "parameters": [
+          {
+            "name": "gameId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Game ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Total count of game players retrieved successfully",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "example": "number"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "404": {
+            "description": "Game Not Found",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
     "/api/v1/game-players/player/{playerId}": {
       "get": {
         "tags": [
