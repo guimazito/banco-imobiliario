@@ -49,7 +49,6 @@ const iconArray: PlayerIcon[] = [
 export default function HomePage() {
   const router = useRouter();
   const { player } = useAuth();
-  console.log("Player no HomePage:", player);
   const { setGameId } = useGameId();
   const playerId = player?.playerId;
   const playerStatus: PlayerStatus = "IDLE";
@@ -82,6 +81,7 @@ export default function HomePage() {
     }
     setCreateMode("new");
     setIconModalOpen(true);
+    setPlayerIcon(undefined);
   };
 
   const handleJoinGame = async (e: React.FormEvent) => {
