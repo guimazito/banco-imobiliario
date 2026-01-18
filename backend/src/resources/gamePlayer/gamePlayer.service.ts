@@ -97,3 +97,11 @@ export const getGamePlayerUsedAvatarByGameId = async (
 
   return usedAvatars.map((gp) => gp.playerIcon);
 }
+
+export const getGamePlayerTotalCountByGameId = async (
+  gameId: string
+): Promise<number> => {
+  return await prisma.gamePlayer.count({
+    where: { gameId },
+  });
+};

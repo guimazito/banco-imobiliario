@@ -27,6 +27,12 @@ router.get(
 );
 
 router.get(
+    "/count/:gameId",
+    validate(gamePlayerIdSchema),
+    gamePlayerController.listGamePlayerTotalCountByGameId
+);
+
+router.get(
     "/player/:playerId",
     validate(gamePlayerIdSchema),
     gamePlayerController.listGamePlayerByPlayerId
