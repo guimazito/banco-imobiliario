@@ -23,14 +23,28 @@ type AuthContextType = {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
+function base64UrlDecode(str: string) {
+  str = str.replace(/-/g, '+').replace(/_/g, '/');
+  while (str.length % 4) str += '=';
+  const decoded = typeof atob === 'function'
+    ? atob(str)
+    : Buffer.from(str, 'base64').toString('binary');
+  try {
+    return decodeURIComponent(
+      decoded
+        .split('')
+        .map(c => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
+        .join('')
+    );
+  } catch {
+    return decoded;
+  }
+}
+
 function decodeJwt(token: string): Player | null {
   try {
     const payload = token.split(".")[1];
-    const json = JSON.parse(
-      typeof atob === "function"
-        ? atob(payload)
-        : Buffer.from(payload, "base64").toString("utf8")
-    );
+    const json = JSON.parse(base64UrlDecode(payload));
     return json as Player;
   } catch {
     return null;
@@ -45,7 +59,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const token = getAuthToken();
     if (token) {
         const u = decodeJwt(token);
-        // Evita renderização em cascata agendando o setState
         setTimeout(() => setPlayer(u), 0);
     }
     setTimeout(() => setIsReady(true), 0);

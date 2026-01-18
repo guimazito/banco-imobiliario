@@ -46,4 +46,4 @@ swagger:
 	$(DOCKER_COMPOSE) exec banco_imobiliario_backend npx ts-node src/swagger.ts
 
 swagger-prod:
-	$(DOCKER_COMPOSE) exec banco_imobiliario_backend bash -c "NODE_ENV=production node dist/src/swagger.js && NODE_ENV=production node scripts/generate-swagger.js"
+	$(DOCKER_COMPOSE) exec banco_imobiliario_backend bash -c "NODE_ENV=production node scripts/generate-swagger.js"

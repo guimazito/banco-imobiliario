@@ -86,3 +86,22 @@ export const getGamePlayerRankingByGameId = async (
     },
   });
 };
+
+export const getGamePlayerUsedAvatarByGameId = async (
+  gameId: string
+): Promise<string[]> => {
+  const usedAvatars = await prisma.gamePlayer.findMany({
+    where: { gameId },
+    select: { playerIcon: true },
+  });
+
+  return usedAvatars.map((gp) => gp.playerIcon);
+}
+
+export const getGamePlayerTotalCountByGameId = async (
+  gameId: string
+): Promise<number> => {
+  return await prisma.gamePlayer.count({
+    where: { gameId },
+  });
+};
