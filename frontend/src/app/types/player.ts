@@ -1,7 +1,6 @@
 export interface Player {
   id: string;
   username: string;
-  password: string;
   profileId: string;
   createdAt: string;
   updatedAt: string;

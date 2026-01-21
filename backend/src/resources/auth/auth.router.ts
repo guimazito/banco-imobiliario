@@ -1,6 +1,8 @@
 import { Router } from "express";
 import authController from "./auth.controller";
+import { isAuth } from '../../middlewares/isAuth';
 import { validate } from '../../middlewares/validate';
+import { authenticateJWT } from "../../middlewares/authenticateJWT";
 import {
   signUpSchema,
   loginSchema,
@@ -23,6 +25,8 @@ router.post(
 
 router.post(
   "/logout",
+  authenticateJWT,
+  isAuth,
   authController.logout
 );
 

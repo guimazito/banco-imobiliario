@@ -16,6 +16,7 @@ import {
 const index = async (req: Request, res: Response) => {
   /*
     #swagger.summary = 'List all game players'
+    #swagger.security = [{ "bearerAuth": [] }]
     #swagger.responses[200] = {
         description: 'List of game players',
         schema: { $ref: '#/definitions/GamePlayer' }
@@ -36,6 +37,7 @@ const index = async (req: Request, res: Response) => {
 const create = async (req: Request, res: Response) => {
   /*
     #swagger.summary = 'Create a new game player'
+    #swagger.security = [{ "bearerAuth": [] }]
     #swagger.parameters['body'] = {
         in: 'body',
         schema: { $ref: '#/definitions/CreateGamePlayerDto' }
@@ -64,6 +66,7 @@ const create = async (req: Request, res: Response) => {
 const update = async (req: Request, res: Response) => {
   /*
     #swagger.summary = 'Update a game player by ID'
+    #swagger.security = [{ "bearerAuth": [] }]
     #swagger.parameters['gameId'] = {
         in: 'path',
         description: 'Game ID',
@@ -109,6 +112,7 @@ const update = async (req: Request, res: Response) => {
 const listGamePlayerByGameId = async (req: Request, res: Response) => {
   /*
     #swagger.summary = 'Get a game player by Game ID'
+    #swagger.security = [{ "bearerAuth": [] }]
     #swagger.parameters['gameId'] = {
         in: 'path',
         description: 'Game ID',
@@ -140,6 +144,7 @@ const listGamePlayerByGameId = async (req: Request, res: Response) => {
 const listGamePlayerByPlayerId = async (req: Request, res: Response) => {
   /*
     #swagger.summary = 'Get a game player by Player ID'
+    #swagger.security = [{ "bearerAuth": [] }]
     #swagger.parameters['playerId'] = {
         in: 'path',
         description: 'Player ID',
@@ -171,6 +176,7 @@ const listGamePlayerByPlayerId = async (req: Request, res: Response) => {
 const listGamePlayerById = async (req: Request, res: Response) => {
   /*
     #swagger.summary = 'Get a game player by Game ID and Player ID'
+    #swagger.security = [{ "bearerAuth": [] }]
     #swagger.parameters['gameId'] = {
         in: 'path',
         description: 'Game ID',
@@ -208,6 +214,7 @@ const listGamePlayerById = async (req: Request, res: Response) => {
 const listGamePlayerRankingByGameId = async (req: Request, res: Response) => {
   /*
     #swagger.summary = 'Get a game player ranking by Game ID'
+    #swagger.security = [{ "bearerAuth": [] }]
     #swagger.parameters['gameId'] = {
         in: 'path',
         description: 'Game ID',
@@ -239,6 +246,7 @@ const listGamePlayerRankingByGameId = async (req: Request, res: Response) => {
 const listGamePlayerUsedAvatarByGameId = async (req: Request, res: Response) => {
   /*
     #swagger.summary = 'Get used avatars in a game by Game ID'
+    #swagger.security = [{ "bearerAuth": [] }]
     #swagger.parameters['gameId'] = {
         in: 'path',
         description: 'Game ID',
@@ -270,6 +278,7 @@ const listGamePlayerUsedAvatarByGameId = async (req: Request, res: Response) => 
 const listGamePlayerTotalCountByGameId = async (req: Request, res: Response) => {
   /*
     #swagger.summary = 'Get total count of game players by Game ID'
+    #swagger.security = [{ "bearerAuth": [] }]
     #swagger.parameters['gameId'] = {
         in: 'path',
         description: 'Game ID',
