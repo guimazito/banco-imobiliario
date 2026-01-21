@@ -59,7 +59,7 @@ api.interceptors.response.use(
         typeof window !== "undefined" &&
         window.location.pathname !== "/login"
       ) {
-        window.location.replace("/login");
+        window.location.replace("/banco-imobiliario");
       }
     }
     return Promise.reject(error);
