@@ -91,20 +91,6 @@ export default function HomePage() {
       toast.error("Código de convite inválido ou partida não encontrada.");
       return;
     }
-    const { getGamePlayerTotalCountByGameId } = await import(
-      "@/app/services/gamePlayers"
-    );
-    const totalPlayers = await getGamePlayerTotalCountByGameId(
-      getGameByInvite.id,
-    );
-    if (totalPlayers >= 6) {
-      toast.error("A partida já atingiu o número máximo de jogadores.");
-      return;
-    }
-    const { getGamePlayerUsedAvatarByGameId } =
-      await import("@/app/services/gamePlayers");
-    const avatars = await getGamePlayerUsedAvatarByGameId(getGameByInvite.id);
-    setUsedAvatars(avatars as PlayerIcon[]);
     try {
       const { getGamePlayerId } = await import("@/app/services/gamePlayers");
       const existing = await getGamePlayerId(
@@ -114,12 +100,27 @@ export default function HomePage() {
       if (existing) {
         router.push(`/game/${getGameByInvite.id}/transaction`);
       } else {
+        const { getGamePlayerTotalCountByGameId } =
+          await import("@/app/services/gamePlayers");
+        const totalPlayers = await getGamePlayerTotalCountByGameId(
+          getGameByInvite.id,
+        );
+        if (totalPlayers >= 6) {
+          toast.error("A partida já atingiu o número máximo de jogadores.");
+          return;
+        }
+        const { getGamePlayerUsedAvatarByGameId } =
+          await import("@/app/services/gamePlayers");
+        const avatars = await getGamePlayerUsedAvatarByGameId(
+          getGameByInvite.id,
+        );
+        setUsedAvatars(avatars as PlayerIcon[]);
         setIconModalOpen(true);
       }
     } catch {
       toast.error("Erro ao verificar jogador na partida.");
     }
-  };  
+  };
 
   const handleConfirmIcon = async () => {
     setIconModalOpen(false);

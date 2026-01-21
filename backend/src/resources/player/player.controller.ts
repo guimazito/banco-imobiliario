@@ -11,6 +11,7 @@ import {
 const index = async (req: Request, res: Response) => {
     /*
     #swagger.summary = 'List all players'
+    #swagger.security = [{ "bearerAuth": [] }]
     #swagger.responses[200] = {
         description: 'List of players',
         schema: { $ref: '#/definitions/Player' }
@@ -31,6 +32,7 @@ const index = async (req: Request, res: Response) => {
 const create = async (req: Request, res: Response) => {
     /*
     #swagger.summary = 'Create a new player'
+    #swagger.security = [{ "bearerAuth": [] }]
     #swagger.parameters['body'] = {
         in: 'body',
         schema: { $ref: '#/definitions/CreatePlayerDto' }
@@ -59,6 +61,7 @@ const create = async (req: Request, res: Response) => {
 const update = async (req: Request, res: Response) => {
     /*
     #swagger.summary = 'Update a player by ID'
+    #swagger.security = [{ "bearerAuth": [] }]
     #swagger.parameters['id'] = {
         in: 'path',
         description: 'Player ID',
@@ -98,6 +101,7 @@ const update = async (req: Request, res: Response) => {
 const listPlayerByUsername = async (req: Request, res: Response) => {
     /*
     #swagger.summary = 'Get a player by username'
+    #swagger.security = [{ "bearerAuth": [] }]
     #swagger.parameters['username'] = {
         in: 'path',
         description: 'Player Username',
