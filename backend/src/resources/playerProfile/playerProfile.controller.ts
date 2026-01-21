@@ -16,6 +16,7 @@ import {
 const index = async (req: Request, res: Response) => {
   /*
     #swagger.summary = 'List all player profiles.'
+    #swagger.security = [{ "bearerAuth": [] }]
     #swagger.responses[200] = {
         description: 'Player profiles retrieved successfully.',
         schema: { $ref: '#/definitions/PlayerProfile' }
@@ -36,6 +37,7 @@ const index = async (req: Request, res: Response) => {
 const create = async (req: Request, res: Response) => {
   /*
     #swagger.summary = 'Create new player profile.'
+    #swagger.security = [{ "bearerAuth": [] }]
     #swagger.parameters['body'] = {
         in: 'body',
         schema: { $ref: '#/definitions/CreatePlayerProfileDto' }
@@ -66,6 +68,7 @@ const create = async (req: Request, res: Response) => {
 const read = async (req: Request, res: Response) => {
   /*
     #swagger.summary = 'Get player profile by ID.'
+    #swagger.security = [{ "bearerAuth": [] }]
     #swagger.parameters['id'] = {
         in: 'path',
         required: true,
@@ -97,6 +100,7 @@ const read = async (req: Request, res: Response) => {
 const update = async (req: Request, res: Response) => {
   /*
     #swagger.summary = 'Update player profile by ID.'
+    #swagger.security = [{ "bearerAuth": [] }]
     #swagger.parameters['id'] = {
         in: 'path',
         required: true,
@@ -137,6 +141,7 @@ const update = async (req: Request, res: Response) => {
 const remove = async (req: Request, res: Response) => {
   /*
     #swagger.summary = 'Delete player profile by ID.'
+    #swagger.security = [{ "bearerAuth": [] }]
     #swagger.parameters['id'] = {
         in: 'path',
         required: true,

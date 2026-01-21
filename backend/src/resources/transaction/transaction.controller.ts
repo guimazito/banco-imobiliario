@@ -11,6 +11,7 @@ import {
 const index = async (req: Request, res: Response) => {
   /*
     #swagger.summary = 'List all transactions'
+    #swagger.security = [{ "bearerAuth": [] }]
     #swagger.responses[200] = {
         description: 'List of transactions',
         schema: { $ref: '#/definitions/Transaction' }
@@ -31,6 +32,7 @@ const index = async (req: Request, res: Response) => {
 const create = async (req: Request, res: Response) => {
   /*
     #swagger.summary = 'Create a new transaction'
+    #swagger.security = [{ "bearerAuth": [] }]
     #swagger.parameters['body'] = {
         in: 'body',
         schema: { $ref: '#/definitions/CreateTransactionDto' }
@@ -59,6 +61,7 @@ const create = async (req: Request, res: Response) => {
 const listTransactionById = async (req: Request, res: Response) => {
   /*
     #swagger.summary = 'Get a transaction by ID'
+    #swagger.security = [{ "bearerAuth": [] }]
     #swagger.responses[200] = {
         description: 'Transaction retrieved successfully',
         schema: { $ref: '#/definitions/Transaction' }
@@ -83,6 +86,7 @@ const listTransactionById = async (req: Request, res: Response) => {
 const listTransactionsByGameId = async (req: Request, res: Response) => {
   /*
     #swagger.summary = 'Get transactions by Game ID'
+    #swagger.security = [{ "bearerAuth": [] }]
     #swagger.responses[200] = {
         description: 'Transactions retrieved successfully',
         schema: { $ref: '#/definitions/Transaction' }

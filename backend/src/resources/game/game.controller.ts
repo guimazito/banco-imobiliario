@@ -12,6 +12,7 @@ import {
 const index = async (req: Request, res: Response) => {
   /*
     #swagger.summary = 'List all games'
+    #swagger.security = [{ "bearerAuth": [] }]
     #swagger.responses[200] = {
         description: 'List of games',
         schema: { $ref: '#/definitions/Game' }
@@ -32,6 +33,7 @@ const index = async (req: Request, res: Response) => {
 const listGameById = async (req: Request, res: Response) => {
   /*
     #swagger.summary = 'Get a game by ID'
+    #swagger.security = [{ "bearerAuth": [] }]
     #swagger.parameters['id'] = {
         in: 'path',
         description: 'Game ID',
@@ -62,6 +64,7 @@ const listGameById = async (req: Request, res: Response) => {
 const listGameByInvite = async (req: Request, res: Response) => {
   /*
     #swagger.summary = 'Get a game by Invite Code'
+    #swagger.security = [{ "bearerAuth": [] }]
     #swagger.parameters['invite'] = {
         in: 'path',
         description: 'Game Invite Code',
@@ -92,6 +95,7 @@ const listGameByInvite = async (req: Request, res: Response) => {
 const create = async (req: Request, res: Response) => {
   /*
     #swagger.summary = 'Create a new game'
+    #swagger.security = [{ "bearerAuth": [] }]
     #swagger.parameters['body'] = {
         in: 'body',
         schema: { $ref: '#/definitions/CreateGameDto' }
@@ -120,6 +124,7 @@ const create = async (req: Request, res: Response) => {
 const update = async (req: Request, res: Response) => {
   /*
     #swagger.summary = 'Update an existing game'
+    #swagger.security = [{ "bearerAuth": [] }]
     #swagger.parameters['id'] = {
         in: 'path',
         description: 'Game ID',

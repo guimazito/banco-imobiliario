@@ -15,7 +15,6 @@ import {
 const signup = async (req: Request, res: Response) => {
   /*
     #swagger.summary = 'Register a new player'
-    #swagger.security = [{ "bearerAuth": [] }]
     #swagger.parameters['body'] = {
         in: 'body',
         schema: { $ref: '#/definitions/SignUpDto' }
