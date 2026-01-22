@@ -12,6 +12,7 @@ export interface GamePlayer {
   };
   game?: {
     invite: string;
+    status: string;
     createdAt: string;
   };
 }

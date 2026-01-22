@@ -46,6 +46,7 @@ export const getGamePlayerByPlayerId = async (
       game: {
         select: {
           invite: true,
+          status: true,
           createdAt: true,
         },
       },
