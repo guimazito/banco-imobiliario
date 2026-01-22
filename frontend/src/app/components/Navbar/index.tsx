@@ -1,11 +1,12 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import Box from "@mui/material/Box";
 import List from "@mui/material/List";
 import Drawer from "@mui/material/Drawer";
 import AppBar from "@mui/material/AppBar";
 import Button from "@mui/material/Button";
+import Dialog from "@mui/material/Dialog";
 import Toolbar from "@mui/material/Toolbar";
 import Divider from "@mui/material/Divider";
 import ListItem from "@mui/material/ListItem";
@@ -13,6 +14,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import { useLogout } from "@/app/hooks/useAuth";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
+import { useUpdateGame } from "@/app/hooks/useGames";
 import ListItemText from "@mui/material/ListItemText";
 import { useGameId } from "@/app/contexts/GameContext";
 import { useRouter, usePathname } from "next/navigation";
@@ -34,10 +36,20 @@ export function Navbar(props: Props) {
   const pathname = usePathname();
   const drawerWidth = 240;
   let navItems: string[];
-  if ((pathname === "/home/") || (pathname === "/about/") || (pathname === "/contact/")) {
+  if (
+    pathname === "/home/" ||
+    pathname === "/about/" ||
+    pathname === "/contact/"
+  ) {
     navItems = ["Home", "Sobre", "Contato", "Sair"];
   } else {
-    navItems = ["Home", "Transações", "Propriedades", "Balanço Final"];
+    navItems = [
+      "Home",
+      "Transações",
+      "Propriedades",
+      "Balanço Final",
+      "Finalizar Jogo",
+    ];
   }
   const { window, inviteCode } = props;
   const [mobileOpen, setMobileOpen] = React.useState(false);
@@ -45,14 +57,17 @@ export function Navbar(props: Props) {
     setMobileOpen((prevState) => !prevState);
   };
   const { mutateAsync: doLogout, isPending } = useLogout();
+  const { mutateAsync: updateGameStatus } = useUpdateGame();
+  const [confirmOpen, setConfirmOpen] = useState(false);
+  const [pendingFinalize, setPendingFinalize] = useState(false);
 
   const handleLogout = async () => {
     setGameId("");
     await doLogout();
-    router.push('/');
+    router.push("/");
   };
 
-  const handleNavigation = (item: string) => {
+  const handleNavigation = async (item: string) => {
     if (item === "Home") {
       router.push("/home/");
     } else if (item === "Transações") {
@@ -67,7 +82,19 @@ export function Navbar(props: Props) {
       router.push("/about/");
     } else if (item === "Contato") {
       router.push("/contact/");
+    } else if (item === "Finalizar Jogo") {
+      setConfirmOpen(true);
     }
+  };
+
+  const handleConfirmFinalize = async () => {
+    setPendingFinalize(true);
+    if (gameId) {
+      await updateGameStatus({ gameId, updatedData: { status: "FINISHED" } });
+    }
+    setPendingFinalize(false);
+    setConfirmOpen(false);
+    router.push("/home/");
   };
 
   const basePath = "/banco-imobiliario";
@@ -277,6 +304,32 @@ export function Navbar(props: Props) {
       <Box component="main" sx={{ flexGrow: 1 }}>
         <Toolbar />
       </Box>
+      <Dialog open={confirmOpen} onClose={() => setConfirmOpen(false)} maxWidth="xs" fullWidth>
+        <Box sx={{ p: { xs: 2, sm: 3 } }}>
+          <Typography variant="h6" gutterBottom>
+            Deseja realmente finalizar o jogo?
+          </Typography>
+          <Box
+            sx={{ display: "flex", justifyContent: "flex-end", gap: 2, mt: 2 }}
+          >
+            <Button
+              onClick={() => setConfirmOpen(false)}
+              color="inherit"
+              variant="contained"
+            >
+              Cancelar
+            </Button>
+            <Button
+              onClick={handleConfirmFinalize}
+              color="primary"
+              variant="contained"
+              disabled={pendingFinalize}
+            >
+              {pendingFinalize ? "Finalizando..." : "Finalizar"}
+            </Button>
+          </Box>
+        </Box>
+      </Dialog>
     </Box>
   );
 }

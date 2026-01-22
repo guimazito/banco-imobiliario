@@ -91,6 +91,10 @@ export default function HomePage() {
       toast.error("Código de convite inválido ou partida não encontrada.");
       return;
     }
+    if (getGameByInvite.status !== "IN_PROGRESS") {
+      toast.error("A partida não está em andamento.");
+      return;
+    }
     try {
       const { getGamePlayerId } = await import("@/app/services/gamePlayers");
       const existing = await getGamePlayerId(
@@ -257,31 +261,41 @@ export default function HomePage() {
                   Partidas Recentes
                 </Typography>
               </CardContent>
-              {recentGames && recentGames.length > 0 ? (
+              {recentGames &&
+              recentGames.filter((gp) => gp.game?.status === "IN_PROGRESS")
+                .length > 0 ? (
                 <Box component="ul" sx={{ pl: 0, listStyle: "none", m: 2 }}>
-                  {recentGames.map((gamePlayer) => (
-                    <Box component="li" key={gamePlayer.gameId} sx={{ mb: 2 }}>
+                  {recentGames
+                    .filter(
+                      (gamePlayer) => gamePlayer.game?.status === "IN_PROGRESS",
+                    )
+                    .map((gamePlayer) => (
                       <Box
-                        sx={{ display: "flex", alignItems: "center", gap: 1 }}
+                        component="li"
+                        key={gamePlayer.gameId}
+                        sx={{ mb: 2 }}
                       >
-                        <Typography variant="body2" color="text.secondary">
-                          Sessão: {gamePlayer.game?.invite ?? "-"}
-                        </Typography>
-                        <Button
-                          variant="outlined"
-                          size="small"
-                          onClick={() => {
-                            setGameId(gamePlayer.gameId);
-                            router.push(
-                              `/game/${gamePlayer.gameId}/transaction`,
-                            );
-                          }}
+                        <Box
+                          sx={{ display: "flex", alignItems: "center", gap: 1 }}
                         >
-                          ENTRAR
-                        </Button>
+                          <Typography variant="body2" color="text.secondary">
+                            Sessão: {gamePlayer.game?.invite ?? "-"}
+                          </Typography>
+                          <Button
+                            variant="outlined"
+                            size="small"
+                            onClick={() => {
+                              setGameId(gamePlayer.gameId);
+                              router.push(
+                                `/game/${gamePlayer.gameId}/transaction`,
+                              );
+                            }}
+                          >
+                            ENTRAR
+                          </Button>
+                        </Box>
                       </Box>
-                    </Box>
-                  ))}
+                    ))}
                 </Box>
               ) : (
                 <Typography
