@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import Box from "@mui/material/Box";
 import List from "@mui/material/List";
+import { toast } from "react-toastify";
 import Drawer from "@mui/material/Drawer";
 import AppBar from "@mui/material/AppBar";
 import Button from "@mui/material/Button";
@@ -60,6 +61,21 @@ export function Navbar(props: Props) {
   const { mutateAsync: updateGameStatus } = useUpdateGame();
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [pendingFinalize, setPendingFinalize] = useState(false);
+
+  const handleCopyInviteCode = async () => {
+    if (!inviteCode) return;
+    try {
+      await navigator.clipboard.writeText(inviteCode);
+    } catch (e) {
+      const textarea = document.createElement('textarea');
+      textarea.value = inviteCode;
+      document.body.appendChild(textarea);
+      textarea.select();
+      document.execCommand('copy');
+      document.body.removeChild(textarea);
+    }
+    toast.success("Código de convite copiado!");
+  };
 
   const handleLogout = async () => {
     setGameId("");
@@ -180,7 +196,12 @@ export function Navbar(props: Props) {
               userSelect: "all",
               width: "100%",
               textAlign: "center",
+              cursor: "pointer",
+              transition: "color 0.2s",
+              '&:hover': { color: '#ffd700' },
             }}
+            title="Clique para copiar o código de convite"
+            onClick={handleCopyInviteCode}
           >
             Convite: {inviteCode}
           </Typography>
@@ -253,7 +274,13 @@ export function Navbar(props: Props) {
                   borderRadius: 2,
                   verticalAlign: "middle",
                   display: "inline",
+                  cursor: "pointer",
+                  userSelect: "all",
+                  transition: "color 0.2s",
+                  '&:hover': { color: '#fff' },
                 }}
+                title="Clique para copiar o código de convite"
+                onClick={handleCopyInviteCode}
               >
                 Convite: {inviteCode}
               </Typography>
